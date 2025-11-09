@@ -35,3 +35,98 @@ footer { opacity: .7; }
 .top-nav .links a{ margin-left:14px; opacity:.9 }
 .page-wrap{ max-width: 840px; margin: 20px auto; padding: 0 12px; }
 .site-footer{ max-width:840px; margin: 60px auto 20px; padding:0 12px; opacity:.7 }
+
+/* ===== Photo-zine Grey Blue aesthetic =================================== */
+/* Palette: off-white paper, graphite text, muted blue accents, soft shadows */
+:root{
+  --paper: #f5f7fa;          /* 胶片相纸感的淡灰白 */
+  --ink:   #1f2937;          /* 深石墨正文色 */
+  --muted: #6b7280;          /* 次要文字 */
+  --edge:  #e5e7eb;          /* 细分割线 */
+  --blue:  #5b8aa6;          /* 主色：暗灰蓝 */
+  --blue-2:#2e6f8f;          /* hover/active */
+  --chip:  #eef2f7;          /* 标签/代码背景 */
+}
+
+/* page background + body text */
+body{
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.8;
+  font-feature-settings: "liga","kern";
+}
+
+/* site title & tagline */
+.top-nav .brand{
+  letter-spacing:.4px;
+}
+header .site-title, .top-nav .brand{
+  color: var(--ink);
+}
+header .site-description, .site-description, .page-description{
+  color: var(--muted);
+  opacity:.9;
+}
+
+/* links */
+a{ color: var(--blue); text-decoration: none; }
+a:hover{ color: var(--blue-2); text-decoration: underline; }
+
+/* nav */
+.top-nav{
+  border-bottom: 1px solid var(--edge);
+  backdrop-filter: blur(2px);
+}
+.top-nav .links a{
+  color: var(--ink);
+  opacity:.8;
+}
+.top-nav .links a:hover{ color: var(--blue-2); opacity:1; }
+
+/* content container */
+.page-wrap, .wrapper, .container, .post, .page{
+  max-width: 860px;
+  margin: 28px auto;
+  padding: 0 16px;
+}
+
+/* home list */
+h1, h2, h3{ color: var(--ink); }
+ul{ padding-left: 1.2rem; }
+.post-list li, main ul li{
+  margin: .35rem 0;
+}
+
+/* cards feel for blocks (optional subtle) */
+.post, .page{
+  background: #fff;
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 12px rgba(17,24,39,.04);
+  border-radius: 10px;
+  padding: 22px;
+}
+
+/* code/blockquote */
+pre, code{ background: var(--chip); }
+pre{
+  padding: 12px 14px; overflow:auto; border-radius:8px;
+  border:1px solid var(--edge);
+}
+blockquote{
+  border-left: 3px solid var(--blue);
+  color: var(--muted);
+  padding: .4rem .9rem; margin:.8rem 0; background:#fff;
+}
+
+/* footer */
+.site-footer{ opacity:.65; border-top:1px solid var(--edge); padding-top:14px; }
+
+/* Dark mode (auto) – 保持同色系反转 */
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0f141a; --ink:#e5eaf0; --muted:#9aa4b2;
+    --edge:#1f2a36; --blue:#7fb4cf; --blue-2:#a2c8da; --chip:#111821;
+  }
+  .post, .page{ background:#0d1319; border-color:var(--edge); box-shadow:none; }
+  a:hover{ text-decoration: none; }
+}
