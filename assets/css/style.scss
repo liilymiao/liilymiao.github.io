@@ -1,0 +1,27 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* === Color & typography quick overrides === */
+body {
+  background: #111;            /* 页面背景（深色） */
+  color: #e6e6e6;              /* 正文字色（浅灰） */
+  line-height: 1.7;
+}
+
+a { color: #7fdfff; }          /* 链接主色（青蓝） */
+a:hover { color: #9fe9ff; text-decoration: none; }
+
+h1, h2, h3 {
+  color: #ffffff;              /* 标题色 */
+}
+
+/* 卡片 / 容器：让内容更集中一些 */
+.wrapper, .container, .post, .page {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+/* 页脚淡一点 */
+footer { opacity: .7; }
