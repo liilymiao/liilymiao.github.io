@@ -53,3 +53,10 @@ blockquote{border-left:3px solid var(--blue); color:var(--muted); background:#ff
   .post,.page{background:#0d1319; border-color:var(--edge); box-shadow:none}
   a:hover{text-decoration:none}
 }
+
+/* chips */
+.post-cats{ margin:.25rem 0 .6rem }
+.chip{ display:inline-block; padding:.14rem .5rem; margin-right:.35rem;
+  background:var(--chip); border:1px solid var(--edge); border-radius:999px;
+  font-size:.88rem; color:var(--ink); opacity:.9 }
+.chip:hover{ border-color:var(--blue); color:var(--blue) }
