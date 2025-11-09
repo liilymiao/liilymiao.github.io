@@ -1,4 +1,20 @@
 ---
 layout: default
 ---
-<article class="post
+<article class="post">
+  <h1>{{ page.title }}</h1>
+  <p class="post-meta">{{ page.date | date: "%Y-%m-%d" }}</p>
+  <div class="post-content">
+    {{ content }}
+  </div>
+</article>
+
+<div id="comments" style="margin-top:40px;">
+  <script src="https://utteranc.es/client.js"
+          repo="liilymiao/liilymiao.github.io"
+          issue-term="pathname"
+          theme="github-dark"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
