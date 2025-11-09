@@ -1,6 +1,6 @@
 ---
 layout: album
-title: Vietnam Trip
+title: 城门水塘, 香港
 date: 2025-11-10
 cover: /assets/img/albums/vietnam-trip/cover.jpg
 photos:
