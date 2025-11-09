@@ -23,18 +23,19 @@ title: Home
 
 <hr>
 
-<section id="gallery">
-  <h2>Gallery</h2>
-  <div class="gallery">
-    {%- assign pics = site.static_files
-         | where_exp: "f", "f.path contains '/assets/img/gallery/'"
-         | slice: 0, 12 -%}
-    {%- for f in pics -%}
-    <figure class="gallery-item">
-      <img src="{{ f.path | relative_url }}" alt="{{ f.name | split:'.' | first | replace:'-',' ' }}" loading="lazy">
-      <figcaption>{{ f.name | split:'.' | first | replace:'-',' ' }}</figcaption>
-    </figure>
-    {%- endfor -%}
+<section id="albums">
+  <h2>Albums</h2>
+  <div class="albums-grid">
+    {% assign list = site.albums | sort: "date" | reverse | slice: 0, 6 %}
+    {% for a in list %}
+    <a class="album-card" href="{{ a.url | relative_url }}">
+      <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">
+      <div class="meta">
+        <h3>{{ a.title }}</h3>
+        <small>{{ a.date | date: "%Y-%m-%d" }}</small>
+      </div>
+    </a>
+    {% endfor %}
   </div>
-  <p><a href="{{ '/gallery/' | relative_url }}">View all →</a></p>
+  <p><a href="{{ '/albums/' | relative_url }}">View all →</a></p>
 </section>
