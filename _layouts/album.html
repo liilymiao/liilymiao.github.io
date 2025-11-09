@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<article class="page">
+  <h1>{{ page.title }}</h1>
+  {% if page.content %}<div class="post-content">{{ content }}</div>{% endif %}
+
+  <div class="album-grid">
+    {% for p in page.photos %}
+    <figure class="album-item">
+      <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: page.title }}" loading="lazy">
+      {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+    </figure>
+    {% endfor %}
+  </div>
+</article>
