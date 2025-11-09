@@ -25,3 +25,13 @@ h1, h2, h3 {
 
 /* 页脚淡一点 */
 footer { opacity: .7; }
+
+/* === Nav & layout === */
+.top-nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 20px; margin: 0 auto; max-width: 960px;
+}
+.top-nav .brand{ font-weight:700; }
+.top-nav .links a{ margin-left:14px; opacity:.9 }
+.page-wrap{ max-width: 840px; margin: 20px auto; padding: 0 12px; }
+.site-footer{ max-width:840px; margin: 60px auto 20px; padding:0 12px; opacity:.7 }
