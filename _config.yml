@@ -11,3 +11,10 @@ collections:
   albums:
     output: true
     permalink: /album/:name/
+defaults:
+  - scope:
+      path: ""
+      type: albums
+    values:
+      layout: album
+      permalink: /album/:name/
