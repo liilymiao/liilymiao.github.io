@@ -10,7 +10,6 @@ plugins:
 collections:
   albums:
     output: true
-    permalink: /album/:name/
 defaults:
   - scope:
       path: ""
