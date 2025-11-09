@@ -1,0 +1,59 @@
+---
+---
+
+/* load theme css first */
+@import "{{ site.theme }}";
+
+/* ===== Photo-zine Grey Blue aesthetic =================================== */
+:root{
+  --paper: #f5f7fa;
+  --ink:   #1f2937;
+  --muted: #6b7280;
+  --edge:  #e5e7eb;
+  --blue:  #5b8aa6;
+  --blue-2:#2e6f8f;
+  --chip:  #eef2f7;
+}
+
+body{
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.8;
+}
+
+a{ color: var(--blue); text-decoration:none; }
+a:hover{ color: var(--blue-2); text-decoration:underline; }
+
+h1,h2,h3{ color: var(--ink); }
+
+.post, .page{
+  background:#fff;
+  border:1px solid var(--edge);
+  box-shadow:0 2px 12px rgba(17,24,39,.04);
+  border-radius:10px;
+  padding:22px;
+}
+
+/* make the modernist “card”区域更像相纸 */
+.wrapper{
+  max-width:860px;
+  margin:28px auto; 
+}
+
+/* code/blockquote */
+pre,code{ background: var(--chip); }
+pre{ padding:12px 14px; border-radius:8px; border:1px solid var(--edge); }
+blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#fff; padding:.4rem .9rem; }
+
+/* footer */
+footer{ opacity:.7; }
+
+/* Dark mode */
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0f141a; --ink:#e5eaf0; --muted:#9aa4b2;
+    --edge:#1f2a36; --blue:#7fb4cf; --blue-2:#a2c8da; --chip:#111821;
+  }
+  .post,.page{ background:#0d1319; border-color:var(--edge); box-shadow:none; }
+  a:hover{ text-decoration:none; }
+}
