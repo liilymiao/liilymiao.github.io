@@ -3,6 +3,7 @@ description: 填写描述让更多人看到这些花里胡哨的玩意儿
 theme: jekyll-theme-modernist
 author: liilymiao
 lang: en
+timezone: Asia/Hong_Kong
 
 plugins:
   - jekyll-feed

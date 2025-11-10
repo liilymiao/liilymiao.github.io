@@ -87,24 +87,49 @@ title: Home
     {%- endfor -%}
   </div>
 
-  <div class="photos-grid" id="photoGrid">
-    {%- comment -%} Flatten all photos; fallback to album date if no taken_at {%- endcomment -%}
-    {%- assign photo_items = "" | split: "" -%}
-    {%- for a in albums_all -%}
-      {%- if a.photos -%}
-        {%- for p in a.photos -%}
-          {%- assign when = p.taken_at | default: a.date -%}
-          {%- assign ts   = when | date: "%s" -%}
-          {%- assign item = p | merge: {
-                "_album_title": a.title,
-                "_album_url":   a.url,
-                "_taken_at":    when,
-                "_ts":          ts
-              } -%}
-          {%- assign photo_items = photo_items | push: item -%}
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
+<div class="photos-grid" id="photoGrid">
+  {%- assign photo_items = "" | split: "" -%}
+  {%- for a in albums_all -%}
+    {%- if a.photos -%}
+      {%- for p in a.photos -%}
+        {%- assign when = p.taken_at | default: a.date -%}
+        {%- assign ts   = when | date: "%s" -%}
+        {%- assign item = p | merge: {
+              "_album_title": a.title,
+              "_album_url":   a.url,
+              "_taken_at":    when,
+              "_ts":          ts
+            } -%}
+        {%- assign photo_items = photo_items | push: item -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
+
+  {%- comment -%} 开关：把 show_debug 设为 true 可打印前 12 条的排序键 {%- endcomment -%}
+  {%- assign show_debug = false -%}
+  {%- if show_debug -%}
+    <ol style="font:12px ui-monospace,monospace;opacity:.7;margin:.5rem 0 1rem;padding-left:1.2rem">
+      {%- for p in photos_sorted limit:12 -%}
+        <li>{{ p._taken_at }} → {{ p._ts }}</li>
+      {%- endfor -%}
+    </ol>
+  {%- endif -%}
+
+  {%- for p in photos_sorted -%}
+    <a class="photo-card"
+       href="{{ p._album_url | relative_url }}"
+       data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
+       title="{{ p.caption | default: p._album_title }}">
+      <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
+      <div class="ph-meta">
+        <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
+        {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{%- endif -%}
+      </div>
+    </a>
+  {%- endfor -%}
+</div>
 
     {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
     {%- for p in photos_sorted -%}
