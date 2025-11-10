@@ -7,13 +7,3 @@ lang: en
 plugins:
   - jekyll-feed
   - jekyll-sitemap
-collections:
-  albums:
-    output: true
-defaults:
-  - scope:
-      path: ""
-      type: albums
-    values:
-      layout: album
-      permalink: /album/:name/
