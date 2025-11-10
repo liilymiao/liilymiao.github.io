@@ -4,7 +4,7 @@ title: 镰仓, 日本
 permalink: /album/kamakura-jp/
 date: 2025-01-20
 location: Japan
-location_name: Kamakura, Japan
+location_name: Japan
 cover: /assets/img/albums/kamakura-jp/cover.jpg
 photos:
   - src: /assets/img/albums/kamakura-jp/cover.jpg
