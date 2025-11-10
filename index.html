@@ -39,3 +39,93 @@ title: Home
   </div>
   <p><a href="{{ '/albums/' | relative_url }}">View all →</a></p>
 </section>
+
+<hr style="margin:2rem 0; opacity:.2">
+
+<section id="photos">
+  <h2>Photos</h2>
+
+  <!-- 生成镜头按钮（从所有相册里聚合） -->
+  {% assign all_albums = site.pages | where: "layout", "album" %}
+  {% assign lens_pool = "" | split: "" %}
+  {% for a in all_albums %}
+    {% if a.photos %}
+      {% for p in a.photos %}
+        {% if p.lens %}{% assign lens_pool = lens_pool | concat: p.lens %}{% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  {% assign lenses = lens_pool | uniq | sort %}
+
+  <div class="album-filters" id="photoFilters">
+    <strong>Filter:</strong>
+    <button data-lens="all" class="on">All</button>
+    {% for l in lenses %}
+      <button data-lens="{{ l }}">{{ l }}</button>
+    {% endfor %}
+  </div>
+
+  <div class="photos-grid" id="photoGrid">
+    {% comment %}
+      把所有相册里的所有照片“扁平化”为卡片；
+      用 taken_at 排序：先收集、再排序（Liquid 里不便直接排序嵌套，采用两次遍历）
+    {% endcomment %}
+
+    {% assign photo_items = "" | split: "" %}
+    {% for a in all_albums %}
+      {% if a.photos %}
+        {% for p in a.photos %}
+          {% assign item = p | merge: 
+            {"_album_title": a.title, "_album_url": a.url, "_taken_at": p.taken_at} %}
+          {% assign photo_items = photo_items | push: item %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
+    {%- comment -%}
+      由于 Liquid 对数组对象复杂排序有限，我们先把没有 taken_at 的过滤掉，
+      再用 taken_at 字符串排序（统一格式即可正确排序）。
+    {%- endcomment -%}
+    {% assign photos_with_time = photo_items | where_exp: "x", "x._taken_at" %}
+    {% assign photos_sorted = photos_with_time | sort: "_taken_at" | reverse %}
+
+    {% for p in photos_sorted %}
+      <a class="photo-card"
+         href="{{ p._album_url | relative_url }}"
+         data-lenses="{{ p.lens | join: ' ' | default: '' }}"
+         title="{{ p.caption | default: p._album_title }}">
+        <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
+        <div class="ph-meta">
+          <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
+          {% if p.lens %}<small> · {{ p.lens | join: ", " }}</small>{% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+(function(){
+  // 简单前端筛选：按镜头
+  const grid = document.getElementById('photoGrid');
+  const cards = Array.from(grid.querySelectorAll('.photo-card'));
+  const lensBtns = document.querySelectorAll('#photoFilters [data-lens]');
+  let lens = 'all';
+
+  function apply(){
+    cards.forEach(card=>{
+      const ls = (card.getAttribute('data-lenses') || '').split(' ').filter(Boolean);
+      const ok = lens==='all' ? true : ls.includes(lens);
+      card.style.display = ok ? '' : 'none';
+    });
+  }
+  lensBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      lensBtns.forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      lens = btn.dataset.lens;
+      apply();
+    });
+  });
+})();
+</script>
