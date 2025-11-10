@@ -94,13 +94,21 @@ title: Home
       {%- if a.photos -%}
         {%- for p in a.photos -%}
           {%- assign when = p.taken_at | default: a.date -%}
-          {%- assign item = p | merge: {"_album_title": a.title, "_album_url": a.url, "_taken_at": when} -%}
+          {%- assign ts   = when | date: "%s" -%}  {# 统一转 Unix 时间戳 #}
+          {%- assign item = p | merge: {
+                "_album_title": a.title,
+                "_album_url":   a.url,
+                "_taken_at":    when,
+                "_ts":          ts
+              } -%}
           {%- assign photo_items = photo_items | push: item -%}
         {%- endfor -%}
       {%- endif -%}
     {%- endfor -%}
 
-    {%- assign photos_sorted = photo_items | sort: "_taken_at" | reverse -%}
+    {%- comment -%} 用 _ts（Unix 时间戳）排序，保证严格的时间倒序 {%- endcomment -%}
+    {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%} 
+
     {%- for p in photos_sorted -%}
       <a class="photo-card"
          href="{{ p._album_url | relative_url }}"
