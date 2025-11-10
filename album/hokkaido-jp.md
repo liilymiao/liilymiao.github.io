@@ -3,8 +3,8 @@ layout: album
 title: 北海道, 日本
 permalink: /album/hokkaido-jp/
 date: 2025-01-17
-location: japan-hokkaido
-location_name: Hokkaido, Japan
+location: japan
+location_name: Japan
 cover: /assets/img/albums/hokkaido-jp/cover.jpg
 photos:
   - src: /assets/img/albums/hokkaido-jp/dsc01297.jpg
