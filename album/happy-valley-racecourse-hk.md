@@ -2,7 +2,7 @@
 layout: album
 title: 跑马地马场, 香港
 permalink: /album/happy-valley-racecourse-hk/
-date: 2025-02-22
+date: 2025-10-22
 cover: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
 photos:
   - src: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
