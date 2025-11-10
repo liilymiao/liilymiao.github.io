@@ -60,3 +60,42 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   .post,.page{ background:#0d1319; border-color:var(--edge); box-shadow:none; }
   a:hover{ text-decoration:none; }
 }
+/* --- Albums grid (all pages) --- */
+.albums-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:1rem;
+  margin-top:1rem;
+}
+
+.albums-grid .album-card{
+  display:block;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+  text-decoration:none;
+}
+
+.albums-grid .album-card img{
+  display:block;
+  width:100%;
+  height:200px;             /* 统一卡片高度 */
+  object-fit:cover;         /* 居中裁切封面 */
+}
+
+.albums-grid .album-card .meta{
+  padding:.75rem .9rem;
+}
+.albums-grid .album-card h3{
+  margin:0 0 .25rem 0;
+  font-size:1.05rem;
+}
+
+/* 防止页面上“游离”的第一张图片占满整页（保险阀） */
+.page > p:first-child > img:only-child{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:0 auto;
+}
