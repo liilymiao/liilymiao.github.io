@@ -44,10 +44,10 @@ title: Home
       <a class="album-card"
          href="{{ a.url | relative_url }}"
          data-location="{{ a.location | default: '' }}">
-        {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}
+        {%- if a.cover -%}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{%- endif -%}
         <div class="meta">
           <h3>{{ a.title }}</h3>
-          {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
+          {%- if a.date -%}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{%- endif -%}
         </div>
       </a>
     {%- endfor -%}
@@ -60,7 +60,7 @@ title: Home
 <section id="photos">
   <h2>Photos</h2>
 
-  {%- comment -%} 聚合所有镜头名（数组/字符串皆兼容） {%- endcomment -%}
+  {%- comment -%} Collect all lens names (supports array or string) {%- endcomment -%}
   {%- assign lens_pool = "" | split: "" -%}
   {%- for a in albums_all -%}
     {%- if a.photos -%}
@@ -88,13 +88,13 @@ title: Home
   </div>
 
   <div class="photos-grid" id="photoGrid">
-    {%- comment -%} 扁平化所有照片；没有 taken_at 用所属相册日期兜底 {%- endcomment -%}
+    {%- comment -%} Flatten all photos; fallback to album date if no taken_at {%- endcomment -%}
     {%- assign photo_items = "" | split: "" -%}
     {%- for a in albums_all -%}
       {%- if a.photos -%}
         {%- for p in a.photos -%}
           {%- assign when = p.taken_at | default: a.date -%}
-          {%- assign ts   = when | date: "%s" -%}  {# 统一转 Unix 时间戳 #}
+          {%- assign ts   = when | date: "%s" -%}
           {%- assign item = p | merge: {
                 "_album_title": a.title,
                 "_album_url":   a.url,
@@ -106,9 +106,7 @@ title: Home
       {%- endif -%}
     {%- endfor -%}
 
-    {%- comment -%} 用 _ts（Unix 时间戳）排序，保证严格的时间倒序 {%- endcomment -%}
-    {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%} 
-
+    {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
     {%- for p in photos_sorted -%}
       <a class="photo-card"
          href="{{ p._album_url | relative_url }}"
@@ -117,7 +115,7 @@ title: Home
         <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
         <div class="ph-meta">
           <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
-          {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{% endif %}
+          {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{%- endif -%}
         </div>
       </a>
     {%- endfor -%}
@@ -126,7 +124,7 @@ title: Home
 
 <script>
 (function () {
-  // Albums：按地点筛选 + ?loc=hongkong
+  // Albums: filter by location with ?loc=
   const ag = document.getElementById('albumGrid');
   const ab = document.getElementById('albumLocFilters');
   if (ag && ab) {
@@ -141,7 +139,7 @@ title: Home
         const v = c.getAttribute('data-location') || '';
         c.style.display = (loc==='all' || v===loc) ? '' : 'none';
       });
-      const u=new URL(window.location.href);
+      const u = new URL(window.location.href);
       if(loc==='all') u.searchParams.delete('loc'); else u.searchParams.set('loc', loc);
       history.replaceState(null,'',u.toString());
     }
@@ -156,7 +154,7 @@ title: Home
     setActive(start); apply(start);
   }
 
-  // Photos：按镜头筛选 + ?lens=sigma-18-50-f2.8
+  // Photos: filter by lens with ?lens=
   const pg = document.getElementById('photoGrid');
   const pb = document.getElementById('photoFilters');
   if (pg && pb) {
@@ -171,7 +169,7 @@ title: Home
         const set = (c.getAttribute('data-lenses')||'').split(/\s+/).filter(Boolean);
         c.style.display = (l==='all' || set.includes(l)) ? '' : 'none';
       });
-      const u=new URL(window.location.href);
+      const u = new URL(window.location.href);
       if(l==='all') u.searchParams.delete('lens'); else u.searchParams.set('lens', l);
       history.replaceState(null,'',u.toString());
     }
