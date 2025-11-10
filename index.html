@@ -25,17 +25,32 @@ title: Home
 
 <section id="albums">
   <h2>Albums</h2>
-  <div class="albums-grid">
-    {% assign cards = site.pages | where: "layout", "album" | sort: "path" %}
-    {% for a in cards limit:6 %}
-    <a class="album-card" href="{{ a.url | relative_url }}">
-      <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">
-      <div class="meta">
-        <h3>{{ a.title }}</h3>
-        <small>{{ a.date | date: "%Y-%m-%d" }}</small>
-      </div>
-    </a>
-    {% endfor %}
+
+  {%- assign albums_all = site.pages | where: "layout", "album" -%}
+  {%- assign locs = albums_all | map: "location" | uniq | sort -%}
+
+  <div class="album-filters" id="albumLocFilters">
+    <strong>Location:</strong>
+    <button type="button" data-loc="all" class="on">All</button>
+    {%- for loc in locs -%}
+      {%- assign rep = albums_all | where: "location", loc | first -%}
+      <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
+    {%- endfor -%}
+  </div>
+
+  <div class="albums-grid" id="albumGrid">
+    {%- assign cards = albums_all | sort: "date" | reverse -%}
+    {%- for a in cards limit:6 -%}
+      <a class="album-card"
+         href="{{ a.url | relative_url }}"
+         data-location="{{ a.location | default: '' }}">
+        {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}
+        <div class="meta">
+          <h3>{{ a.title }}</h3>
+          {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
+        </div>
+      </a>
+    {%- endfor -%}
   </div>
   <p><a href="{{ '/albums/' | relative_url }}">View all →</a></p>
 </section>
@@ -45,87 +60,122 @@ title: Home
 <section id="photos">
   <h2>Photos</h2>
 
-  <!-- 生成镜头按钮（从所有相册里聚合） -->
-  {% assign all_albums = site.pages | where: "layout", "album" %}
-  {% assign lens_pool = "" | split: "" %}
-  {% for a in all_albums %}
-    {% if a.photos %}
-      {% for p in a.photos %}
-        {% if p.lens %}{% assign lens_pool = lens_pool | concat: p.lens %}{% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-  {% assign lenses = lens_pool | uniq | sort %}
+  {%- comment -%} 聚合所有镜头名（数组/字符串皆兼容） {%- endcomment -%}
+  {%- assign lens_pool = "" | split: "" -%}
+  {%- for a in albums_all -%}
+    {%- if a.photos -%}
+      {%- for p in a.photos -%}
+        {%- if p.lens -%}
+          {%- assign L = p.lens -%}
+          {%- if L.first -%}
+            {%- assign lens_pool = lens_pool | concat: L -%}
+          {%- else -%}
+            {%- assign L_arr = L | replace: ',', ' ' | split: ' ' | reject: '' -%}
+            {%- assign lens_pool = lens_pool | concat: L_arr -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign lenses = lens_pool | uniq | sort -%}
 
   <div class="album-filters" id="photoFilters">
     <strong>Filter:</strong>
-    <button data-lens="all" class="on">All</button>
-    {% for l in lenses %}
-      <button data-lens="{{ l }}">{{ l }}</button>
-    {% endfor %}
+    <button type="button" data-lens="all" class="on">All</button>
+    {%- for l in lenses -%}
+      <button type="button" data-lens="{{ l }}">{{ l }}</button>
+    {%- endfor -%}
   </div>
 
   <div class="photos-grid" id="photoGrid">
-    {% comment %}
-      把所有相册里的所有照片“扁平化”为卡片；
-      用 taken_at 排序：先收集、再排序（Liquid 里不便直接排序嵌套，采用两次遍历）
-    {% endcomment %}
+    {%- comment -%} 扁平化所有照片；没有 taken_at 用所属相册日期兜底 {%- endcomment -%}
+    {%- assign photo_items = "" | split: "" -%}
+    {%- for a in albums_all -%}
+      {%- if a.photos -%}
+        {%- for p in a.photos -%}
+          {%- assign when = p.taken_at | default: a.date -%}
+          {%- assign item = p | merge: {"_album_title": a.title, "_album_url": a.url, "_taken_at": when} -%}
+          {%- assign photo_items = photo_items | push: item -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
 
-    {% assign photo_items = "" | split: "" %}
-    {% for a in all_albums %}
-      {% if a.photos %}
-        {% for p in a.photos %}
-          {% assign item = p | merge: 
-            {"_album_title": a.title, "_album_url": a.url, "_taken_at": p.taken_at} %}
-          {% assign photo_items = photo_items | push: item %}
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-
-    {%- comment -%}
-      由于 Liquid 对数组对象复杂排序有限，我们先把没有 taken_at 的过滤掉，
-      再用 taken_at 字符串排序（统一格式即可正确排序）。
-    {%- endcomment -%}
-    {% assign photos_with_time = photo_items | where_exp: "x", "x._taken_at" %}
-    {% assign photos_sorted = photos_with_time | sort: "_taken_at" | reverse %}
-
-    {% for p in photos_sorted %}
+    {%- assign photos_sorted = photo_items | sort: "_taken_at" | reverse -%}
+    {%- for p in photos_sorted -%}
       <a class="photo-card"
          href="{{ p._album_url | relative_url }}"
-         data-lenses="{{ p.lens | join: ' ' | default: '' }}"
+         data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
          title="{{ p.caption | default: p._album_title }}">
         <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
         <div class="ph-meta">
           <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
-          {% if p.lens %}<small> · {{ p.lens | join: ", " }}</small>{% endif %}
+          {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{% endif %}
         </div>
       </a>
-    {% endfor %}
+    {%- endfor -%}
   </div>
 </section>
 
 <script>
-(function(){
-  // 简单前端筛选：按镜头
-  const grid = document.getElementById('photoGrid');
-  const cards = Array.from(grid.querySelectorAll('.photo-card'));
-  const lensBtns = document.querySelectorAll('#photoFilters [data-lens]');
-  let lens = 'all';
+(function () {
+  // Albums：按地点筛选 + ?loc=hongkong
+  const ag = document.getElementById('albumGrid');
+  const ab = document.getElementById('albumLocFilters');
+  if (ag && ab) {
+    const url  = new URL(window.location.href);
+    const initial = url.searchParams.get('loc') || 'all';
+    const cards = Array.from(ag.querySelectorAll('.album-card'));
+    const btns  = Array.from(ab.querySelectorAll('[data-loc]'));
 
-  function apply(){
-    cards.forEach(card=>{
-      const ls = (card.getAttribute('data-lenses') || '').split(' ').filter(Boolean);
-      const ok = lens==='all' ? true : ls.includes(lens);
-      card.style.display = ok ? '' : 'none';
+    function setActive(loc){ btns.forEach(b=>b.classList.toggle('on', b.dataset.loc===loc)); }
+    function apply(loc){
+      cards.forEach(c=>{
+        const v = c.getAttribute('data-location') || '';
+        c.style.display = (loc==='all' || v===loc) ? '' : 'none';
+      });
+      const u=new URL(window.location.href);
+      if(loc==='all') u.searchParams.delete('loc'); else u.searchParams.set('loc', loc);
+      history.replaceState(null,'',u.toString());
+    }
+    ab.addEventListener('click', e=>{
+      const btn = e.target.closest('[data-loc]');
+      if(!btn) return;
+      const loc = btn.dataset.loc;
+      setActive(loc); apply(loc);
     });
+    const exists = btns.some(b=>b.dataset.loc===initial);
+    const start  = exists ? initial : 'all';
+    setActive(start); apply(start);
   }
-  lensBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      lensBtns.forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-      lens = btn.dataset.lens;
-      apply();
+
+  // Photos：按镜头筛选 + ?lens=sigma-18-50-f2.8
+  const pg = document.getElementById('photoGrid');
+  const pb = document.getElementById('photoFilters');
+  if (pg && pb) {
+    const url  = new URL(window.location.href);
+    const initial = url.searchParams.get('lens') || 'all';
+    const cards = Array.from(pg.querySelectorAll('.photo-card'));
+    const btns  = Array.from(pb.querySelectorAll('[data-lens]'));
+
+    function setActive(l){ btns.forEach(b=>b.classList.toggle('on', b.dataset.lens===l)); }
+    function apply(l){
+      cards.forEach(c=>{
+        const set = (c.getAttribute('data-lenses')||'').split(/\s+/).filter(Boolean);
+        c.style.display = (l==='all' || set.includes(l)) ? '' : 'none';
+      });
+      const u=new URL(window.location.href);
+      if(l==='all') u.searchParams.delete('lens'); else u.searchParams.set('lens', l);
+      history.replaceState(null,'',u.toString());
+    }
+    pb.addEventListener('click', e=>{
+      const btn = e.target.closest('[data-lens]');
+      if(!btn) return;
+      const l = btn.dataset.lens;
+      setActive(l); apply(l);
     });
-  });
+    const exists = btns.some(b=>b.dataset.lens===initial);
+    const start  = exists ? initial : 'all';
+    setActive(start); apply(start);
+  }
 })();
 </script>
