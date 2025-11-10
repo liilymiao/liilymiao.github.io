@@ -1,0 +1,31 @@
+---
+layout: default
+title: Locations
+permalink: /locations/
+---
+
+<h1>Locations</h1>
+
+{% assign albums_all = site.pages | where: "layout", "album" %}
+{% assign locs = albums_all | map: "location" | uniq | sort %}
+
+<div class="albums-by-loc">
+{% for loc in locs %}
+  {% assign rep = albums_all | where: "location", loc | first %}
+  <h2 id="{{ loc }}">{{ rep.location_name | default: loc }}</h2>
+
+  <div class="albums-grid">
+    {% assign group = albums_all | where: "location", loc | sort: "date" | reverse %}
+    {% for a in group %}
+      <a class="album-card" href="{{ a.url | relative_url }}">
+        <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}">
+        <div class="meta">
+          <h3>{{ a.title }}</h3>
+          <small>{{ a.date | date: "%Y-%m-%d" }}</small>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+  <hr style="opacity:.2; margin:2rem 0">
+{% endfor %}
+</div>
