@@ -8,6 +8,7 @@ location_name: Hokkaido, Japan
 cover: /assets/img/albums/hokkaido-jp/cover.jpg
 photos:
   - src: /assets/img/albums/hokkaido-jp/dsc01297.jpg
+    taken_at: 2024-02-01 12:00
     lens: ["sigma-18-50-f2.8"]
     caption: ""
   - src: /assets/img/albums/hokkaido-jp/dsc01298.jpg
