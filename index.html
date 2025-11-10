@@ -26,7 +26,7 @@ title: Home
 <section id="albums">
   <h2>Albums</h2>
   <div class="albums-grid">
-    {% assign cards = site.pages | where: "layout", "album" | sort: "date" | reverse %}
+    {% assign cards = site.pages | where: "layout", "album" | sort: "path" %}
     {% for a in cards limit:6 %}
     <a class="album-card" href="{{ a.url | relative_url }}">
       <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">
