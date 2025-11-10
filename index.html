@@ -26,9 +26,8 @@ title: Home
 <section id="albums">
   <h2>Albums</h2>
   <div class="albums-grid">
-    {%- assign cards = site.pages | where_exp: "p", "p.path contains 'album/' and p.cover" 
-                     | sort: "date" | reverse | slice: 0, 6 -%}
-    {%- for a in cards -%}
+    {% assign cards = site.pages | where: "layout", "album" | sort: "date" | reverse %}
+    {% for a in cards limit:6 %}
     <a class="album-card" href="{{ a.url | relative_url }}">
       <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">
       <div class="meta">
@@ -36,7 +35,7 @@ title: Home
         <small>{{ a.date | date: "%Y-%m-%d" }}</small>
       </div>
     </a>
-    {%- endfor -%}
+    {% endfor %}
   </div>
   <p><a href="{{ '/albums/' | relative_url }}">View all →</a></p>
 </section>
