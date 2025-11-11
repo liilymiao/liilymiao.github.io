@@ -176,64 +176,16 @@ title: Home
 
 </script>
 
-<!-- Simple full-image viewer -->
-<style>
-#imgViewer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.9);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-#imgViewer img {
-  max-width: 94%;
-  max-height: 94%;
-  border-radius: 10px;
-  box-shadow: 0 0 40px rgba(0,0,0,.6);
-}
-#imgViewer.visible { display: flex; }
-</style>
-
-<div id="imgViewer"><img></div>
-
-<script>
-(function(){
-  const viewer = document.getElementById('imgViewer');
-  const vimg   = viewer.querySelector('img');
-
-  document.addEventListener('click', e=>{
-    const card = e.target.closest('.photo-card img');
-    if (card) {
-      e.preventDefault();
-      vimg.src = card.src;
-      viewer.classList.add('visible');
-    } else if (e.target === viewer) {
-      viewer.classList.remove('visible');
-      vimg.src = '';
-    }
-  });
-})();
-</script>
-
-<!-- PhotoSwipe for Home / Photos -->
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
-
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  // 根据当前可见图片（受 lens 过滤影响）构建数据源
+  // 仅收集“当前可见”的图片（配合 lens 过滤）
   function buildItems() {
     const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
-      .filter(img => {
-        const card = img.closest('.photo-card');
-        // 只取当前“可见”的卡片
-        return card && card.style.display !== 'none';
-      });
+      .filter(img => img.closest('.photo-card')?.style.display !== 'none');
 
     return nodes.map(img => {
-      // 先拿 naturalWidth/Height；拿不到时给个保底值
       const w = img.naturalWidth || 2000;
       const h = img.naturalHeight || Math.round(w * 0.66);
       return {
@@ -245,13 +197,8 @@ title: Home
     });
   }
 
-  // 监听点击，打开灯箱
-  const grid = document.getElementById('photoGrid');
-  const filterBar = document.getElementById('photoFilters');
-
   function openLightbox(clickedImg) {
     const items = buildItems();
-    // 在“当前可见集合”里找到索引
     const idx = items.findIndex(it => it.src === (clickedImg.currentSrc || clickedImg.src));
     const pswp = new PhotoSwipe({
       index: Math.max(0, idx),
@@ -263,20 +210,35 @@ title: Home
     pswp.init();
   }
 
+  const grid = document.getElementById('photoGrid');
+  const filterBar = document.getElementById('photoFilters');
+
   if (grid) {
+    // 统一拦截 .photo-card 上的点击（而不是只拦截 img）
     grid.addEventListener('click', (e) => {
-      const img = e.target.closest('.photo-card img');
-      if (!img) return;
+      const card = e.target.closest('.photo-card');
+      if (!card) return;
+
+      // ——关键：阻止原 anchor 导航——
       e.preventDefault();
-      openLightbox(img);
+      e.stopPropagation();
+
+      const img = card.querySelector('img');
+      if (img) openLightbox(img);
     });
   }
 
-  // 切换镜头筛选时，灯箱数据源需跟随刷新（不需要立即打开，只要在下次点击时生效）
+  // 切换滤镜后，数据源自然以“下一次点击时”重建，不需要额外处理
   if (filterBar) {
     filterBar.addEventListener('click', () => {
-      // 让浏览器先完成 UI 显示切换，再更新数据源（这里不需要持久缓存，实时重建）
-      requestAnimationFrame(() => {/* noop: buildItems() 会在点击时实时取 */});
+      requestAnimationFrame(() => {/* no-op */});
     });
   }
+
+  // UX：鼠标样式提示“可放大”
+  const style = document.createElement('style');
+  style.textContent = `
+    #photoGrid .photo-card { cursor: zoom-in; }
+  `;
+  document.head.appendChild(style);
 </script>
