@@ -49,7 +49,7 @@ title: Home
           <img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">
         {% endif %}
         <div class="meta">
-          <!-- 默认展示英文（若无英文则回退中文） -->
+          <!-- 初始放英文；真正展示由 JS 覆盖 -->
           <h3>{{ a.title_en | default: a.title }}</h3>
           {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
         </div>
@@ -106,7 +106,6 @@ title: Home
         {%- endfor -%}
       {%- endif -%}
     {%- endfor -%}
-
     {%- assign photos_sorted = photo_items | sort | reverse -%}
 
     {%- for row in photos_sorted -%}
@@ -135,7 +134,7 @@ title: Home
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  // ---- Lightbox ----
+  // Lightbox
   function buildItems() {
     const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
       .filter(img => img.closest('.photo-card')?.style.display !== 'none');
@@ -161,17 +160,15 @@ title: Home
     });
   }
 
-  // ---- Albums filter (?loc=) ----
+  // Albums filter (?loc=)
   (function () {
     const ag = document.getElementById('albumGrid');
     const ab = document.getElementById('albumLocFilters');
     if (!ag || !ab) return;
-
     const url = new URL(window.location.href);
     const initial = url.searchParams.get('loc') || 'all';
     const cards = Array.from(ag.querySelectorAll('.album-card'));
     const btns  = Array.from(ab.querySelectorAll('[data-loc]'));
-
     const setActive = (loc) => btns.forEach(b=>b.classList.toggle('on', b.dataset.loc===loc));
     const apply = (loc) => {
       cards.forEach(c=>{
@@ -182,28 +179,24 @@ title: Home
       if(loc==='all') u.searchParams.delete('loc'); else u.searchParams.set('loc', loc);
       history.replaceState(null,'', u.toString());
     };
-
     const exists = btns.some(b=>b.dataset.loc===initial);
     const start  = exists ? initial : 'all';
     setActive(start); apply(start);
-
     ab.addEventListener('click', e=>{
       const btn=e.target.closest('[data-loc]'); if(!btn) return;
       setActive(btn.dataset.loc); apply(btn.dataset.loc);
     });
   })();
 
-  // ---- Photos filter (?lens=) ----
+  // Photos filter (?lens=)
   (function () {
     const pg = document.getElementById('photoGrid');
     const pb = document.getElementById('photoFilters');
     if (!pg || !pb) return;
-
     const url = new URL(window.location.href);
     const initial = url.searchParams.get('lens') || 'all';
     const cards = Array.from(pg.querySelectorAll('.photo-card'));
     const btns  = Array.from(pb.querySelectorAll('[data-lens]'));
-
     const setActive = (l) => btns.forEach(b=>b.classList.toggle('on', b.dataset.lens===l));
     const apply = (l) => {
       cards.forEach(c=>{
@@ -214,21 +207,18 @@ title: Home
       if(l==='all') u.searchParams.delete('lens'); else u.searchParams.set('lens', l);
       history.replaceState(null,'',u.toString());
     };
-
     const exists = btns.some(b=>b.dataset.lens===initial);
     const start  = exists ? initial : 'all';
     setActive(start); apply(start);
-
     pb.addEventListener('click', e=>{
       const btn=e.target.closest('[data-lens]'); if(!btn) return;
       setActive(btn.dataset.lens); apply(btn.dataset.lens);
     });
   })();
 
-  // ---- 关键：根据语言切换相册卡片标题（读取 data-title-zh/en）----
+  // —— 关键：根据语言切换相册卡片标题 —— //
   (function syncAlbumTitlesWithLang(){
-    const resolve = () => (localStorage.getItem('lang') || 'en');
-    const swap = (lang) => {
+    const apply = (lang) => {
       document.querySelectorAll('.album-card').forEach(card=>{
         const zh = card.dataset.titleZh;
         const en = card.dataset.titleEn || zh;
@@ -236,9 +226,10 @@ title: Home
         if (h3) h3.textContent = (lang === 'zh') ? (zh || en) : (en || zh);
       });
     };
-    // 初次按当前语言渲染
-    swap(resolve());
-    // 监听 default.html 派发的语言变更事件
-    window.addEventListener('langchange', e => swap(e.detail || resolve()));
+    // 首次依据当前 lang 渲染
+    const cur = localStorage.getItem('lang') || 'en';
+    apply(cur);
+    // 监听全局语言变更
+    window.addEventListener('langchange', e => apply(e.detail || 'en'));
   })();
 </script>
