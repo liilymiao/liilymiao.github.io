@@ -173,4 +173,46 @@ title: Home
     });
   }
 })();
+
+</script>
+
+<!-- Simple full-image viewer -->
+<style>
+#imgViewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+#imgViewer img {
+  max-width: 94%;
+  max-height: 94%;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba(0,0,0,.6);
+}
+#imgViewer.visible { display: flex; }
+</style>
+
+<div id="imgViewer"><img></div>
+
+<script>
+(function(){
+  const viewer = document.getElementById('imgViewer');
+  const vimg   = viewer.querySelector('img');
+
+  document.addEventListener('click', e=>{
+    const card = e.target.closest('.photo-card img');
+    if (card) {
+      e.preventDefault();
+      vimg.src = card.src;
+      viewer.classList.add('visible');
+    } else if (e.target === viewer) {
+      viewer.classList.remove('visible');
+      vimg.src = '';
+    }
+  });
+})();
 </script>
