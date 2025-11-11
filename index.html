@@ -33,7 +33,6 @@ title: Home
     <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
     {%- for loc in locs -%}
       {%- assign rep = albums_all | where: "location", loc | first -%}
-      <!-- 地点名称来自各相册 front matter（动态），不做硬编码翻译 -->
       <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
     {%- endfor -%}
   </div>
@@ -41,10 +40,12 @@ title: Home
   <div class="albums-grid" id="albumGrid">
     {%- assign cards = albums_all | sort: "date" | reverse -%}
     {%- for a in cards -%}
+      {%- assign t_en = a.title_en | default: a.title -%}
       <a class="album-card" href="{{ a.url | relative_url }}" data-location="{{ a.location | default: '' }}">
         {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}
         <div class="meta">
-          <h3>{{ a.title }}</h3>
+          <!-- 默认显示英文；切到中文时由 JS 改成 data-title-zh -->
+          <h3 data-title-en="{{ t_en | escape }}" data-title-zh="{{ a.title | escape }}">{{ t_en }}</h3>
           {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
         </div>
       </a>
@@ -80,7 +81,6 @@ title: Home
     <strong data-i18n="filters.filter">Filter:</strong>
     <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
     {%- for l in lenses -%}
-      <!-- 镜头名称为数据值（动态），不做硬编码翻译 -->
       <button type="button" data-lens="{{ l }}">{{ l }}</button>
     {%- endfor -%}
   </div>
@@ -121,7 +121,7 @@ title: Home
 
 <script>
 (function () {
-  // Albums filter (?loc=)
+  // ===== Albums filter (?loc=) =====
   const ag = document.getElementById('albumGrid');
   const ab = document.getElementById('albumLocFilters');
   if (ag && ab) {
@@ -148,7 +148,7 @@ title: Home
     });
   }
 
-  // Photos filter (?lens=)
+  // ===== Photos filter (?lens=) =====
   const pg = document.getElementById('photoGrid');
   const pb = document.getElementById('photoFilters');
   if (pg && pb) {
@@ -174,6 +174,22 @@ title: Home
       setActive(btn.dataset.lens); apply(btn.dataset.lens);
     });
   }
+
+  // ===== Album card title language swap =====
+  function setAlbumCardTitles(lang){
+    const zh = (lang === 'zh');
+    document.querySelectorAll('.albums-grid h3[data-title-en][data-title-zh]').forEach(h=>{
+      h.textContent = zh ? (h.dataset.titleZh || h.textContent)
+                         : (h.dataset.titleEn || h.textContent);
+    });
+  }
+  // 初始：按 localStorage.lang（默认 en）
+  setAlbumCardTitles(localStorage.getItem('lang') || 'en');
+
+  // 点击左下角语言按钮后，同步更新（按钮由 default.html 提供）
+  document.getElementById('langToggle')?.addEventListener('click', ()=>{
+    setTimeout(()=>setAlbumCardTitles(localStorage.getItem('lang') || 'en'), 0);
+  });
 })();
 </script>
 
