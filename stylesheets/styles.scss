@@ -88,13 +88,22 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
     --paper:#121212; --ink:#f5f6fa; --muted:#b0b6bf; --edge:#2a2f38;
     --blue:#93c5fd; --blue-2:#bfdbfe; --chip:#1c1f24;
   }
+
   body{ background:var(--paper); color:var(--ink); }
-  .post,.page{
-    background:#1e242c;                   /* 比纯黑更易读 */
+
+  /* 关键：干掉主题可能注入的浅色渐变或更高优先级背景 */
+  .post,
+  .page{
+    background:#1e242c !important;   /* 深色但不发黑 */
+    background-image:none !important; /* 关掉主题的浅色渐变 */
     border-color:var(--edge);
     border:1px solid rgba(255,255,255,.05);
     box-shadow:0 2px 12px rgba(0,0,0,.30);
   }
+
+  /* 辅助对比度：代码与引用也跟着变暗一点 */
+  pre,code{ background:#151a20; }
+  blockquote{ background:#1e242c; color:var(--muted); }
   a{ color:var(--blue); }
   a:hover{ color:var(--blue-2); text-decoration:underline; }
 }
