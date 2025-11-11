@@ -85,37 +85,43 @@ title: Home
   </div>
 
   <div class="photos-grid" id="photoGrid">
-    {%- assign photo_items = "" | split: "" -%}
-    {%- for a in albums_all -%}
-      {%- if a.photos -%}
-        {%- for p in a.photos -%}
-          {%- assign when = p.taken_at | default: a.date -%}
-          {%- assign key  = when | date: "%Y%m%d%H%M%S" -%}
-          {%- assign item = p | merge: {
-                "_album_title": a.title,
-                "_album_url":   a.url,
-                "_taken_at":    when,
-                "_key":         key
-              } -%}
-          {%- assign photo_items = photo_items | push: item -%}
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
+  {%- assign photo_items = "" | split: "" -%}
+  {%- for a in albums_all -%}
+    {%- if a.photos -%}
+      {%- for p in a.photos -%}
+        {%- if p.taken_at -%}
+          {%- assign ts = p.taken_at | date: "%s" -%}
+          {%- assign when = p.taken_at -%}
+        {%- else -%}
+          {%- assign ts = a.date | date: "%s" -%}
+          {%- assign when = a.date -%}
+        {%- endif -%}
+        {%- assign item = p | merge: {
+              "_album_title": a.title,
+              "_album_url":   a.url,
+              "_taken_at":    when,
+              "_ts":          ts
+            } -%}
+        {%- assign photo_items = photo_items | push: item -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
 
-    {%- assign photos_sorted = photo_items | sort: "_key" | reverse -%}
-    {%- for p in photos_sorted -%}
-      <a class="photo-card"
-         href="{{ p._album_url | relative_url }}"
-         data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
-         title="{{ p.caption | default: p._album_title }}">
-        <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
-        <div class="ph-meta">
-          <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
-          {% if p.lens %}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{% endif %}
-        </div>
-      </a>
-    {%- endfor -%}
-  </div>
+  {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
+
+  {%- for p in photos_sorted -%}
+    <a class="photo-card"
+       href="{{ p._album_url | relative_url }}"
+       data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
+       title="{{ p.caption | default: p._album_title }}">
+      <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
+      <div class="ph-meta">
+        <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
+        {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{%- endif -%}
+      </div>
+    </a>
+  {%- endfor -%}
+</div>
 </section>
 
 <script>

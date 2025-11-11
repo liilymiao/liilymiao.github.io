@@ -1,86 +1,93 @@
 ---
 ---
 
-/* 先加载主题的基础样式 */
-/* @import "{{ site.theme }}"; */
+/* 先加载主题，再覆盖 */
+@import "{{ site.theme }}";
 
-/* ===== Photo-zine Grey Blue aesthetic ===== */
+/* ===== 基础配色（亮色） ===== */
 :root{
   --paper:#f5f7fa; --ink:#1f2937; --muted:#6b7280; --edge:#e5e7eb;
   --blue:#5b8aa6; --blue-2:#2e6f8f; --chip:#eef2f7;
 }
 
-body{ background:var(--paper); color:var(--ink); line-height:1.8; font-feature-settings:"liga","kern"; }
+/* 基础排版 */
+body{ background:var(--paper); color:var(--ink); line-height:1.8; }
 a{ color:var(--blue); text-decoration:none; }
 a:hover{ color:var(--blue-2); text-decoration:underline; }
 h1,h2,h3{ color:var(--ink); }
 
-/* 容器：让“卡片”有内容区的宽度与边距 */
-.page-wrap,.wrapper,.container,.post,.page{ max-width:860px; margin:28px auto; padding:0 16px; }
-
-/* 卡片质感 */
+/* 容器 & 卡片 */
+.wrapper{ max-width:860px; margin:28px auto; }
 .post,.page{
   background:#fff; border:1px solid var(--edge);
   box-shadow:0 2px 12px rgba(17,24,39,.04); border-radius:10px; padding:22px;
 }
 
-/* 代码块 & 引用 */
+/* 代码块、引文 */
 pre,code{ background:var(--chip); }
 pre{ padding:12px 14px; border-radius:8px; border:1px solid var(--edge); overflow:auto; }
 blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#fff; padding:.4rem .9rem; }
 
-/* 导航/页脚微调 */
-.top-nav{ border-bottom:1px solid var(--edge); }
-.site-footer{ opacity:.7; border-top:1px solid var(--edge); padding-top:14px; }
-
-/* 深色模式（提升可读性：卡片不再与背景同色，稍亮一点） */
+/* ===== 深色模式（系统） ===== */
 @media (prefers-color-scheme: dark){
   :root{
     --paper:#121212; --ink:#f5f6fa; --muted:#b0b6bf; --edge:#2a2f38;
     --blue:#93c5fd; --blue-2:#bfdbfe; --chip:#1c1f24;
   }
-  body { background: var(--paper); color: var(--ink); }
+  body{ background:var(--paper); color:var(--ink); }
   .post,.page{
-    background:#1e242c;            /* 提亮卡片背景，文字更清晰 */
+    background:#1e242c;           /* 提亮：避免字色过暗 */
     border-color:var(--edge);
     box-shadow:0 2px 12px rgba(0,0,0,.30);
     border:1px solid rgba(255,255,255,.05);
   }
-  a { color: var(--blue); }
-  a:hover { color: var(--blue-2); text-decoration: underline; }
+  a{ color:var(--blue); }
+  a:hover{ color:var(--blue-2); text-decoration:underline; }
 }
 
-/* 防止 /albums 页第一张图铺满屏（保险阀） */
+/* ===== /albums 顶部“首图铺满”保险阀 ===== */
 .page > p:first-child > img:only-child{
   max-width:100%; height:auto; display:block; margin:0 auto;
 }
 
-/* === Albums grid === */
+/* ===== Albums Grid（统一封面裁切为相同高度） ===== */
 .albums-grid{
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
   gap:1rem; margin-top:1rem;
 }
 .album-card{
   display:block; background:#fff; border-radius:12px; overflow:hidden;
   box-shadow:0 1px 6px rgba(0,0,0,.06); text-decoration:none;
 }
-.album-card img{ width:100%; height:200px; object-fit:cover; display:block; }
+.album-card img{
+  width:100%;
+  height:200px;               /* 关键：固定高度 */
+  object-fit:cover;           /* 关键：等比裁切 */
+  display:block;
+}
 .album-card .meta{ padding:.75rem .9rem; }
 .album-card h3{ margin:0 0 .25rem 0; font-size:1.05rem; }
 
-/* === Photos stream on Home === */
+/* ===== 首页 Photos 流 ===== */
 .photos-grid{
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
-  gap:.75rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  gap:.75rem; margin-top:1rem;
 }
 .photo-card{
   display:block; background:#fff; border-radius:12px; overflow:hidden;
   box-shadow:0 1px 6px rgba(0,0,0,.06); text-decoration:none;
 }
-.photo-card img{ width:100%; height:180px; object-fit:cover; display:block; }
+.photo-card img{
+  width:100%;
+  height:180px;               /* 关键：统一卡片高度 */
+  object-fit:cover;           /* 关键：等比裁切 */
+  display:block;
+}
 .photo-card .ph-meta{ padding:.4rem .6rem; font-size:.8rem; color:#6b7280; }
 
-/* 过滤按钮（复用 Albums/Photos 两处） */
+/* ===== 顶部筛选“胶囊”按钮 ===== */
 .album-filters{
   margin:.5rem 0 1rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;
 }
