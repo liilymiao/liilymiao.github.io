@@ -1,7 +1,7 @@
 ---
 layout: album
 title: 城门水塘, 香港
-title_en: "城门水塘, 香港"
+title_en: Shing Mun Reservoir, Hong Kong
 permalink: /album/chengmun-reservoir-hongkong/
 date: 2025-02-22
 location: Hong Kong SAR, China

@@ -1,7 +1,7 @@
 ---
 layout: album
 title: 北海道, 日本
-title_en: "北海道, 日本"
+title_en: Hokkaido, Japan
 permalink: /album/hokkaido-jp/
 date: 2025-01-17
 location: japan

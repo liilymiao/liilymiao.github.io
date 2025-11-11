@@ -1,7 +1,7 @@
 ---
 layout: album
 title: 镰仓, 日本
-title_en: "镰仓, 日本"
+title_en: Kamakura, Japan
 permalink: /album/kamakura-jp/
 date: 2025-01-20
 location: japan
