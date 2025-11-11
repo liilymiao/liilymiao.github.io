@@ -124,3 +124,45 @@ blockquote{border-left:3px solid var(--blue); color:var(--muted); background:#ff
 }
 .album-item img{ display:block; width:100%; height:auto; }
 .album-item figcaption{ padding:8px 10px; color:var(--muted); font-size:.92rem; background:#fff; }
+
+/* === Dark / Light theme colors === */
+:root[data-theme='light'] {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --link-color: #0070f3;
+  --border-color: rgba(0,0,0,0.1);
+}
+
+:root[data-theme='dark'] {
+  --bg-color: #111111;
+  --text-color: #f0f0f0;
+  --link-color: #7fb8ff;
+  --border-color: rgba(255,255,255,0.2);
+}
+
+/* Apply variables globally */
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.4s, color 0.4s;
+}
+a { color: var(--link-color); }
+hr { border-color: var(--border-color); }
+
+/* === Toggle button style === */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+}
+.theme-toggle button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.theme-toggle button:hover {
+  transform: rotate(20deg);
+}
