@@ -102,44 +102,55 @@ title: Home
     {%- endfor -%}
   </div>
 
-  <div class="photos-grid" id="photoGrid">
-    {%- assign photo_items = "" | split: "" -%}
-    {%- for a in albums_all -%}
-      {%- if a.photos -%}
-        {%- for p in a.photos -%}
-          {%- assign when_raw = p.taken_at | default: a.date -%}
-          {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
-          {%- assign ts = day_only | date: "%s" -%}
-          {%- capture row -%}
-{{ ts }}||{{ p.src }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}
-          {%- endcapture -%}
-          {%- assign photo_items = photo_items | push: row | compact -%}
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
+<div class="photos-grid" id="photoGrid">
+  {%- assign photo_items = "" | split: "" -%}
+  {%- for a in albums_all -%}
+    {%- if a.photos -%}
+      {%- for p in a.photos -%}
+        {%- assign when_raw = p.taken_at | default: a.date -%}
+        {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
+        {%- assign ts = day_only | date: "%s" -%}
 
-    {%- assign photos_sorted = photo_items | sort | reverse -%}
+        {%- assign src = p.src -%}
+        {%- assign thumb = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-thumb.jpg' -%}
+        {%- assign large = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-large.jpg' -%}
 
-    {%- for row in photos_sorted -%}
-      {%- assign parts = row | split: "||" -%}
-      {%- assign _ts        = parts[0] -%}
-      {%- assign _src       = parts[1] -%}
-      {%- assign _lenses    = parts[2] -%}
-      {%- assign _caption   = parts[3] -%}
-      {%- assign _album_url = parts[4] -%}
-      {%- assign _taken_at  = parts[5] -%}
+        {%- capture row -%}
+{{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}
+        {%- endcapture -%}
+        {%- assign photo_items = photo_items | push: row | compact -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
 
-      <a class="photo-card" href="{{ _album_url | relative_url }}"
-         data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
-         title="{{ _caption }}">
-        <img src="{{ _src | relative_url }}" alt="{{ _caption }}" loading="lazy">
-        <div class="ph-meta">
-          <small>{{ _taken_at }}</small>
-          {%- if _lenses and _lenses != '' -%}<small> · {{ _lenses | replace: ',', ', ' }}</small>{% endif %}
-        </div>
-      </a>
-    {%- endfor -%}
-  </div>
+  {%- assign photos_sorted = photo_items | sort | reverse -%}
+
+  {%- for row in photos_sorted -%}
+    {%- assign parts = row | split: "||" -%}
+    {%- assign _ts        = parts[0] -%}
+    {%- assign _src       = parts[1] -%}
+    {%- assign _thumb     = parts[2] -%}
+    {%- assign _large     = parts[3] -%}
+    {%- assign _lenses    = parts[4] -%}
+    {%- assign _caption   = parts[5] -%}
+    {%- assign _album_url = parts[6] -%}
+    {%- assign _taken_at  = parts[7] -%}
+
+    <a class="photo-card" href="{{ _album_url | relative_url }}"
+       data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+       title="{{ _caption }}">
+      <!-- 只加载缩略图；用 data-full 存放大图 URL -->
+      <img src="{{ _thumb | relative_url }}"
+           data-full="{{ _large | relative_url }}"
+           alt="{{ _caption }}"
+           loading="lazy" decoding="async" width="480" height="320">
+      <div class="ph-meta">
+        <small>{{ _taken_at }}</small>
+        {%- if _lenses and _lenses != '' -%}<small> · {{ _lenses | replace: ',', ', ' }}</small>{% endif %}
+      </div>
+    </a>
+  {%- endfor -%}
+</div>
 </section>
 
 <script>
@@ -207,16 +218,19 @@ title: Home
   function buildItems() {
     const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
       .filter(img => img.closest('.photo-card')?.style.display !== 'none');
+
     return nodes.map(img => {
-      const w = img.naturalWidth || 2000;
-      const h = img.naturalHeight || Math.round(w * 0.66);
-      return { src: img.currentSrc || img.src, width: w, height: h, alt: img.alt || '' };
+      // ✅ 这里使用 data-full（大图）；没有则回退 currentSrc/src
+      const big = img.getAttribute('data-full') || img.currentSrc || img.src;
+      // ✅ 给灯箱足够的尺寸，提升清晰度与缩放体验
+      return { src: big, width: 1600, height: 1067, alt: img.alt || '' };
     });
   }
 
   function openLightbox(clickedImg) {
     const items = buildItems();
-    const idx = items.findIndex(it => it.src === (clickedImg.currentSrc || clickedImg.src));
+    const curSrc = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
+    const idx = items.findIndex(it => it.src === curSrc);
     const pswp = new PhotoSwipe({ index: Math.max(0, idx), dataSource: items, bgOpacity: 0.95, wheelToZoom: true });
     pswp.on('close', () => pswp.destroy());
     pswp.init();

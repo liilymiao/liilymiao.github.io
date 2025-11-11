@@ -1,8 +1,7 @@
 ---
 layout: default
 ---
-
-<!-- PhotoSwipe 样式（放这里也能正常加载） -->
+<!-- PhotoSwipe 样式 -->
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
 
 <article class="page" id="album-pswp">
@@ -11,19 +10,25 @@ layout: default
 
   <div class="album-grid">
     {% for p in page.photos %}
-    <figure class="album-item">
-      <!-- 用 <a> 包裹图片，供 PhotoSwipe 识别；先不写尺寸，JS 会在 onload 后自动补齐 -->
-      <a class="pswp-link"
-         href="{{ p.src | relative_url }}"
-         data-pswp-src="{{ p.src | relative_url }}"
-         {% if p.caption %}data-pswp-caption="{{ p.caption | escape }}"{% endif %}>
-        <img
-          src="{{ p.src | relative_url }}"
-          alt="{{ p.caption | default: page.title }}"
-          loading="lazy">
-      </a>
-      {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
-    </figure>
+      {%- assign src   = p.src -%}
+      {%- assign base  = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
+      {%- assign thumb = base | replace:'.jpg','-thumb.jpg'  | replace:'.jpeg','-thumb.jpg' | replace:'.png','-thumb.jpg' -%}
+      {%- assign large = base | replace:'.jpg','-large.jpg'  | replace:'.jpeg','-large.jpg' | replace:'.png','-large.jpg' -%}
+      {%- assign caption = p.caption | default: page.title -%}
+
+      <figure class="album-item">
+        <a class="pswp-link"
+           href="{{ large | relative_url }}"
+           data-pswp-caption="{{ caption | escape }}">
+          <img
+            src="{{ thumb | relative_url }}"
+            alt="{{ caption | escape }}"
+            loading="lazy"
+            decoding="async"
+            width="480">
+        </a>
+        {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+      </figure>
     {% endfor %}
   </div>
 </article>
@@ -32,37 +37,47 @@ layout: default
 <script type="module">
   import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@5/dist/photoswipe-lightbox.esm.min.js';
 
-  // 1) 等图片加载后，补齐 data-pswp-width/height，避免弹出时抖动
-  const galleryRoot = document.querySelector('#album-pswp');
-  const anchors = Array.from(galleryRoot.querySelectorAll('a.pswp-link'));
+  // 依据缩略图尺寸推算大图尺寸，给 anchor 标注 data-pswp-width/height
+  function primeSlideSizes(root) {
+    const anchors = root.querySelectorAll('a.pswp-link');
+    anchors.forEach(a => {
+      // 已有尺寸就不重复
+      if (a.dataset.pswpWidth && a.dataset.pswpHeight) return;
+      const img = a.querySelector('img');
+      if (!img) return;
 
-  function setSizeFromImage(a) {
-    const img = a.querySelector('img');
-    if (!img) return;
-    const set = () => {
-      if (!a.dataset.pswpWidth)  a.dataset.pswpWidth  = img.naturalWidth  || img.width  || 1600;
-      if (!a.dataset.pswpHeight) a.dataset.pswpHeight = img.naturalHeight || img.height || 1067;
-      // 兼容 PhotoSwipe 的通用读取字段
-      a.setAttribute('data-pswp-width',  a.dataset.pswpWidth);
-      a.setAttribute('data-pswp-height', a.dataset.pswpHeight);
-      a.setAttribute('data-pswp-src',    a.getAttribute('href'));
-    };
-    if (img.complete) set(); else img.addEventListener('load', set, { once:true });
+      const setDims = () => {
+        const w = img.naturalWidth || img.width || 480;
+        const h = img.naturalHeight || img.height || Math.round(w * 0.66);
+        // 估算大图为 1600 宽等比例；若横竖不明，按比例推
+        const targetW = 1600;
+        const ratio   = h / Math.max(1, w);
+        const targetH = Math.round(targetW * ratio);
+
+        a.dataset.pswpWidth  = String(targetW);
+        a.dataset.pswpHeight = String(targetH);
+        a.setAttribute('data-pswp-width',  a.dataset.pswpWidth);
+        a.setAttribute('data-pswp-height', a.dataset.pswpHeight);
+        a.setAttribute('data-pswp-src',    a.getAttribute('href')); // 兼容读取
+      };
+
+      if (img.complete) setDims();
+      else img.addEventListener('load', setDims, { once: true });
+    });
   }
-  anchors.forEach(setSizeFromImage);
 
-  // 2) 初始化 Lightbox
+  const galleryRoot = document.getElementById('album-pswp');
+  primeSlideSizes(galleryRoot);
+
   const lightbox = new PhotoSwipeLightbox({
     gallery: '#album-pswp .album-grid',
     children: 'a.pswp-link',
     pswpModule: () => import('https://unpkg.com/photoswipe@5/dist/photoswipe.esm.min.js'),
-    // 如果写了 data-pswp-caption，就当作标题展示
-    // 也可以从 figcaption 里取：
-    showHideAnimationType: 'zoom', // 手感更好
-    wheelToZoom: true
+    wheelToZoom: true,
+    showHideAnimationType: 'zoom'
   });
 
-  // 自定义标题：优先 data-pswp-caption，其次同级 figcaption
+  // 自定义标题：优先 data-pswp-caption，其次 figure > figcaption
   lightbox.on('uiRegister', function() {
     lightbox.pswp.ui.registerElement({
       name: 'custom-caption',
@@ -72,7 +87,7 @@ layout: default
       html: '',
       onInit: (el, pswp) => {
         pswp.on('change', () => {
-          const curr = pswp.currSlide?.data?.element; // <a>
+          const curr = pswp.currSlide?.data?.element; // <a.pswp-link>
           let caption = curr?.getAttribute('data-pswp-caption') || '';
           if (!caption) {
             const figcap = curr?.closest('figure')?.querySelector('figcaption');
@@ -88,9 +103,7 @@ layout: default
 </script>
 
 <style>
-/* 让相册网格的<a>占满 figure，点击区域更大 */
+/* 让点击区域更大 & 保持圆角/阴影统一 */
 .album-item > a.pswp-link { display:block; border-radius:12px; overflow:hidden; }
 .album-item > a.pswp-link img { display:block; width:100%; height:auto; }
-
-/* 深色模式下，PhotoSwipe 自带样式即可，这里不额外改色 */
 </style>
