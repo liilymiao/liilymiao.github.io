@@ -33,6 +33,7 @@ title: Home
     <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
     {%- for loc in locs -%}
       {%- assign rep = albums_all | where: "location", loc | first -%}
+      <!-- 地点名称来自各相册 front matter（动态），不做硬编码翻译 -->
       <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
     {%- endfor -%}
   </div>
@@ -79,6 +80,7 @@ title: Home
     <strong data-i18n="filters.filter">Filter:</strong>
     <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
     {%- for l in lenses -%}
+      <!-- 镜头名称为数据值（动态），不做硬编码翻译 -->
       <button type="button" data-lens="{{ l }}">{{ l }}</button>
     {%- endfor -%}
   </div>
