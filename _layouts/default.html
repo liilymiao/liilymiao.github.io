@@ -7,9 +7,27 @@ layout: null
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+
+  <!-- 🌓 Early boot: avoid flash before CSS loads -->
+  <script>
+  (function(){
+    try {
+      var t = localStorage.getItem('theme');
+      if (t) {
+        document.documentElement.dataset.theme = t;
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.dataset.theme = 'dark';
+      } else {
+        document.documentElement.dataset.theme = 'light';
+      }
+    } catch(e){}
+  })();
+  </script>
+
   <link rel="stylesheet" href="{{ '/stylesheets/styles.css?v=' | append: site.github.build_revision | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/custom.css?v=' | append: site.github.build_revision | relative_url }}">
 </head>
+
 <body>
   <nav class="top-nav">
     <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
@@ -21,14 +39,43 @@ layout: null
       <a href="{{ '/locations/' | relative_url }}">Locations</a>
     </div>
   </nav>
+
+  <!-- ☀️ / 🌙 Toggle Button -->
   <div class="theme-toggle">
-  <button id="themeToggle" title="Toggle dark/light mode">🌙</button>
+    <button id="themeToggle" title="Toggle dark/light mode" aria-label="Toggle theme">🌙</button>
   </div>
+
   <main class="page-wrap">
     {{ content }}
   </main>
+
   <footer class="site-footer">
     <small>© {{ site.time | date: '%Y' }} {{ site.title }}</small>
   </footer>
+
+  <!-- 🌙 Theme Toggle Script -->
+  <script>
+  (function() {
+    const btn = document.getElementById('themeToggle');
+    const root = document.documentElement;
+
+    // 初始化：加载本地记录或系统偏好
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initTheme = stored || (prefersDark ? 'dark' : 'light');
+    root.dataset.theme = initTheme;
+    btn.textContent = initTheme === 'dark' ? '☀️' : '🌙';
+
+    // 切换逻辑
+    btn.addEventListener('click', () => {
+      const cur = root.dataset.theme;
+      const next = cur === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
+      btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  })();
+  </script>
+
 </body>
 </html>
