@@ -85,55 +85,55 @@ title: Home
   </div>
 
   <div class="photos-grid" id="photoGrid">
-  {%- assign photo_items = "" | split: "" -%}
-  {%- for a in albums_all -%}
-    {%- if a.photos -%}
-      {%- for p in a.photos -%}
-        {%- if p.taken_at -%}
-          {%- assign ts = p.taken_at | date: "%s" -%}
-          {%- assign when = p.taken_at -%}
-        {%- else -%}
-          {%- assign ts = a.date | date: "%s" -%}
-          {%- assign when = a.date -%}
-        {%- endif -%}
-        {%- assign item = p | merge: {
-              "_album_title": a.title,
-              "_album_url":   a.url,
-              "_taken_at":    when,
-              "_ts":          ts
-            } -%}
-        {%- assign photo_items = photo_items | push: item -%}
-      {%- endfor -%}
-    {%- endif -%}
-  {%- endfor -%}
+    {%- assign photo_items = "" | split: "" -%}
+    {%- for a in albums_all -%}
+      {%- if a.photos -%}
+        {%- for p in a.photos -%}
+          {%- if p.taken_at -%}
+            {%- assign ts = p.taken_at | date: "%s" -%}
+            {%- assign when = p.taken_at -%}
+          {%- else -%}
+            {%- assign ts = a.date | date: "%s" -%}
+            {%- assign when = a.date -%}
+          {%- endif -%}
+          {%- assign item = p | merge: {
+                "_album_title": a.title,
+                "_album_url":   a.url,
+                "_taken_at":    when,
+                "_ts":          ts
+              } -%}
+          {%- assign photo_items = photo_items | push: item -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
 
-  {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
-
-  {%- for p in photos_sorted -%}
-    <a class="photo-card"
-       href="{{ p._album_url | relative_url }}"
-       data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
-       title="{{ p.caption | default: p._album_title }}">
-      <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
-      <div class="ph-meta">
-        <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
-        {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{%- endif -%}
-      </div>
-    </a>
-  {%- endfor -%}
-</div>
+    {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
+    {%- for p in photos_sorted -%}
+      <a class="photo-card"
+         href="{{ p._album_url | relative_url }}"
+         data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
+         title="{{ p.caption | default: p._album_title }}">
+        <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
+        <div class="ph-meta">
+          <small>{{ p._taken_at | date: "%Y-%m-%d" }}</small>
+          {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
 </section>
 
 <script>
 (function () {
-  // Albums: filter by location with ?loc=
+  // Albums: filter by location (?loc=)
   const ag = document.getElementById('albumGrid');
   const ab = document.getElementById('albumLocFilters');
   if (ag && ab) {
-    const url = new URL(window.location.href);
+    const url  = new URL(window.location.href);
     const initial = url.searchParams.get('loc') || 'all';
     const cards = Array.from(ag.querySelectorAll('.album-card'));
     const btns  = Array.from(ab.querySelectorAll('[data-loc]'));
+
     function setActive(loc){ btns.forEach(b=>b.classList.toggle('on', b.dataset.loc===loc)); }
     function apply(loc){
       cards.forEach(c=>{
@@ -149,17 +149,19 @@ title: Home
       const loc = btn.dataset.loc; setActive(loc); apply(loc);
     });
     const exists = btns.some(b=>b.dataset.loc===initial);
-    setActive(exists ? initial : 'all'); apply(exists ? initial : 'all');
+    const start  = exists ? initial : 'all';
+    setActive(start); apply(start);
   }
 
-  // Photos: filter by lens with ?lens=
+  // Photos: filter by lens (?lens=)
   const pg = document.getElementById('photoGrid');
   const pb = document.getElementById('photoFilters');
   if (pg && pb) {
-    const url = new URL(window.location.href);
+    const url  = new URL(window.location.href);
     const initial = url.searchParams.get('lens') || 'all';
     const cards = Array.from(pg.querySelectorAll('.photo-card'));
     const btns  = Array.from(pb.querySelectorAll('[data-lens]'));
+
     function setActive(l){ btns.forEach(b=>b.classList.toggle('on', b.dataset.lens===l)); }
     function apply(l){
       cards.forEach(c=>{
@@ -175,7 +177,8 @@ title: Home
       const l = btn.dataset.lens; setActive(l); apply(l);
     });
     const exists = btns.some(b=>b.dataset.lens===initial);
-    setActive(exists ? initial : 'all'); apply(exists ? initial : 'all');
+    const start  = exists ? initial : 'all';
+    setActive(start); apply(start);
   }
 })();
 </script>
