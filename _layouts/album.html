@@ -1,15 +1,96 @@
 ---
 layout: default
 ---
-<article class="page">
+
+<!-- PhotoSwipe 样式（放这里也能正常加载） -->
+<link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
+
+<article class="page" id="album-pswp">
   <h1>{{ page.title }}</h1>
   {% if page.content %}<div class="post-content">{{ content }}</div>{% endif %}
+
   <div class="album-grid">
     {% for p in page.photos %}
     <figure class="album-item">
-      <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: page.title }}" loading="lazy">
+      <!-- 用 <a> 包裹图片，供 PhotoSwipe 识别；先不写尺寸，JS 会在 onload 后自动补齐 -->
+      <a class="pswp-link"
+         href="{{ p.src | relative_url }}"
+         data-pswp-src="{{ p.src | relative_url }}"
+         {% if p.caption %}data-pswp-caption="{{ p.caption | escape }}"{% endif %}>
+        <img
+          src="{{ p.src | relative_url }}"
+          alt="{{ p.caption | default: page.title }}"
+          loading="lazy">
+      </a>
       {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
     </figure>
     {% endfor %}
   </div>
 </article>
+
+<!-- PhotoSwipe 脚本（ESM） -->
+<script type="module">
+  import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@5/dist/photoswipe-lightbox.esm.min.js';
+
+  // 1) 等图片加载后，补齐 data-pswp-width/height，避免弹出时抖动
+  const galleryRoot = document.querySelector('#album-pswp');
+  const anchors = Array.from(galleryRoot.querySelectorAll('a.pswp-link'));
+
+  function setSizeFromImage(a) {
+    const img = a.querySelector('img');
+    if (!img) return;
+    const set = () => {
+      if (!a.dataset.pswpWidth)  a.dataset.pswpWidth  = img.naturalWidth  || img.width  || 1600;
+      if (!a.dataset.pswpHeight) a.dataset.pswpHeight = img.naturalHeight || img.height || 1067;
+      // 兼容 PhotoSwipe 的通用读取字段
+      a.setAttribute('data-pswp-width',  a.dataset.pswpWidth);
+      a.setAttribute('data-pswp-height', a.dataset.pswpHeight);
+      a.setAttribute('data-pswp-src',    a.getAttribute('href'));
+    };
+    if (img.complete) set(); else img.addEventListener('load', set, { once:true });
+  }
+  anchors.forEach(setSizeFromImage);
+
+  // 2) 初始化 Lightbox
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#album-pswp .album-grid',
+    children: 'a.pswp-link',
+    pswpModule: () => import('https://unpkg.com/photoswipe@5/dist/photoswipe.esm.min.js'),
+    // 如果写了 data-pswp-caption，就当作标题展示
+    // 也可以从 figcaption 里取：
+    showHideAnimationType: 'zoom', // 手感更好
+    wheelToZoom: true
+  });
+
+  // 自定义标题：优先 data-pswp-caption，其次同级 figcaption
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el, pswp) => {
+        pswp.on('change', () => {
+          const curr = pswp.currSlide?.data?.element; // <a>
+          let caption = curr?.getAttribute('data-pswp-caption') || '';
+          if (!caption) {
+            const figcap = curr?.closest('figure')?.querySelector('figcaption');
+            caption = figcap ? figcap.textContent.trim() : '';
+          }
+          el.innerHTML = caption ? `<div style="color:#fff;padding:8px 12px;">${caption}</div>` : '';
+        });
+      }
+    });
+  });
+
+  lightbox.init();
+</script>
+
+<style>
+/* 让相册网格的<a>占满 figure，点击区域更大 */
+.album-item > a.pswp-link { display:block; border-radius:12px; overflow:hidden; }
+.album-item > a.pswp-link img { display:block; width:100%; height:auto; }
+
+/* 深色模式下，PhotoSwipe 自带样式即可，这里不额外改色 */
+</style>
