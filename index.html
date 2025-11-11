@@ -90,7 +90,7 @@ title: Home
     {%- endfor -%}
   </div>
 
-  <div class="photos-grid" id="photoGrid">
+    <div class="photos-grid" id="photoGrid">
     {%- assign photo_items = "" | split: "" -%}
     {%- for a in albums_all -%}
       {%- if a.photos -%}
@@ -98,26 +98,32 @@ title: Home
           {%- assign when_raw = p.taken_at | default: a.date -%}
           {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
           {%- assign ts = day_only | date: "%s" -%}
-          {%- assign item = p | merge: {
-                "_album_title": a.title_en | default: a.title,
-                "_album_url":   a.url,
-                "_taken_at":    day_only,
-                "_ts":          ts
-              } -%}
-          {%- assign photo_items = photo_items | push: item -%}
+          {%- capture row -%}
+{{ ts }}||{{ p.src }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}
+          {%- endcapture -%}
+          {%- assign photo_items = photo_items | push: row | compact -%}
         {%- endfor -%}
       {%- endif -%}
     {%- endfor -%}
-    {%- assign photos_sorted = photo_items | sort: "_ts" | reverse -%}
 
-    {%- for p in photos_sorted -%}
-      <a class="photo-card" href="{{ p._album_url | relative_url }}"
-         data-lenses="{{ p.lens | join: ' ' | default: p.lens | default: '' }}"
-         title="{{ p.caption | default: p._album_title }}">
-        <img src="{{ p.src | relative_url }}" alt="{{ p.caption | default: p._album_title }}" loading="lazy">
+    {%- assign photos_sorted = photo_items | sort | reverse -%}
+
+    {%- for row in photos_sorted -%}
+      {%- assign parts = row | split: "||" -%}
+      {%- assign _ts        = parts[0] -%}
+      {%- assign _src       = parts[1] -%}
+      {%- assign _lenses    = parts[2] -%}
+      {%- assign _caption   = parts[3] -%}
+      {%- assign _album_url = parts[4] -%}
+      {%- assign _taken_at  = parts[5] -%}
+
+      <a class="photo-card" href="{{ _album_url | relative_url }}"
+         data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+         title="{{ _caption }}">
+        <img src="{{ _src | relative_url }}" alt="{{ _caption }}" loading="lazy">
         <div class="ph-meta">
-          <small>{{ p._taken_at }}</small>
-          {%- if p.lens -%}<small> · {{ p.lens | join: ", " | default: p.lens }}</small>{% endif %}
+          <small>{{ _taken_at }}</small>
+          {%- if _lenses and _lenses != '' -%}<small> · {{ _lenses | replace: ',', ', ' }}</small>{% endif %}
         </div>
       </a>
     {%- endfor -%}
