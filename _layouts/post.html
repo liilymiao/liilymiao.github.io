@@ -2,26 +2,58 @@
 layout: default
 ---
 <article class="post">
-  <h1>{{ page.title }}</h1>
-  <p class="post-meta">{{ page.date | date: "%Y-%m-%d" }}</p>
-{% if page.categories %}
-<div class="post-cats">
-  {% for c in page.categories %}
-  <a class="chip" href="{{ '/categories/' | relative_url }}#{{ c | downcase | url_encode }}">#{{ c }}</a>
-  {% endfor %}
-</div>
-{% endif %}
-  <div class="post-content">
+  <!-- 标题：默认英文，JS 根据语言切换 -->
+  <h1 id="postTitle"
+      data-title-zh="{{ page.title | escape }}"
+      data-title-en="{{ page.title_en | default: page.title | escape }}">
+    {{ page.title_en | default: page.title }}
+  </h1>
+
+  {% if page.date %}
+  <p class="post-meta">
+    <small>{{ page.date | date: "%Y-%m-%d %H:%M" }}</small>
+    {%- if page.categories and page.categories != empty -%}
+      · <small>{{ page.categories | join: ", " }}</small>
+    {%- endif -%}
+  </p>
+  {% endif %}
+
+  <!-- 正文：英文为默认（Markdown 原文），中文在 body_zh -->
+  <div class="post-body" data-lang="en">
     {{ content }}
   </div>
+
+  {% if page.body_zh %}
+  <div class="post-body" data-lang="zh" style="display:none">
+    {{ page.body_zh | markdownify }}
+  </div>
+  {% endif %}
 </article>
 
-<div id="comments" style="margin-top:40px;">
-  <script src="https://utteranc.es/client.js"
-          repo="liilymiao/liilymiao.github.io"
-          issue-term="pathname"
-          theme="github-dark"
-          crossorigin="anonymous"
-          async>
-  </script>
-</div>
+<script>
+(function(){
+  const STORE = 'lang';
+  const titleEl = document.getElementById('postTitle');
+  const blocks  = document.querySelectorAll('.post-body[data-lang]');
+
+  function apply(lang){
+    // 标题切换
+    if (titleEl){
+      const zh = titleEl.dataset.titleZh;
+      const en = titleEl.dataset.titleEn || zh || titleEl.textContent;
+      titleEl.textContent = (lang === 'zh') ? (zh || en) : (en || zh);
+    }
+    // 正文切换（无中文时始终显示英文）
+    let hasZh = false;
+    blocks.forEach(b => { if (b.dataset.lang === 'zh') hasZh = true; });
+    blocks.forEach(b => {
+      const want = (lang === 'zh' && hasZh) ? 'zh' : 'en';
+      b.style.display = (b.dataset.lang === want) ? '' : 'none';
+    });
+  }
+
+  const saved = localStorage.getItem(STORE) || 'en';
+  apply(saved);
+  window.addEventListener('langchange', e => apply(e.detail || 'en'));
+})();
+</script>
