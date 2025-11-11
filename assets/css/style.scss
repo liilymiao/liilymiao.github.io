@@ -36,11 +36,23 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
 /* Dark mode */
 @media (prefers-color-scheme: dark){
   :root{
-    --paper:#0f141a; --ink:#e5eaf0; --muted:#9aa4b2; --edge:#1f2a36;
-    --blue:#7fb4cf; --blue-2:#a2c8da; --chip:#111821;
+    --paper:#121212;
+    --ink:#f5f6fa;
+    --muted:#b0b6bf;
+    --edge:#2a2f38;
+    --blue:#93c5fd;
+    --blue-2:#bfdbfe;
+    --chip:#1c1f24;
   }
-  .post,.page{ background:#0d1319; border-color:var(--edge); box-shadow:none; }
-  a:hover{ text-decoration:none; }
+
+  body { background: var(--paper); color: var(--ink); }
+  .post,.page{
+    background:#181b1f;
+    border-color:var(--edge);
+    box-shadow:none;
+  }
+  a { color: var(--blue); }
+  a:hover { color: var(--blue-2); text-decoration: underline; }
 }
 
 /* 防止 /albums 页第一张图铺满屏（保险阀） */
