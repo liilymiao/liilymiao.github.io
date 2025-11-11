@@ -1,6 +1,7 @@
 ---
 layout: album
 title: 香港科技大学, 香港
+title_en: "香港科技大学, 香港"
 permalink: /album/hkust-hk/
 date: 2025-11-05
 location: Hong Kong SAR, China

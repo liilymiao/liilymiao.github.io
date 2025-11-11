@@ -1,6 +1,7 @@
 ---
 layout: album
 title: 港岛线, 香港
+title_en: "港岛线, 香港"
 permalink: /album/island-line-hk/
 date: 2025-10-11
 location: Hong Kong SAR, China

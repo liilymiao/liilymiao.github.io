@@ -1,6 +1,7 @@
 ---
 layout: album
 title: 岘港-胡志明, 越南
+title_en: "岘港-胡志明, 越南"
 permalink: /album/danang-saigon-vn/
 date: 2024-04-26
 location: Vietnam

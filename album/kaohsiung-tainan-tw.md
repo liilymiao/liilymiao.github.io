@@ -1,6 +1,7 @@
 ---
 layout: album
 title: 高雄-台南, 台湾
+title_en: "高雄-台南, 台湾"
 permalink: /album/kaohsiung-tainan-tw/
 date: 2024-02-19
 location: Taiwan, China

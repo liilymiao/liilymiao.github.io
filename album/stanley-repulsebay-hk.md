@@ -1,6 +1,7 @@
 ---
 layout: album
 title: 赤柱-浅水湾, 香港
+title_en: "赤柱-浅水湾, 香港"
 permalink: /album/stanley-repulsebay-hk/
 date: 2024-07-25
 location: Hong Kong SAR, China
