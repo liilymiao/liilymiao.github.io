@@ -40,12 +40,17 @@ title: Home
   <div class="albums-grid" id="albumGrid">
     {%- assign cards = albums_all | sort: "date" | reverse -%}
     {%- for a in cards -%}
-      {%- assign t_en = a.title_en | default: a.title -%}
-      <a class="album-card" href="{{ a.url | relative_url }}" data-location="{{ a.location | default: '' }}">
-        {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}
+      {%- assign title_zh = a.title -%}
+      {%- assign title_en = a.title_en | default: a.title -%}
+      <a class="album-card"
+         href="{{ a.url | relative_url }}"
+         data-location="{{ a.location | default: '' }}"
+         data-title-zh="{{ title_zh | escape }}"
+         data-title-en="{{ title_en | escape }}">
+        {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ title_en }}" loading="lazy">{% endif %}
         <div class="meta">
-          <!-- 默认显示英文；切到中文时由 JS 改成 data-title-zh -->
-          <h3 data-title-en="{{ t_en | escape }}" data-title-zh="{{ a.title | escape }}">{{ t_en }}</h3>
+          <!-- 默认首屏英文 -->
+          <h3>{{ title_en }}</h3>
           {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
         </div>
       </a>
@@ -94,7 +99,7 @@ title: Home
           {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
           {%- assign ts = day_only | date: "%s" -%}
           {%- assign item = p | merge: {
-                "_album_title": a.title,
+                "_album_title": a.title_en | default: a.title,
                 "_album_url":   a.url,
                 "_taken_at":    day_only,
                 "_ts":          ts
@@ -121,7 +126,7 @@ title: Home
 
 <script>
 (function () {
-  // ===== Albums filter (?loc=) =====
+  // Albums filter (?loc=)
   const ag = document.getElementById('albumGrid');
   const ab = document.getElementById('albumLocFilters');
   if (ag && ab) {
@@ -148,7 +153,7 @@ title: Home
     });
   }
 
-  // ===== Photos filter (?lens=) =====
+  // Photos filter (?lens=)
   const pg = document.getElementById('photoGrid');
   const pb = document.getElementById('photoFilters');
   if (pg && pb) {
@@ -174,22 +179,6 @@ title: Home
       setActive(btn.dataset.lens); apply(btn.dataset.lens);
     });
   }
-
-  // ===== Album card title language swap =====
-  function setAlbumCardTitles(lang){
-    const zh = (lang === 'zh');
-    document.querySelectorAll('.albums-grid h3[data-title-en][data-title-zh]').forEach(h=>{
-      h.textContent = zh ? (h.dataset.titleZh || h.textContent)
-                         : (h.dataset.titleEn || h.textContent);
-    });
-  }
-  // 初始：按 localStorage.lang（默认 en）
-  setAlbumCardTitles(localStorage.getItem('lang') || 'en');
-
-  // 点击左下角语言按钮后，同步更新（按钮由 default.html 提供）
-  document.getElementById('langToggle')?.addEventListener('click', ()=>{
-    setTimeout(()=>setAlbumCardTitles(localStorage.getItem('lang') || 'en'), 0);
-  });
 })();
 </script>
 
@@ -226,4 +215,20 @@ title: Home
       if (img) openLightbox(img);
     });
   }
+
+  // —— 根据语言切换卡片标题（读取 data-title-zh/en）——
+  (function syncAlbumTitlesWithLang(){
+    const cur = localStorage.getItem('lang') || 'en';
+    const swap = (lang) => {
+      document.querySelectorAll('.album-card').forEach(card=>{
+        const zh = card.dataset.titleZh;
+        const en = card.dataset.titleEn || zh;
+        const h3 = card.querySelector('h3');
+        if (h3) h3.textContent = (lang === 'zh') ? zh : en;
+      });
+    };
+    swap(cur);
+    // 监听 default.html 中语言按钮的切换事件（我们那边已派发 langchange 事件）
+    window.addEventListener('langchange', e => swap(e.detail || 'en'));
+  })();
 </script>
