@@ -48,10 +48,6 @@ photos:
     lens: [iphone-15-pro-max]
     taken_at: 2024-11-12
 
-  - src: /assets/img/albums/hkust-hk/img_2685.jpg
-    lens: [iphone-15-pro-max]
-    taken_at: 2024-11-12
-
   - src: /assets/img/albums/hkust-hk/img_2693.jpg
     lens: [iphone-15-pro-max]
     taken_at: 2024-11-12
