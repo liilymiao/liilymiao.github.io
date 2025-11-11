@@ -22,9 +22,9 @@ layout: null
     </div>
   </nav>
 
-  <!-- 左下角：主题 & 语言按钮 -->
+  <!-- 左下角：主题 & 语言按钮（样式见 custom.css） -->
   <div class="theme-toggle"><button id="themeToggle" title="Toggle dark/light mode">🌙</button></div>
-  <div class="lang-toggle"><button id="langToggle" title="Switch language">中 / EN</button></div>
+  <div class="lang-toggle"><button id="langToggle" title="Switch language">EN/中</button></div>
 
   <main class="page-wrap">
     {{ content }}
@@ -34,7 +34,7 @@ layout: null
     <small>© {{ site.time | date: '%Y' }} {{ site.title }}</small>
   </footer>
 
-  <!-- 主题切换（保持你现有逻辑） -->
+  <!-- 主题切换 -->
   <script>
   (function() {
     const btn = document.getElementById('themeToggle');
@@ -43,8 +43,8 @@ layout: null
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initTheme = stored || (prefersDark ? 'dark' : 'light');
     root.dataset.theme = initTheme;
-    btn.textContent = initTheme === 'dark' ? '☀️' : '🌙';
-    btn.addEventListener('click', () => {
+    if (btn) btn.textContent = initTheme === 'dark' ? '☀️' : '🌙';
+    btn && btn.addEventListener('click', () => {
       const cur = root.dataset.theme;
       const next = cur === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
@@ -54,9 +54,14 @@ layout: null
   })();
   </script>
 
-  <!-- 语言切换 + 文案替换 -->
+  <!-- 语言切换 + 文案替换（首次默认英文） -->
   <script>
   (function(){
+    const SUPPORTED = ['en','zh'];
+    const STORE_KEY = 'lang';
+    const btn = document.getElementById('langToggle');
+
+    // 词典
     const dict = {
       en: {
         "nav.home":"Home",
@@ -85,7 +90,7 @@ layout: null
         "home.latest":"最新文章",
         "home.about":"关于",
         "home.albums":"相册",
-        "home.location":"地点：",
+        "home.location":"地区：",
         "home.viewall":"查看全部 →",
         "home.photos":"照片",
 
@@ -94,29 +99,52 @@ layout: null
       }
     };
 
-    const STORE_KEY = 'lang';
-    const btn = document.getElementById('langToggle');
+    function getInitLang(){
+      // ① URL 覆盖（一次性并写入本地）
+      const urlLang = new URL(location.href).searchParams.get('lang');
+      if (urlLang && SUPPORTED.includes(urlLang)) {
+        localStorage.setItem(STORE_KEY, urlLang);
+        return urlLang;
+      }
+      // ② 读取本地
+      const saved = localStorage.getItem(STORE_KEY);
+      if (saved && SUPPORTED.includes(saved)) return saved;
+      // ③ 默认：英文
+      return 'en';
+    }
 
-    function apply(lang){
-      const map = dict[lang] || dict.en;
-      // 设置 <html lang="">
-      document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
-      // 批量替换
+    let lang = getInitLang();
+
+    function setHtmlLang(l){
+      document.documentElement.lang = (l === 'zh' ? 'zh-CN' : 'en');
+      document.documentElement.dataset.lang = l;
+    }
+    function setBtnLabel(l){
+      if (!btn) return;
+      btn.textContent = (l === 'zh') ? '中/EN' : 'EN/中';
+      btn.setAttribute('aria-label', (l === 'zh') ? 'Switch to English' : '切换到中文');
+    }
+    function applyI18n(l){
+      const map = dict[l] || dict.en;
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key = el.getAttribute('data-i18n');
         if (map[key] != null) el.textContent = map[key];
       });
-      localStorage.setItem(STORE_KEY, lang);
-      btn.textContent = (lang === 'zh') ? 'EN' : '中';
-      btn.setAttribute('aria-label', (lang === 'zh') ? 'Switch to English' : '切换到中文');
     }
 
-    const saved = localStorage.getItem(STORE_KEY) || (navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
-    apply(saved);
+    // 初始化
+    setHtmlLang(lang);
+    setBtnLabel(lang);
+    applyI18n(lang);
+    localStorage.setItem(STORE_KEY, lang);
 
-    btn.addEventListener('click', ()=>{
-      const cur = localStorage.getItem(STORE_KEY) || 'en';
-      apply(cur === 'zh' ? 'en' : 'zh');
+    // 点击切换
+    btn && btn.addEventListener('click', ()=>{
+      lang = (lang === 'en' ? 'zh' : 'en');
+      localStorage.setItem(STORE_KEY, lang);
+      setHtmlLang(lang);
+      setBtnLabel(lang);
+      applyI18n(lang);
     });
   })();
   </script>
