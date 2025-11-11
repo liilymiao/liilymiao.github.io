@@ -24,6 +24,4 @@ photos:
     taken_at: 2024-04-26
 ---
 
-# 岘港 → 胡志明（iPhone 15 Pro Max）
-
 一些随手记录。设备：iPhone 15 Pro Max。
