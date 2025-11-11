@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-<h1>Latest posts</h1>
+<h1 data-i18n="home.latest">Latest posts</h1>
 <ul>
   {% for post in site.posts %}
     <li>
@@ -16,21 +16,21 @@ title: Home
 <hr>
 
 <section id="about">
-  <h2>About</h2>
+  <h2 data-i18n="home.about">About</h2>
   {% include about.html %}
-  <p><a href="{{ '/about/' | relative_url }}">More →</a></p>
+  <p><a href="{{ '/about/' | relative_url }}" data-i18n="home.viewall">View all →</a></p>
 </section>
 
 <hr>
 
 <section id="albums">
-  <h2>Albums</h2>
+  <h2 data-i18n="home.albums">Albums</h2>
   {%- assign albums_all = site.pages | where: "layout", "album" -%}
   {%- assign locs = albums_all | map: "location" | uniq | sort -%}
 
   <div class="album-filters" id="albumLocFilters">
-    <strong>Location:</strong>
-    <button type="button" data-loc="all" class="on">All</button>
+    <strong data-i18n="home.location">Location:</strong>
+    <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
     {%- for loc in locs -%}
       {%- assign rep = albums_all | where: "location", loc | first -%}
       <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
@@ -49,13 +49,13 @@ title: Home
       </a>
     {%- endfor -%}
   </div>
-  <p><a href="{{ '/albums/' | relative_url }}">View all →</a></p>
+  <p><a href="{{ '/albums/' | relative_url }}" data-i18n="home.viewall">View all →</a></p>
 </section>
 
 <hr style="margin:2rem 0; opacity:.2">
 
 <section id="photos">
-  <h2>Photos</h2>
+  <h2 data-i18n="home.photos">Photos</h2>
 
   {%- assign lens_pool = "" | split: "" -%}
   {%- for a in albums_all -%}
@@ -76,8 +76,8 @@ title: Home
   {%- assign lenses = lens_pool | uniq | sort -%}
 
   <div class="album-filters" id="photoFilters">
-    <strong>Filter:</strong>
-    <button type="button" data-lens="all" class="on">All</button>
+    <strong data-i18n="filters.filter">Filter:</strong>
+    <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
     {%- for l in lenses -%}
       <button type="button" data-lens="{{ l }}">{{ l }}</button>
     {%- endfor -%}
@@ -173,72 +173,39 @@ title: Home
     });
   }
 })();
-
 </script>
 
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  // 仅收集“当前可见”的图片（配合 lens 过滤）
   function buildItems() {
     const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
       .filter(img => img.closest('.photo-card')?.style.display !== 'none');
-
     return nodes.map(img => {
       const w = img.naturalWidth || 2000;
       const h = img.naturalHeight || Math.round(w * 0.66);
-      return {
-        src: img.currentSrc || img.src,
-        width: w,
-        height: h,
-        alt: img.alt || ''
-      };
+      return { src: img.currentSrc || img.src, width: w, height: h, alt: img.alt || '' };
     });
   }
 
   function openLightbox(clickedImg) {
     const items = buildItems();
     const idx = items.findIndex(it => it.src === (clickedImg.currentSrc || clickedImg.src));
-    const pswp = new PhotoSwipe({
-      index: Math.max(0, idx),
-      dataSource: items,
-      bgOpacity: 0.95,
-      wheelToZoom: true
-    });
+    const pswp = new PhotoSwipe({ index: Math.max(0, idx), dataSource: items, bgOpacity: 0.95, wheelToZoom: true });
     pswp.on('close', () => pswp.destroy());
     pswp.init();
   }
 
   const grid = document.getElementById('photoGrid');
-  const filterBar = document.getElementById('photoFilters');
-
   if (grid) {
-    // 统一拦截 .photo-card 上的点击（而不是只拦截 img）
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.photo-card');
       if (!card) return;
-
-      // ——关键：阻止原 anchor 导航——
       e.preventDefault();
       e.stopPropagation();
-
       const img = card.querySelector('img');
       if (img) openLightbox(img);
     });
   }
-
-  // 切换滤镜后，数据源自然以“下一次点击时”重建，不需要额外处理
-  if (filterBar) {
-    filterBar.addEventListener('click', () => {
-      requestAnimationFrame(() => {/* no-op */});
-    });
-  }
-
-  // UX：鼠标样式提示“可放大”
-  const style = document.createElement('style');
-  style.textContent = `
-    #photoGrid .photo-card { cursor: zoom-in; }
-  `;
-  document.head.appendChild(style);
 </script>
