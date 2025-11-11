@@ -47,9 +47,10 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
 
   body { background: var(--paper); color: var(--ink); }
   .post,.page{
-    background:#181b1f;
+    background:#1e242c; /* 提亮，让文字更清晰 */
     border-color:var(--edge);
-    box-shadow:none;
+    box-shadow: 0 2px 12px rgba(0,0,0,.3);
+    border: 1px solid rgba(255,255,255,.05);
   }
   a { color: var(--blue); }
   a:hover { color: var(--blue-2); text-decoration: underline; }
