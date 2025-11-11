@@ -9,7 +9,7 @@ cover: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
 photos:
   - src: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
     taken_at: 2025-10-22
-    lens: [leica-40-f2]
+    lens: [leica-summicron-40-f2]
     camera: sony-a7m3
     focal: 40
     aperture: 2.0
@@ -19,7 +19,7 @@ photos:
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-1.jpg
     taken_at: 2025-10-22
-    lens: [leica-40-f2]
+    lens: [leica-summicron-40-f2]
     camera: sony-a7m3
     focal: 40
     aperture: 2.0
@@ -29,7 +29,7 @@ photos:
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-2.jpg
     taken_at: 2025-10-22
-    lens: [leica-40-f2]
+    lens: [leica-summicron-40-f2]
     camera: sony-a7m3
     focal: 40
     aperture: 2.0
@@ -39,7 +39,7 @@ photos:
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-3.jpg
     taken_at: 2025-10-22
-    lens: [leica-40-f2]
+    lens: [leica-summicron-40-f2]
     camera: sony-a7m3
     focal: 40
     aperture: 2.0
