@@ -11,7 +11,7 @@ photos:
     lens: [135-film]
     taken_at: 2024-02-18
 
-- src: /assets/img/albums/taipei-hualian-tw/dhalf 2024-02-21 181508.524.jpg
+- src: /assets/img/albums/taipei-hualian-tw/dhalf-2024-02-21-181508.524.jpg
     lens: [135-film]
     taken_at: 2024-02-20
 
