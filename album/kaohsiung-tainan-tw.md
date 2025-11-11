@@ -20,7 +20,7 @@ photos:
     taken_at: 2024-02-19
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/fullsizerender-5.jpg
-    lens: [135-film]
+    lens: [iphone-15-pro-max]
     taken_at: 2024-02-19
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/hoga-2024-02-19-144633.170.jpg
