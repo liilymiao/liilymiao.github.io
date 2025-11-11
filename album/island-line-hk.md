@@ -2,7 +2,7 @@
 layout: album
 title: 港岛线, 香港
 permalink: /album/island-line-hk/
-date: 2025-11-12
+date: 2025-10-11
 location: Hong Kong SAR, China
 location_name: Hong Kong SAR, China
 cover: /assets/img/albums/island-line-hk/dsc00066.jpg
