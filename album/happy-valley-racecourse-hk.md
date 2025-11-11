@@ -8,7 +8,7 @@ location_name: Hong Kong
 cover: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
 photos:
   - src: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
-    taken_at: 2025-10-22 19:20:00 +0800
+    taken_at: 2025-10-22
     lens: [leica-40-f2]
     camera: sony-a7m3
     focal: 40
@@ -18,7 +18,7 @@ photos:
     caption: "Happy Wednesday, Hong Kong — main view entrance vibes"
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-1.jpg
-    taken_at: 2025-10-22 19:48:00 +0800
+    taken_at: 2025-10-22
     lens: [leica-40-f2]
     camera: sony-a7m3
     focal: 40
@@ -28,7 +28,7 @@ photos:
     caption: "Warm lights under stadium stands"
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-2.jpg
-    taken_at: 2025-10-22 20:13:00 +0800
+    taken_at: 2025-10-22
     lens: [leica-40-f2]
     camera: sony-a7m3
     focal: 40
@@ -38,7 +38,7 @@ photos:
     caption: "People & field edge of turf"
 
   - src: /assets/img/albums/happy-valley-racecourse-hk/leica402-3.jpg
-    taken_at: 2025-10-22 20:46:00 +0800
+    taken_at: 2025-10-22
     lens: [leica-40-f2]
     camera: sony-a7m3
     focal: 40
