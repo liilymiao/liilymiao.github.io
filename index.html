@@ -39,7 +39,7 @@ title: Home
 
   <div class="albums-grid" id="albumGrid">
     {%- assign cards = albums_all | sort: "date" | reverse -%}
-    {%- for a in cards limit:6 -%}
+    {%- for a in cards -%}   {# ← 这里去掉 limit:6 #}
       <a class="album-card" href="{{ a.url | relative_url }}" data-location="{{ a.location | default: '' }}">
         {% if a.cover %}<img src="{{ a.cover | relative_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}
         <div class="meta">
