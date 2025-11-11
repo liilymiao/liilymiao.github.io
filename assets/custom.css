@@ -271,3 +271,48 @@ blockquote{
 .page > p:first-child > img:only-child{
   max-width:100%; height:auto; display:block; margin:0 auto;
 }
+
+/* =========================================================
+   Fix: album card background contrast for light theme
+   ========================================================= */
+
+/* 通用样式（暗色时自动继承） */
+.album-card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 亮色主题下：卡片底色更浅、阴影更柔和 */
+:root[data-theme='light'] .album-card {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 暗色主题下：卡片更深，阴影淡 */
+:root[data-theme='dark'] .album-card {
+  background: #10161d;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.03);
+}
+
+/* meta 部分同步调整 */
+.album-card .meta {
+  background: inherit;
+  padding: 10px 12px;
+  color: var(--text-color);
+}
+
+.album-card h3 {
+  margin: .1rem 0;
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+.album-card small {
+  color: var(--muted);
+}
+.album-card:hover h3 {
+  color: var(--link-color);
+}
