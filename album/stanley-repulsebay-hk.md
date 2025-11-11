@@ -1,7 +1,7 @@
 ---
 layout: album
 title: 赤柱-浅水湾, 香港
-title_en: Stanley title_en: Stanley title_en: "赤柱-浅水湾, 香港" Repulse Bay, Hong Kong Repulse Bay, Hong Kong
+title_en: Stanley-Repulse Bay, Hong Kong 
 permalink: /album/stanley-repulsebay-hk/
 date: 2024-07-25
 location: Hong Kong SAR, China

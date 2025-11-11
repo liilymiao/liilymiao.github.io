@@ -1,7 +1,7 @@
 ---
 layout: album
 title: 台北-花莲, 台湾
-title_en: Taipei title_en: Taipei title_en: "台北-花莲, 台湾" Hualien, Taiwan Hualien, Taiwan
+title_en: Taipei-Hualien, Taiwan 
 permalink: /album/taipei-hualian-tw/
 date: 2024-02-21
 location: Taiwan, China
