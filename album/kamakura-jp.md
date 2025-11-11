@@ -23,10 +23,6 @@ photos:
     lens: [sigma-18-50-f2.8]
     taken_at: 2025-01-20 12:37:00 +0900
 
-  - src: /assets/img/albums/kamakura-jp/dsc01713.jpg
-    lens: [sigma-18-50-f2.8]
-    taken_at: 2025-01-20 12:37:00 +0900
-
   - src: /assets/img/albums/kamakura-jp/dsc01717.jpg
     lens: [sigma-18-50-f2.8]
     taken_at: 2025-01-20 12:38:00 +0900
@@ -34,10 +30,6 @@ photos:
   - src: /assets/img/albums/kamakura-jp/dsc01737.jpg
     lens: [sigma-18-50-f2.8]
     taken_at: 2025-01-20 12:49:00 +0900
-
-  - src: /assets/img/albums/kamakura-jp/dsc01748.jpg
-    lens: [sigma-18-50-f2.8]
-    taken_at: 2025-01-20 12:50:00 +0900
 
   - src: /assets/img/albums/kamakura-jp/dsc01774.jpg
     lens: [sigma-18-50-f2.8]
