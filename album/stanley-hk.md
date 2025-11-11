@@ -3,7 +3,7 @@ layout: album
 title: 赤柱, 香港
 permalink: /album/stanley-hk/
 date: 2024-07-25
-location: hongkong
+location: Hong Kong
 location_name: Hong Kong
 cover: /assets/img/albums/stanley-hk/cover.jpg
 photos:
