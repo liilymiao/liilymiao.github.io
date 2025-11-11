@@ -1,7 +1,8 @@
 ---
 ---
 
-@import "{{ site.theme }}";
+// Removed invalid Liquid import. If you need to import a SCSS file, use:
+// @import "theme"; // or the actual SCSS filename without curly braces
 
 /* ===== Photo-zine Grey Blue aesthetic ===== */
 :root{
