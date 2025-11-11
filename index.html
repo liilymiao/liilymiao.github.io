@@ -5,8 +5,8 @@ title: Home
 
 <!-- 让多语言区块默认不显示，由脚本按当前语言打开；兜底显示英文 -->
 <style>
-  #aboutContent .lang-block{ display:none; }
-  #aboutContent .lang-block[data-lang="en"]{ display:block; }
+  #aboutContent .lang-block { display: none; }
+  #aboutContent .lang-block[data-lang="en"] { display: block; }
 </style>
 
 <h1 data-i18n="home.latest">Latest posts</h1>
@@ -28,6 +28,7 @@ title: Home
 
 <section id="about">
   <h2 data-i18n="home.about">About</h2>
+
   <div id="aboutContent">
     <div class="lang-block" data-lang="en">
       {% include about_en.html %}
@@ -36,6 +37,7 @@ title: Home
       {% include about_zh.html %}
     </div>
   </div>
+
   <p><a href="{{ '/about/' | relative_url }}" data-i18n="home.viewall">View all →</a></p>
 </section>
 
@@ -186,11 +188,12 @@ title: Home
   });
 </script>
 
-<!-- 语言与筛选脚本 -->
+<!-- 语言与筛选脚本（About/标题切换 + 两组筛选） -->
 <script>
 (function () {
-  /* ---------- 文案字典 ---------- */
   const STORE = 'lang';
+
+  /* --------- 文案字典 & 应用 --------- */
   const dict = {
     en: {
       "home.latest":"Latest posts",
@@ -221,6 +224,7 @@ title: Home
       if (map[key] != null) el.textContent = map[key];
     });
   }
+
   function applyAbout(lang){
     const blocks = document.querySelectorAll('#aboutContent .lang-block');
     let shown = false;
@@ -234,6 +238,7 @@ title: Home
       if (en) en.style.display = '';
     }
   }
+
   function applyPostTitles(lang){
     document.querySelectorAll('.i18n-post-title').forEach(a=>{
       const zh = a.dataset.titleZh;
@@ -241,6 +246,7 @@ title: Home
       a.textContent = (lang==='zh') ? (zh || en) : (en || zh);
     });
   }
+
   function applyAlbumCardTitles(lang){
     document.querySelectorAll('.album-card').forEach(card=>{
       const zh = card.dataset.titleZh;
@@ -250,25 +256,31 @@ title: Home
     });
   }
 
-  /* ---------- 首次语言确定（固定默认 EN） ---------- */
+  /* --------- 初始化语言（首访默认 en） --------- */
   let lang = localStorage.getItem(STORE);
   if (!lang) {
     lang = 'en';
     localStorage.setItem(STORE, lang);
-    window.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+    try { window.dispatchEvent(new CustomEvent('langchange', { detail: lang })); } catch(e){}
   }
 
-  /* ---------- 初始应用 ---------- */
-  applyText(lang); applyAbout(lang); applyPostTitles(lang); applyAlbumCardTitles(lang);
+  // 首次应用
+  applyText(lang);
+  applyAbout(lang);
+  applyPostTitles(lang);
+  applyAlbumCardTitles(lang);
 
-  /* ---------- 监听来自全局按钮的切换 ---------- */
+  // 监听全局语言切换（default.html 会派发）
   window.addEventListener('langchange', e=>{
     const next = e.detail || 'en';
     localStorage.setItem(STORE, next);
-    applyText(next); applyAbout(next); applyPostTitles(next); applyAlbumCardTitles(next);
+    applyText(next);
+    applyAbout(next);
+    applyPostTitles(next);
+    applyAlbumCardTitles(next);
   });
 
-  /* ---------- Albums 筛选 ---------- */
+  /* --------- Albums 筛选 --------- */
   (function initAlbumFilter(){
     const ag = document.getElementById('albumGrid');
     const ab = document.getElementById('albumLocFilters');
@@ -276,7 +288,6 @@ title: Home
 
     const cards = Array.from(ag.querySelectorAll('.album-card'));
     const btns  = Array.from(ab.querySelectorAll('button[data-loc]'));
-
     function setActive(btn){ btns.forEach(b=>b.classList.toggle('on', b===btn)); }
     function apply(loc){
       cards.forEach(c=>{
@@ -289,16 +300,13 @@ title: Home
         history.replaceState(null, '', u.toString());
       } catch(_) {}
     }
-
     let init = 'all';
     try {
       const p = new URL(window.location.href).searchParams.get('loc');
       if (btns.some(b=>b.dataset.loc === p)) init = p;
     } catch(_) {}
-
     const startBtn = btns.find(b=>b.dataset.loc === init) || btns[0];
     if (startBtn){ setActive(startBtn); apply(startBtn.dataset.loc); }
-
     ab.addEventListener('click', e=>{
       const btn = e.target.closest('button[data-loc]');
       if (!btn) return;
@@ -306,7 +314,7 @@ title: Home
     });
   })();
 
-  /* ---------- Photos 筛选 ---------- */
+  /* --------- Photos 筛选 --------- */
   (function initPhotoFilter(){
     const pg = document.getElementById('photoGrid');
     const pb = document.getElementById('photoFilters');
@@ -314,7 +322,6 @@ title: Home
 
     const cards = Array.from(pg.querySelectorAll('.photo-card'));
     const btns  = Array.from(pb.querySelectorAll('button[data-lens]'));
-
     function setActive(btn){ btns.forEach(b=>b.classList.toggle('on', b===btn)); }
     function apply(l){
       cards.forEach(c=>{
@@ -327,16 +334,13 @@ title: Home
         history.replaceState(null, '', u.toString());
       } catch(_) {}
     }
-
     let init = 'all';
     try {
       const p = new URL(window.location.href).searchParams.get('lens');
       if (btns.some(b=>b.dataset.lens === p)) init = p;
     } catch(_) {}
-
     const startBtn = btns.find(b=>b.dataset.lens === init) || btns[0];
     if (startBtn){ setActive(startBtn); apply(startBtn.dataset.lens); }
-
     pb.addEventListener('click', e=>{
       const btn = e.target.closest('button[data-lens]');
       if (!btn) return;
