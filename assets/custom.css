@@ -282,3 +282,37 @@ blockquote{
 .page > p:first-child > img:only-child{
   max-width:100%; height:auto; display:block; margin:0 auto;
 }
+
+/* =========================================================
+   Fix: post card background/contrast (light/dark)
+   ========================================================= */
+.home .post, article.post, .post {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border: var(--card-border);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  padding: 22px;
+}
+
+/* 文章标题/元信息颜色对齐主题变量 */
+.post h1, .post h2, .post h3,
+article.post h1, article.post h2, article.post h3 {
+  color: var(--text-color) !important;
+}
+.post .post-meta, .post small,
+article.post .post-meta, article.post small {
+  color: var(--muted) !important;
+}
+
+/* 亮色/暗色下的微调（可选，更稳） */
+:root[data-theme='light'] .post,
+:root[data-theme='light'] article.post {
+  background: #ffffff !important;
+  box-shadow: 0 2px 12px color-mix(in oklab, var(--text-color) 8%, transparent);
+}
+:root[data-theme='dark'] .post,
+:root[data-theme='dark'] article.post {
+  background: #0d1319 !important;
+  box-shadow: none;
+}
