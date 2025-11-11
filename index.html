@@ -216,3 +216,67 @@ title: Home
   });
 })();
 </script>
+
+<!-- PhotoSwipe for Home / Photos -->
+<link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
+
+<script type="module">
+  import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
+
+  // 根据当前可见图片（受 lens 过滤影响）构建数据源
+  function buildItems() {
+    const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
+      .filter(img => {
+        const card = img.closest('.photo-card');
+        // 只取当前“可见”的卡片
+        return card && card.style.display !== 'none';
+      });
+
+    return nodes.map(img => {
+      // 先拿 naturalWidth/Height；拿不到时给个保底值
+      const w = img.naturalWidth || 2000;
+      const h = img.naturalHeight || Math.round(w * 0.66);
+      return {
+        src: img.currentSrc || img.src,
+        width: w,
+        height: h,
+        alt: img.alt || ''
+      };
+    });
+  }
+
+  // 监听点击，打开灯箱
+  const grid = document.getElementById('photoGrid');
+  const filterBar = document.getElementById('photoFilters');
+
+  function openLightbox(clickedImg) {
+    const items = buildItems();
+    // 在“当前可见集合”里找到索引
+    const idx = items.findIndex(it => it.src === (clickedImg.currentSrc || clickedImg.src));
+    const pswp = new PhotoSwipe({
+      index: Math.max(0, idx),
+      dataSource: items,
+      bgOpacity: 0.95,
+      wheelToZoom: true
+    });
+    pswp.on('close', () => pswp.destroy());
+    pswp.init();
+  }
+
+  if (grid) {
+    grid.addEventListener('click', (e) => {
+      const img = e.target.closest('.photo-card img');
+      if (!img) return;
+      e.preventDefault();
+      openLightbox(img);
+    });
+  }
+
+  // 切换镜头筛选时，灯箱数据源需跟随刷新（不需要立即打开，只要在下次点击时生效）
+  if (filterBar) {
+    filterBar.addEventListener('click', () => {
+      // 让浏览器先完成 UI 显示切换，再更新数据源（这里不需要持久缓存，实时重建）
+      requestAnimationFrame(() => {/* noop: buildItems() 会在点击时实时取 */});
+    });
+  }
+</script>
