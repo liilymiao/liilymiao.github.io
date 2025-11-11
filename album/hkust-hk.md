@@ -5,7 +5,7 @@ permalink: /album/hkust-hk/
 date: 2025-11-05
 location: Hong Kong SAR, China
 location_name: Hong Kong SAR, China
-cover: /assets/img/albums/hkust-hk/img_9244.jpg
+cover: /assets/img/albums/hkust-hk/
 photos:
   - src: /assets/img/albums/hkust-hk/img_9244.jpg
     lens: [iphone-15-pro-max]
