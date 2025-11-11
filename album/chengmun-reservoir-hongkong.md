@@ -3,8 +3,8 @@ layout: album
 title: 城门水塘, 香港
 permalink: /album/chengmun-reservoir-hongkong/
 date: 2025-02-22
-location: Hong Kong
-location_name: Hong Kong
+location: Hong Kong SAR, China
+location_name: Hong Kong SAR, China
 cover: /assets/img/albums/chengmun-reservoir-hongkong/cover.jpg
 photos:
   - src: /assets/img/albums/chengmun-reservoir-hongkong/DSC01830.jpg

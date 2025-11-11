@@ -3,8 +3,8 @@ layout: album
 title: 高雄-台南, 台湾
 permalink: /album/kaohsiung-tainan-tw/
 date: 2024-02-19
-location: Taiwan
-location_name: Taiwan
+location: Taiwan, China
+location_name: Taiwan, China
 cover: /assets/img/albums/kaohsiung-tainan-tw/fullsizerender-5.jpg
 photos:
   - src: /assets/img/albums/kaohsiung-tainan-tw/dblack-2024-02-18-132710.269.jpg

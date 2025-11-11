@@ -3,8 +3,8 @@ layout: album
 title: 跑马地马场, 香港
 permalink: /album/happy-valley-racecourse-hk/
 date: 2025-10-22
-location: Hong Kong
-location_name: Hong Kong
+location: Hong Kong SAR, China
+location_name: Hong Kong SAR, China
 cover: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg
 photos:
   - src: /assets/img/albums/happy-valley-racecourse-hk/cover.jpg

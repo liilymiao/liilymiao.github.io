@@ -3,8 +3,8 @@ layout: album
 title: 台北-花莲, 台湾
 permalink: /album/taipei-hualian-tw/
 date: 2024-02-21
-location: Taiwan
-location_name: Taiwan
+location: Taiwan, China
+location_name: Taiwan, China
 cover: /assets/img/albums/taipei-hualian-tw/img_0985.jpg
 photos:
   - src: /assets/img/albums/taipei-hualian-tw/img_0985.jpg
