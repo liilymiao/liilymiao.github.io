@@ -8,7 +8,7 @@ location_name: Taiwan, China
 cover: /assets/img/albums/taipei-hualian-tw/img_0985.jpg
 photos:
   - src: /assets/img/albums/taipei-hualian-tw/img_0985.jpg
-    lens: [135-film]
+    lens: [iphone-15-pro-max]
     taken_at: 2024-02-21
 
   - src: /assets/img/albums/taipei-hualian-tw/dhalf-2024-02-21-181508.524.jpg
