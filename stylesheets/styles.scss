@@ -82,28 +82,31 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
 }
 .album-filters button.on{ background:#eef2ff; border-color:#c7d2fe; font-weight:600; }
 
-/* ===== 深色模式（系统）——合并为一个块，避免重复覆盖 ===== */
+/* ===== 深色模式（系统） ===== */
 @media (prefers-color-scheme: dark){
   :root{
     --paper:#121212; --ink:#f5f6fa; --muted:#b0b6bf; --edge:#2a2f38;
     --blue:#93c5fd; --blue-2:#bfdbfe; --chip:#1c1f24;
   }
 
-  body{ background:var(--paper); color:var(--ink); }
+  /* 背景与文字 */
+  body{ background:var(--paper) !important; color:var(--ink) !important; }
 
-  /* 关键：干掉主题可能注入的浅色渐变或更高优先级背景 */
-  .post,
-  .page{
-    background:#1e242c !important;   /* 深色但不发黑 */
-    background-image:none !important; /* 关掉主题的浅色渐变 */
-    border-color:var(--edge);
-    border:1px solid rgba(255,255,255,.05);
-    box-shadow:0 2px 12px rgba(0,0,0,.30);
+  /* 关键：提升选择器并加 !important，100% 压过主题 */
+  body .post, body .page{
+    background:#1e242c !important;
+    border-color:var(--edge) !important;
+    box-shadow:0 2px 12px rgba(0,0,0,.30) !important;
+    border:1px solid rgba(255,255,255,.05) !important;
   }
 
-  /* 辅助对比度：代码与引用也跟着变暗一点 */
-  pre,code{ background:#151a20; }
-  blockquote{ background:#1e242c; color:var(--muted); }
-  a{ color:var(--blue); }
-  a:hover{ color:var(--blue-2); text-decoration:underline; }
+  /* 相册/照片卡片在暗色下的底色（可选，统一观感） */
+  body .album-card,
+  body .photo-card{
+    background:#1e242c !important;
+    border-color:var(--edge) !important;
+  }
+
+  a{ color:var(--blue) !important; }
+  a:hover{ color:var(--blue-2) !important; text-decoration:underline !important; }
 }
