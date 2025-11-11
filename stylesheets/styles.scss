@@ -92,12 +92,19 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   /* 只让页面主“卡片”（About 那块）变深；Albums/Photos 的卡片别动 */
   body{ background:var(--paper) !important; color:var(--ink) !important; }
 
-  .post,.page{
-    background:#1e242c !important;
-    border-color:var(--edge) !important;
-    box-shadow:0 2px 12px rgba(0,0,0,.30) !important;
-    border:1px solid rgba(255,255,255,.05) !important;
-  }
+ /* 强制 About 等页面卡片为深色，去掉主题的渐变背景 */
+  body .post,
+  body .page,
+  body .page-content,
+  body .post-content,
+  body .entry,
+  body article {
+    background: #1e242c !important;       /* 深色底 */
+    background-image: none !important;     /* 取消主题的渐变 */
+    border-color: var(--edge) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.30) !important;
+    border: 1px solid rgba(255,255,255,.05) !important;
+    color: var(--ink) !important;
 
   /* 链接颜色 */
   a{ color:var(--blue) !important; }
