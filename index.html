@@ -159,33 +159,53 @@ title: Home
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
+  // 从可见卡片构建 items；强制用 data-full（大图）+ 正确宽高（按缩略图比例推算）
   function buildItems() {
     const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
       .filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
+
     return nodes.map(img => {
-      const big = img.getAttribute('data-full') || img.currentSrc || img.src;
-      return { src: big, width: 1600, height: 1067, alt: img.alt || '' };
+      const thumbW = img.naturalWidth  || img.width  || 480;
+      const thumbH = img.naturalHeight || img.height || 320;
+      const aspect = thumbH / thumbW;
+
+      // 目标大图宽度（与你生成 large 时一致；如果你用 1600 宽，这里就 1600）
+      const w = 1600;
+      const h = Math.max(1, Math.round(w * aspect));
+
+      const big = img.getAttribute('data-full') || img.dataset.full || img.src; // ✅ 一律取大图
+      return { src: big, msrc: img.currentSrc || img.src, width: w, height: h, alt: img.alt || '' };
     });
   }
+
   function openLightbox(clickedImg) {
+    const imgs  = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
+      .filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
     const items = buildItems();
-    const curSrc = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
-    const idx = items.findIndex(it => it.src === curSrc);
+
+    const curBig = clickedImg.getAttribute('data-full') || clickedImg.dataset.full || clickedImg.src;
+    const idx    = Math.max(0, items.findIndex(it => it.src === curBig));
+
     const pswp = new PhotoSwipe({
-      index: Math.max(0, idx),
+      index: idx,
       dataSource: items,
       bgOpacity: 0.95,
-      wheelToZoom: true
+      wheelToZoom: true,
     });
+
     pswp.init();
   }
-  document.getElementById('photoGrid')?.addEventListener('click', (e) => {
-    const card = e.target.closest('.photo-card');
-    if (!card) return;
-    e.preventDefault();
-    const img = card.querySelector('img');
-    if (img) openLightbox(img);
-  });
+
+  const grid = document.getElementById('photoGrid');
+  if (grid) {
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.photo-card');
+      if (!card) return;
+      e.preventDefault();
+      const img = card.querySelector('img');
+      if (img) openLightbox(img);
+    });
+  }
 </script>
 
 <!-- 语言与筛选：简化版 -->
