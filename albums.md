@@ -1,91 +1,90 @@
 ---
 layout: default
-title: Albums
-permalink: /albums/
 ---
 
-<h1 data-i18n="home.albums">Albums</h1>
+<article class="page">
+  <h1 data-i18n="albums.title">Albums</h1>
 
-{%- assign raw = site.pages | where: "layout", "album" -%}
-{%- assign grouped = raw | group_by: "url" -%}
-{%- assign albums_all = "" | split: "" -%}{% for g in grouped %}{% assign albums_all = albums_all | push: g.items.first %}{% endfor %}
-{%- assign locs = albums_all | map: "location" | uniq | sort -%}
+  <div class="albums-grid">
+    {%- assign albums = site.pages | where: "layout", "album" | sort: "date" | reverse -%}
 
-<div class="album-filters" id="albumLocFilters">
-  <strong data-i18n="home.location">Location:</strong>
-  <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
-  {%- for loc in locs -%}
-    {%- assign rep = albums_all | where: "location", loc | first -%}
-    <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
-  {%- endfor -%}
-</div>
+    {%- for a in albums -%}
+      <a class="album-card" href="{{ a.url | relative_url }}">
+        <div class="album-cover">
+          {%- if a.cover -%}
+            <img src="{{ a.cover | relative_url }}"
+                 alt="{{ a.title_en | default: a.title }}"
+                 loading="lazy" decoding="async">
+          {%- else -%}
+            <div class="album-cover-placeholder"></div>
+          {%- endif -%}
+        </div>
 
-<div class="albums-grid" id="albumGrid">
-  {%- assign cards = albums_all | sort: "date" | reverse -%}
-  {%- for a in cards -%}
-    <a class="album-card"
-       href="{{ a.url | relative_url }}"
-       data-location="{{ a.location | default: '' }}"
-       data-title-zh="{{ a.title   | escape }}"
-       data-title-en="{{ a.title_en | default: a.title | escape }}">
-      {% if a.cover %}
-        <img src="{{ a.cover | relative_url }}" alt="{{ a.title_en | default: a.title }}" loading="lazy" decoding="async">
-      {% endif %}
-      <div class="meta">
-        <h3>{{ a.title_en | default: a.title }}</h3>
-        {% if a.date %}<small>{{ a.date | date: "%Y-%m-%d" }}</small>{% endif %}
-      </div>
-    </a>
-  {%- endfor -%}
-</div>
+        <div class="album-meta">
+          <h2 class="album-title">
+            {{ a.title_en | default: a.title }}
+          </h2>
 
-<script>
-/* --- 语言切换：专管相册卡片标题 --- */
-(function(){
-  const STORE = 'lang';
-  function applyTitles(lang){
-    document.querySelectorAll('.album-card').forEach(card=>{
-      const zh = card.dataset.titleZh;
-      const en = card.dataset.titleEn || zh;
-      const h3 = card.querySelector('h3');
-      if (h3) h3.textContent = (lang === 'zh') ? zh : en;
-    });
+          <p class="album-sub">
+            {%- if a.date -%}
+              <span class="album-date">
+                {{ a.date | date: "%Y-%m-%d" }}
+              </span>
+            {%- endif -%}
+
+            {%- if a.location_name -%}
+              {%- if a.date -%} · {% endif -%}
+              <span class="album-location">
+                {{ a.location_name }}
+              </span>
+            {%- endif -%}
+          </p>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</article>
+
+<style>
+  .albums-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:18px;
+    margin-top:16px;
   }
-  const cur = localStorage.getItem(STORE) || 'en';
-  applyTitles(cur);
-  window.addEventListener('langchange', e => applyTitles(e.detail || 'en'));
-})();
-
-/* --- 地点筛选 --- */
-(function(){
-  const ag = document.getElementById('albumGrid');
-  const ab = document.getElementById('albumLocFilters');
-  if (!ag || !ab) return;
-  const cards = Array.from(ag.querySelectorAll('.album-card'));
-  const btns  = Array.from(ab.querySelectorAll('button[data-loc]'));
-  function setActive(btn){ btns.forEach(b=>b.classList.toggle('on', b===btn)); }
-  function apply(loc){
-    cards.forEach(c=>{
-      const v = c.getAttribute('data-location') || '';
-      c.style.display = (loc === 'all' || v === loc) ? '' : 'none';
-    });
-    try{
-      const u = new URL(window.location.href);
-      if (loc === 'all') u.searchParams.delete('loc'); else u.searchParams.set('loc', loc);
-      history.replaceState(null,'',u.toString());
-    }catch(_){}
+  .album-card{
+    display:flex;
+    flex-direction:column;
+    text-decoration:none;
+    background:var(--card-bg);
+    border:var(--card-border);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:var(--card-shadow);
+    transition:transform .15s ease, box-shadow .15s ease;
   }
-  let init = 'all';
-  try{
-    const p = new URL(window.location.href).searchParams.get('loc');
-    if (btns.some(b=>b.dataset.loc === p)) init = p;
-  }catch(_){}
-  const startBtn = btns.find(b=>b.dataset.loc === init) || btns[0];
-  if (startBtn){ setActive(startBtn); apply(startBtn.dataset.loc); }
-  ab.addEventListener('click', e=>{
-    const btn = e.target.closest('button[data-loc]');
-    if (!btn) return;
-    setActive(btn); apply(btn.dataset.loc);
-  });
-})();
-</script>
+  .album-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(0,0,0,.16);
+  }
+  .album-cover img,
+  .album-cover-placeholder{
+    display:block;
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    background:var(--bg-soft);
+  }
+  .album-meta{
+    padding:10px 12px 12px;
+  }
+  .album-title{
+    margin:0 0 4px;
+    font-size:1rem;
+  }
+  .album-sub{
+    margin:0;
+    font-size:.86rem;
+    color:var(--muted);
+  }
+</style>
