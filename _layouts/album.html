@@ -1,17 +1,20 @@
 ---
 layout: default
 ---
+
 <!-- PhotoSwipe 样式 -->
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
 
-<article class="page" id="album-pswp">
-  <h1>{{ page.title }}</h1>
-  {% if page.content %}<div class="post-content">{{ content }}</div>{% endif %}
+<article class="page">
+  <h1>{{ page.title_en | default: page.title }}</h1>
+  {% if page.content %}
+    <div class="post-content">{{ content }}</div>
+  {% endif %}
 
   <div class="album-grid">
     {% for p in page.photos %}
-      {%- assign src = p.src -%}
-      {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
+      {%- assign src   = p.src -%}
+      {%- assign base  = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
 
       {%- assign thumb = base
         | replace: '.JPG','-thumb.jpg'  | replace: '.JPEG','-thumb.jpg'
@@ -24,26 +27,11 @@ layout: default
       {%- assign caption = p.caption | default: page.title -%}
 
       <figure class="album-item">
-        <img src="{{ thumb | relative_url }}"
-             data-full="{{ large | relative_url }}"
-             alt="{{ caption }}"
-             loading="lazy" decoding="async" width="480">
-        {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
-      </figure>
-    {% endfor %}
-  </div>
-
-      <figure class="album-item">
-        <a class="pswp-link"
-           href="{{ large | relative_url }}"
-           data-pswp-caption="{{ caption | escape }}">
-          <img
-            src="{{ thumb | relative_url }}"
-            alt="{{ caption | escape }}"
-            loading="lazy"
-            decoding="async"
-            width="480">
-        </a>
+        <img
+          src="{{ thumb  | relative_url }}"
+          data-full="{{ large | relative_url }}"
+          alt="{{ caption }}"
+          loading="lazy" decoding="async" width="480">
         {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
       </figure>
     {% endfor %}
@@ -52,75 +40,62 @@ layout: default
 
 <!-- PhotoSwipe 脚本（ESM） -->
 <script type="module">
-  import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@5/dist/photoswipe-lightbox.esm.min.js';
+  import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  // 依据缩略图尺寸推算大图尺寸，给 anchor 标注 data-pswp-width/height
-  function primeSlideSizes(root) {
-    const anchors = root.querySelectorAll('a.pswp-link');
-    anchors.forEach(a => {
-      // 已有尺寸就不重复
-      if (a.dataset.pswpWidth && a.dataset.pswpHeight) return;
-      const img = a.querySelector('img');
-      if (!img) return;
-
-      const setDims = () => {
-        const w = img.naturalWidth || img.width || 480;
-        const h = img.naturalHeight || img.height || Math.round(w * 0.66);
-        // 估算大图为 1600 宽等比例；若横竖不明，按比例推
-        const targetW = 1600;
-        const ratio   = h / Math.max(1, w);
-        const targetH = Math.round(targetW * ratio);
-
-        a.dataset.pswpWidth  = String(targetW);
-        a.dataset.pswpHeight = String(targetH);
-        a.setAttribute('data-pswp-width',  a.dataset.pswpWidth);
-        a.setAttribute('data-pswp-height', a.dataset.pswpHeight);
-        a.setAttribute('data-pswp-src',    a.getAttribute('href')); // 兼容读取
-      };
-
-      if (img.complete) setDims();
-      else img.addEventListener('load', setDims, { once: true });
+  function buildItems(root) {
+    const nodes = Array.from(root.querySelectorAll('.album-item img'));
+    return nodes.map(img => {
+      const big = img.getAttribute('data-full') || img.currentSrc || img.src;
+      // 给定一个稳定尺寸，避免放大弹层抖动；真实像素由浏览器再取
+      return { src: big, width: 1600, height: 1067, alt: img.alt || '' };
     });
   }
 
-  const galleryRoot = document.getElementById('album-pswp');
-  primeSlideSizes(galleryRoot);
-
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '#album-pswp .album-grid',
-    children: 'a.pswp-link',
-    pswpModule: () => import('https://unpkg.com/photoswipe@5/dist/photoswipe.esm.min.js'),
-    wheelToZoom: true,
-    showHideAnimationType: 'zoom'
-  });
-
-  // 自定义标题：优先 data-pswp-caption，其次 figure > figcaption
-  lightbox.on('uiRegister', function() {
-    lightbox.pswp.ui.registerElement({
-      name: 'custom-caption',
-      order: 9,
-      isButton: false,
-      appendTo: 'root',
-      html: '',
-      onInit: (el, pswp) => {
-        pswp.on('change', () => {
-          const curr = pswp.currSlide?.data?.element; // <a.pswp-link>
-          let caption = curr?.getAttribute('data-pswp-caption') || '';
-          if (!caption) {
-            const figcap = curr?.closest('figure')?.querySelector('figcaption');
-            caption = figcap ? figcap.textContent.trim() : '';
-          }
-          el.innerHTML = caption ? `<div style="color:#fff;padding:8px 12px;">${caption}</div>` : '';
-        });
-      }
+  function openLightbox(root, clickedImg) {
+    const items = buildItems(root);
+    const curSrc = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
+    const idx = items.findIndex(it => it.src === curSrc);
+    const pswp = new PhotoSwipe({
+      index: Math.max(0, idx),
+      dataSource: items,
+      bgOpacity: 0.95,
+      wheelToZoom: true
     });
-  });
+    pswp.init();
+  }
 
-  lightbox.init();
+  const grid = document.querySelector('.album-grid');
+  if (grid) {
+    grid.addEventListener('click', (e) => {
+      const img = e.target.closest('.album-item img');
+      if (!img) return;
+      e.preventDefault();
+      openLightbox(grid, img);
+    });
+  }
 </script>
 
 <style>
-/* 让点击区域更大 & 保持圆角/阴影统一 */
-.album-item > a.pswp-link { display:block; border-radius:12px; overflow:hidden; }
-.album-item > a.pswp-link img { display:block; width:100%; height:auto; }
+  .album-grid{
+    columns: 2;
+    column-gap:16px;
+    margin-top:10px;
+  }
+  @media (max-width:980px){ .album-grid{ columns:2; } }
+  @media (max-width:640px){ .album-grid{ columns:1; } }
+
+  .album-item{
+    break-inside:avoid; -webkit-column-break-inside:avoid; margin:0 0 16px;
+    background:var(--card-bg);
+    border:var(--card-border);
+    border-radius:10px; overflow:hidden;
+    box-shadow:var(--card-shadow);
+  }
+  .album-item img{ display:block; width:100%; height:auto; }
+  .album-item figcaption{
+    padding:8px 10px;
+    color:var(--muted);
+    font-size:.92rem;
+    background:var(--card-bg);
+  }
 </style>
