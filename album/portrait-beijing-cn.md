@@ -3,7 +3,7 @@ layout: album
 title: "人像, 北京"
 title_en: "Portraits, Beijing"
 date: 2023-06-11
-cover: /assets/img/albums/portrait-beijing-cn/img_2419.jpg
+cover: /assets/img/albums/portrait-beijing-cn/img_2424.jpg
 location: "Beijing, China"
 location_name: "Beijing, China"
 photos:
