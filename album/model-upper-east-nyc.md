@@ -2,7 +2,7 @@
 layout: album
 title: "名模, 上东区"
 title_en: "Model, Upper East Side"
-date: 2005-01-01
+date: 2006-10-07
 cover: /assets/img/albums/model-upper-east-nyc/p1060309.jpg
 photos:
   - src: /assets/img/albums/model-upper-east-nyc/dsc01076.jpg
