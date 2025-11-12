@@ -7,6 +7,18 @@ cover: /assets/img/albums/portrait-beijing-cn/img_2424.jpg
 location: "Beijing, China"
 location_name: "Beijing, China"
 photos:
+  - src: /assets/img/albums/portrait-beijing-cn/IMG_6741.JPG
+    taken_at: 2021-12-24
+    lens: [zonlai-50-f1.4]
+  - src: /assets/img/albums/portrait-beijing-cn/IMG_6740.jpg
+    taken_at: 2021-12-24
+    lens: [zonlai-50-f1.4]
+  - src: /assets/img/albums/portrait-beijing-cn/IMG_6739.jpg
+    taken_at: 2021-12-24
+    lens: [zonlai-50-f1.4]
+  - src: /assets/img/albums/portrait-beijing-cn/IMG_6743.jpg
+    taken_at: 2021-12-24
+    lens: [zonlai-50-f1.4]
   - src: /assets/img/albums/portrait-beijing-cn/dsc07078.jpg
     taken_at: 2023-06-04
     lens: [sigma-18-50-f2.8]
