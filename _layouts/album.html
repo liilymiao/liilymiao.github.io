@@ -12,7 +12,8 @@ layout: default
   {% endif %}
 
   <div class="album-grid">
-    {% for p in page.photos %}
+    {%- assign photos_desc = page.photos | reverse -%}  <!-- ✅ 倒序排列 -->
+    {% for p in photos_desc %}
       {%- assign src   = p.src -%}
       {%- assign base  = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
 
@@ -55,7 +56,7 @@ layout: default
         const ratio = (img.naturalWidth && img.naturalHeight)
           ? (img.naturalHeight / img.naturalWidth)
           : (2/3); // 兜底 3:2
-        const W = 2000;                         // 目标大图宽度（与你的 -large.jpg 接近即可）
+        const W = 2000;
         const H = Math.round(W * ratio);
 
         return { src: full, msrc: img.src, width: W, height: H, alt: img.alt || '' };
