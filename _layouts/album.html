@@ -31,7 +31,7 @@ layout: default
           src="{{ thumb  | relative_url }}"
           data-full="{{ large | relative_url }}"
           alt="{{ caption }}"
-          loading="lazy" decoding="async" width="480">
+          loading="lazy" decoding="async">
         {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
       </figure>
     {% endfor %}
@@ -42,37 +42,37 @@ layout: default
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  function buildItems(root) {
-    const nodes = Array.from(root.querySelectorAll('.album-item img'));
-    return nodes.map(img => {
-      const big = img.getAttribute('data-full') || img.currentSrc || img.src;
-      // 给定一个稳定尺寸，避免放大弹层抖动；真实像素由浏览器再取
-      return { src: big, width: 1600, height: 1067, alt: img.alt || '' };
+  const grid = document.querySelector('.album-grid');
+  if (!grid) return;
+
+  const imgs = Array.from(grid.querySelectorAll('.album-item img'));
+
+  function buildItems() {
+    return imgs.map(img => {
+      // 用 data-full 作为灯箱大图；用缩略图的 naturalWidth/Height 保持正确比例
+      const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+      const w = img.naturalWidth  || 1600;
+      const h = img.naturalHeight || 1067;
+      return { src: full, width: w, height: h, alt: img.alt || '' };
     });
   }
 
-  function openLightbox(root, clickedImg) {
-    const items = buildItems(root);
-    const curSrc = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
-    const idx = items.findIndex(it => it.src === curSrc);
+  function openLightbox(index) {
     const pswp = new PhotoSwipe({
-      index: Math.max(0, idx),
-      dataSource: items,
+      index,
+      dataSource: buildItems(),
       bgOpacity: 0.95,
       wheelToZoom: true
     });
     pswp.init();
   }
 
-  const grid = document.querySelector('.album-grid');
-  if (grid) {
-    grid.addEventListener('click', (e) => {
-      const img = e.target.closest('.album-item img');
-      if (!img) return;
+  imgs.forEach((img, i) => {
+    img.addEventListener('click', e => {
       e.preventDefault();
-      openLightbox(grid, img);
+      openLightbox(i);
     });
-  }
+  });
 </script>
 
 <style>
@@ -91,6 +91,7 @@ layout: default
     border-radius:10px; overflow:hidden;
     box-shadow:var(--card-shadow);
   }
+  /* 关键：不设固定宽高，按原比例渲染缩略图 */
   .album-item img{ display:block; width:100%; height:auto; }
   .album-item figcaption{
     padding:8px 10px;
