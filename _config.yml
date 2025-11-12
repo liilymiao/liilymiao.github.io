@@ -10,3 +10,10 @@ plugins:
   - jekyll-sitemap
 
 exclude: [album_backup_*, node_modules, vendor, script, tools]
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      comments: true

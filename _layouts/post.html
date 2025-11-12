@@ -61,8 +61,8 @@ layout: default
 {% if page.comments != false %}
 <section id="comments" class="comments">
   <h2>Comments</h2>
+  <div id="giscus_container"></div>
 
-  <!-- Giscus：无需 repo_id / category_id，直接用仓库名与分类名 -->
   <script src="https://giscus.app/client.js"
           data-repo="liilymiao/liilymiao.github.io"
           data-category="General"
@@ -73,8 +73,10 @@ layout: default
           data-input-position="top"
           data-theme="preferred_color_scheme"
           data-lang="auto"
+          data-loading="lazy"
           crossorigin="anonymous"
           async>
   </script>
+  <noscript>Please enable JavaScript to view comments powered by giscus.</noscript>
 </section>
 {% endif %}
