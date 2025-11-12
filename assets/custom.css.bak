@@ -1,0 +1,273 @@
+/* =========================================================
+   Photo-zine grey/blue — site-wide theming with data-theme
+   - Unifies light/dark via CSS variables on :root[data-theme]
+   - Cards (post/page/album-card/album-item) all use --card-bg
+   - Borders/shadows use theme vars to keep consistent contrast
+   ========================================================= */
+
+/* ---------- Base (safe defaults before JS sets data-theme) ---------- */
+:root{
+  /* Semantic palette (will be overridden by data-theme) */
+  --paper:#f5f7fa;    /* page background */
+  --ink:#1f2937;      /* text */
+  --muted:#6b7280;    /* secondary text */
+  --edge:#e5e7eb;     /* borders/dividers */
+  --blue:#5b8aa6;     /* link */
+  --blue-2:#2e6f8f;   /* link hover */
+  --chip:#eef2f7;     /* code/label bg */
+
+  /* Card & chrome */
+  --card-bg:#ffffff;
+  --card-shadow:0 2px 12px rgba(17,24,39,.04);
+  --card-border:1px solid var(--edge);
+
+  /* Global bg/text (for smooth transition) */
+  --bg-color: var(--paper);
+  --text-color: var(--ink);
+  --link-color: var(--blue);
+  --link-hover: var(--blue-2);
+  --divider-color: var(--edge);
+}
+
+/* ---------- Light/Dark with data-theme (authoritative) ---------- */
+:root[data-theme='light']{
+  --paper:#f5f7fa;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --edge:#e5e7eb;
+  --blue:#5b8aa6;
+  --blue-2:#2e6f8f;
+  --chip:#eef2f7;
+
+  --card-bg:#ffffff;
+  --card-shadow:0 2px 12px rgba(17,24,39,.04);
+  --card-border:1px solid var(--edge);
+
+  --bg-color: var(--paper);
+  --text-color: var(--ink);
+  --link-color: var(--blue);
+  --link-hover: var(--blue-2);
+  --divider-color: var(--edge);
+}
+
+:root[data-theme='dark']{
+  --paper:#0f141a;
+  --ink:#e5eaf0;
+  --muted:#9aa4b2;
+  --edge:#1f2a36;
+  --blue:#7fb4cf;
+  --blue-2:#a2c8da;
+  --chip:#111821;
+
+  --card-bg:#0d1319;                  /* unified card bg */
+  --card-shadow:none;                 /* darker env: remove big glow */
+  --card-border:1px solid var(--edge);
+
+  --bg-color: var(--paper);
+  --text-color: var(--ink);
+  --link-color: var(--blue);
+  --link-hover: var(--blue-2);
+  --divider-color: var(--edge);
+}
+
+/* ---------- Fallback if JS didn't set data-theme (respect system) ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){
+    --paper:#0f141a; --ink:#e5eaf0; --muted:#9aa4b2; --edge:#1f2a36;
+    --blue:#7fb4cf; --blue-2:#a2c8da; --chip:#111821;
+    --card-bg:#0d1319; --card-shadow:none; --card-border:1px solid var(--edge);
+    --bg-color: var(--paper); --text-color: var(--ink);
+    --link-color: var(--blue); --link-hover: var(--blue-2); --divider-color: var(--edge);
+  }
+}
+
+/* ---------- Global resets & typography ---------- */
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg-color);
+  color:var(--text-color);
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  transition: background .35s ease, color .35s ease;
+}
+h1,h2,h3{ color:var(--text-color) }
+a{ color:var(--link-color); text-decoration:none; transition:color .2s ease }
+a:hover{ color:var(--link-hover); text-decoration:underline }
+hr{ border:0; border-top:1px solid var(--divider-color); }
+
+/* ---------- Top nav ---------- */
+.top-nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 20px; border-bottom:1px solid var(--divider-color);
+  position:sticky; top:0; backdrop-filter:saturate(140%) blur(6px);
+  background: color-mix(in oklab, var(--bg-color) 85%, transparent);
+  z-index: 50;
+}
+.top-nav .brand{font-weight:700; letter-spacing:.3px; color:var(--text-color)}
+.top-nav .links a{margin-left:14px; color:var(--text-color); opacity:.85}
+.top-nav .links a:hover{color:var(--link-hover); opacity:1}
+
+/* ---------- Containers / cards ---------- */
+.page-wrap, .wrapper, .container, .post, .page{
+  max-width:860px; margin:28px auto; padding:0 16px;
+}
+.post, .page{
+  background:var(--card-bg);
+  border:var(--card-border);
+  border-radius:10px;
+  box-shadow:var(--card-shadow);
+  padding:22px;
+}
+
+/* ---------- Chips ---------- */
+.post-cats{ margin:.25rem 0 .6rem }
+.chip{
+  display:inline-block; padding:.14rem .5rem; margin-right:.35rem;
+  background:var(--chip); border:1px solid var(--edge); border-radius:999px;
+  font-size:.88rem; color:var(--text-color); opacity:.9
+}
+.chip:hover{ border-color:var(--link-color); color:var(--link-color) }
+
+/* ---------- Code & blockquote ---------- */
+pre,code{ background:var(--chip) }
+pre{
+  padding:12px 14px; border:1px solid var(--edge);
+  border-radius:8px; overflow:auto
+}
+blockquote{
+  border-left:3px solid var(--link-color);
+  color:var(--muted);
+  background:var(--card-bg);
+  padding:.4rem .9rem; margin:.9rem 0
+}
+
+/* ---------- Footer ---------- */
+.site-footer{
+  opacity:.7; border-top:1px solid var(--divider-color); padding:14px 20px;
+}
+
+/* =========================================================
+   Home: Albums grid (covers)
+   ========================================================= */
+.albums-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin:8px 0 24px;
+}
+@media (max-width:980px){ .albums-grid{ grid-template-columns:repeat(2,1fr);} }
+@media (max-width:640px){ .albums-grid{ grid-template-columns:1fr;} }
+
+.album-card{
+  display:block;
+  background:var(--card-bg);
+  border:var(--card-border);
+  border-radius:10px;
+  box-shadow:var(--card-shadow);
+  overflow:hidden;
+  text-decoration:none;
+}
+.album-card img{ display:block; width:100%; height:auto; }
+.album-card .meta{ padding:10px 12px; }
+.album-card h3{ margin:.1rem 0; font-size:1.05rem; color:var(--text-color) }
+.album-card small{ color:var(--muted) }
+.album-card:hover h3{ color:var(--link-color) }
+
+/* =========================================================
+   Album page (masonry with captions)
+   ========================================================= */
+.album-grid{ columns: 2; column-gap:16px; margin-top:10px; }
+@media (max-width:980px){ .album-grid{ columns:2; } }
+@media (max-width:640px){ .album-grid{ columns:1; } }
+
+.album-item{
+  break-inside:avoid; -webkit-column-break-inside:avoid; margin:0 0 16px;
+  background:var(--card-bg);
+  border:var(--card-border);
+  border-radius:10px; overflow:hidden;
+  box-shadow:var(--card-shadow);
+}
+.album-item img{ display:block; width:100%; height:auto; }
+.album-item figcaption{
+  padding:8px 10px;
+  color:var(--muted);
+  font-size:.92rem;
+  background:var(--card-bg);
+}
+
+/* =========================================================
+   Home: Photos stream (if you render cards there)
+   ========================================================= */
+.photos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  gap:.75rem;
+}
+.photo-card{
+  display:block;
+  background:var(--card-bg);
+  border:var(--card-border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:var(--card-shadow);
+  text-decoration:none;
+}
+.photo-card img{
+  display:block; width:100%;
+  height:180px;       /* fixed height for neat rows */
+  object-fit:cover;
+}
+.ph-meta{
+  display:flex; flex-wrap:wrap; gap:.25rem .5rem;
+  padding:8px 10px;
+  color:var(--muted);
+  background:var(--card-bg);
+  border-top:1px solid var(--edge);
+}
+
+/* =========================================================
+   Simple Image Viewer overlay (home + album)
+   ========================================================= */
+#imgViewer {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.9);
+  display: none; justify-content: center; align-items: center;
+  z-index: 9999;
+}
+#imgViewer img {
+  max-width: 94%; max-height: 94%;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba(0,0,0,.6);
+}
+#imgViewer.visible { display: flex; }
+
+/* =========================================================
+   Theme Toggle Button (bottom-left per request)
+   ========================================================= */
+.theme-toggle{
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  right: auto;
+  top: auto;
+  z-index: 2000;
+}
+.theme-toggle button{
+  background: none; border: 1px solid var(--divider-color);
+  border-radius: 999px; padding:.35rem .6rem;
+  font-size: 1.1rem; cursor: pointer;
+  transition: transform .25s ease, border-color .25s ease;
+  color: var(--text-color);
+  background: color-mix(in oklab, var(--bg-color) 70%, transparent);
+}
+.theme-toggle button:hover{ transform: rotate(20deg); border-color: var(--link-color); }
+@supports (padding: max(0px)) {
+  .theme-toggle{ left:max(1rem, env(safe-area-inset-left)); bottom:max(1rem, env(safe-area-inset-bottom)); }
+}
+
+/* =========================================================
+   Utility: prevent first-image on album page from stretching
+   ========================================================= */
+.page > p:first-child > img:only-child{
+  max-width:100%; height:auto; display:block; margin:0 auto;
+}
