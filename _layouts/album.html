@@ -28,7 +28,7 @@ layout: default
 
       <figure class="album-item">
         <img
-          src="{{ thumb  | relative_url }}"
+          src="{{ thumb | relative_url }}"
           data-full="{{ large | relative_url }}"
           alt="{{ caption }}"
           loading="lazy" decoding="async">
@@ -42,37 +42,41 @@ layout: default
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  const grid = document.querySelector('.album-grid');
-  if (!grid) return;
+  (function(){
+    const grid = document.querySelector('.album-grid');
+    if (!grid) return;
 
-  const imgs = Array.from(grid.querySelectorAll('.album-item img'));
+    function buildItems() {
+      const imgs = Array.from(grid.querySelectorAll('.album-item img'));
+      return imgs.map(img => {
+        const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+        const w = img.naturalWidth  || 1600;
+        const h = img.naturalHeight || 1067;
+        return { src: full, width: w, height: h, alt: img.alt || '' };
+      });
+    }
 
-  function buildItems() {
-    return imgs.map(img => {
-      // 用 data-full 作为灯箱大图；用缩略图的 naturalWidth/Height 保持正确比例
-      const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-      const w = img.naturalWidth  || 1600;
-      const h = img.naturalHeight || 1067;
-      return { src: full, width: w, height: h, alt: img.alt || '' };
-    });
-  }
+    function openLightbox(clickedImg) {
+      const imgs = Array.from(grid.querySelectorAll('.album-item img'));
+      const items = buildItems();
+      const curFull = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
+      const idx = Math.max(0, items.findIndex(it => it.src === curFull));
+      const pswp = new PhotoSwipe({
+        index: idx,
+        dataSource: items,
+        bgOpacity: 0.95,
+        wheelToZoom: true
+      });
+      pswp.init();
+    }
 
-  function openLightbox(index) {
-    const pswp = new PhotoSwipe({
-      index,
-      dataSource: buildItems(),
-      bgOpacity: 0.95,
-      wheelToZoom: true
-    });
-    pswp.init();
-  }
-
-  imgs.forEach((img, i) => {
-    img.addEventListener('click', e => {
+    grid.addEventListener('click', (e) => {
+      const img = e.target.closest('.album-item img');
+      if (!img) return;
       e.preventDefault();
-      openLightbox(i);
+      openLightbox(img);
     });
-  });
+  })();
 </script>
 
 <style>
@@ -91,8 +95,10 @@ layout: default
     border-radius:10px; overflow:hidden;
     box-shadow:var(--card-shadow);
   }
-  /* 关键：不设固定宽高，按原比例渲染缩略图 */
-  .album-item img{ display:block; width:100%; height:auto; }
+  /* 关键：不设固定高，按原比例渲染缩略图 */
+  .album-item img{
+    display:block; width:100%; height:auto; cursor: zoom-in;
+  }
   .album-item figcaption{
     padding:8px 10px;
     color:var(--muted);
