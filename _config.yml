@@ -8,3 +8,5 @@ timezone: Asia/Hong_Kong
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+
+exclude: [album_backup_*, node_modules, vendor, script, tools]
