@@ -105,7 +105,7 @@ title: Home
   {%- assign lenses = lens_pool | uniq | sort -%}
 
   <div class="album-filters" id="photoFilters">
-    <strong data-i18n="filters.filter">Filter:</strong>
+    <strong data-i18n="filters.filter">Lens:</strong>
     <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
     {%- for l in lenses -%}
       <button type="button" data-lens="{{ l }}">{{ l }}</button>
@@ -225,7 +225,7 @@ title: Home
       "home.viewall":"View all →",
       "home.photos":"Photos",
       "filters.all":"All",
-      "filters.filter":"Filter:"
+      "filters.filter":"Lens:"
     },
     zh: {
       "home.latest":"最新文章",
@@ -235,7 +235,7 @@ title: Home
       "home.viewall":"查看全部 →",
       "home.photos":"照片",
       "filters.all":"全部",
-      "filters.filter":"筛选："
+      "filters.filter":"镜头："
     }
   };
 
