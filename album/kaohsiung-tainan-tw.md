@@ -12,10 +12,6 @@ photos:
     lens: [135-film]
     taken_at: 2024-02-18
 
-  - src: /assets/img/albums/kaohsiung-tainan-tw/dhalf-2024-02-18-161633.864.jpg
-    lens: [135-film]
-    taken_at: 2024-02-18
-
   - src: /assets/img/albums/kaohsiung-tainan-tw/dhalf-2024-02-19-153213.413.jpg
     lens: [135-film]
     taken_at: 2024-02-19
