@@ -10,11 +10,28 @@ layout: default
 
   <div class="album-grid">
     {% for p in page.photos %}
-      {%- assign src   = p.src -%}
-      {%- assign base  = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
-      {%- assign thumb = base | replace:'.jpg','-thumb.jpg'  | replace:'.jpeg','-thumb.jpg' | replace:'.png','-thumb.jpg' -%}
-      {%- assign large = base | replace:'.jpg','-large.jpg'  | replace:'.jpeg','-large.jpg' | replace:'.png','-large.jpg' -%}
+      {%- assign src = p.src -%}
+      {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
+
+      {%- assign thumb = base
+        | replace: '.JPG','-thumb.jpg'  | replace: '.JPEG','-thumb.jpg'
+        | replace: '.jpg','-thumb.jpg'  | replace: '.jpeg','-thumb.jpg' -%}
+
+      {%- assign large = base
+        | replace: '.JPG','-large.jpg'  | replace: '.JPEG','-large.jpg'
+        | replace: '.jpg','-large.jpg'  | replace: '.jpeg','-large.jpg' -%}
+
       {%- assign caption = p.caption | default: page.title -%}
+
+      <figure class="album-item">
+        <img src="{{ thumb | relative_url }}"
+             data-full="{{ large | relative_url }}"
+             alt="{{ caption }}"
+             loading="lazy" decoding="async" width="480">
+        {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+      </figure>
+    {% endfor %}
+  </div>
 
       <figure class="album-item">
         <a class="pswp-link"
