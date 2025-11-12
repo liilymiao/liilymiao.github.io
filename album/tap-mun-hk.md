@@ -3,7 +3,7 @@ layout: album
 title: "塔门岛, 香港"
 title_en: "Tap Mun Island, Hong Kong"
 date: 2023-10-23
-cover: /assets/img/albums/tap-mun-hk/img_6577.jpg
+cover: /assets/img/albums/tap-mun-hk/dsc00287.jpg
 location: "Hong Kong SAR, China"
 location_name: "Hong Kong SAR, China"
 photos:
