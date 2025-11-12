@@ -47,14 +47,22 @@ title: Home
   <h2 data-i18n="home.albums">Albums</h2>
   {%- assign raw = site.pages | where: "layout", "album" -%}
   {%- assign grouped = raw | group_by: "url" -%}
-  {%- assign albums_all = "" | split: "" -%}{% for g in grouped %}{% assign albums_all = albums_all | push: g.items.first %}{% endfor %}
-  {%- assign locs = albums_all | map: "location" | uniq | sort -%}
+  {%- assign albums_all = "" | split: "" -%}
+  {%- for g in grouped -%}
+    {%- assign albums_all = albums_all | push: g.items.first -%}
+  {%- endfor -%}
+
+  {%- comment -%}
+    只用有 location 的相册来生成筛选按钮，避免 nil 参与 sort
+  {%- endcomment -%}
+  {%- assign albums_with_loc = albums_all | where_exp: "a", "a.location" -%}
+  {%- assign locs = albums_with_loc | map: "location" | uniq | sort -%}
 
   <div class="album-filters" id="albumLocFilters">
     <strong data-i18n="home.location">Location:</strong>
     <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
     {%- for loc in locs -%}
-      {%- assign rep = albums_all | where: "location", loc | first -%}
+      {%- assign rep = albums_with_loc | where: "location", loc | first -%}
       <button type="button" data-loc="{{ loc }}">{{ rep.location_name | default: loc }}</button>
     {%- endfor -%}
   </div>
@@ -68,7 +76,9 @@ title: Home
          data-title-zh="{{ a.title | escape }}"
          data-title-en="{{ a.title_en | default: a.title | escape }}">
         {% if a.cover %}
-          <img src="{{ a.cover | relative_url }}" alt="{{ a.title_en | default: a.title }}" loading="lazy">
+          <img src="{{ a.cover | relative_url }}"
+               alt="{{ a.title_en | default: a.title }}"
+               loading="lazy">
         {% endif %}
         <div class="meta">
           <h3>{{ a.title_en | default: a.title }}</h3>
