@@ -2,20 +2,11 @@
 layout: album
 title: "人像, 北京"
 title_en: "Portraits, Beijing"
-date: 2023-06-04
-cover: /assets/img/albums/portrait-beijing-cn/img_2419.jpg
+date: 2023-06-11
+cover: /assets/img/albums/portrait-beijing-cn/img_2424.jpg
 location: "Beijing, China"
 location_name: "北京, 中国"
 photos:
-  - src: /assets/img/albums/portrait-beijing-cn/dsc09515.jpg
-    taken_at: 2023-06-16
-    lens: Sigma 18-50 mm F2.8
-  - src: /assets/img/albums/portrait-beijing-cn/dsc09686.jpg
-    taken_at: 2023-06-16
-    lens: Sigma 18-50 mm F2.8
-  - src: /assets/img/albums/portrait-beijing-cn/dsc09411.jpg
-    taken_at: 2023-06-16
-    lens: Sigma 18-50 mm F2.8
   - src: /assets/img/albums/portrait-beijing-cn/dsc07078.jpg
     taken_at: 2023-06-04
     lens: Sigma 18-50 mm F2.8
@@ -24,15 +15,6 @@ photos:
     lens: Sigma 18-50 mm F2.8
   - src: /assets/img/albums/portrait-beijing-cn/img_2425.jpg
     taken_at: 2023-06-04
-    lens: Sigma 18-50 mm F2.8
-  - src: /assets/img/albums/portrait-beijing-cn/img_4040.jpg
-    taken_at: 2023-06-11
-    lens: Sigma 18-50 mm F2.8
-  - src: /assets/img/albums/portrait-beijing-cn/img_4037.jpg
-    taken_at: 2023-06-11
-    lens: Sigma 18-50 mm F2.8
-  - src: /assets/img/albums/portrait-beijing-cn/img_4034.jpg
-    taken_at: 2023-06-11
     lens: Sigma 18-50 mm F2.8
   - src: /assets/img/albums/portrait-beijing-cn/img_2422.jpg
     taken_at: 2023-06-04
@@ -48,5 +30,14 @@ photos:
     lens: Sigma 18-50 mm F2.8
   - src: /assets/img/albums/portrait-beijing-cn/img_2419.jpg
     taken_at: 2023-06-04
+    lens: Sigma 18-50 mm F2.8
+  - src: /assets/img/albums/portrait-beijing-cn/img_4040.jpg
+    taken_at: 2023-06-11
+    lens: Sigma 18-50 mm F2.8
+  - src: /assets/img/albums/portrait-beijing-cn/img_4037.jpg
+    taken_at: 2023-06-11
+    lens: Sigma 18-50 mm F2.8
+  - src: /assets/img/albums/portrait-beijing-cn/img_4034.jpg
+    taken_at: 2023-06-11
     lens: Sigma 18-50 mm F2.8
 ---
