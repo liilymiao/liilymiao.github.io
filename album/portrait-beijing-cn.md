@@ -5,7 +5,7 @@ title_en: "Portraits, Beijing"
 date: 2023-06-11
 cover: /assets/img/albums/portrait-beijing-cn/img_2424.jpg
 location: "Beijing, China"
-location_name: "北京, 中国"
+location_name: "Beijing, China"
 photos:
   - src: /assets/img/albums/portrait-beijing-cn/dsc07078.jpg
     taken_at: 2023-06-04
