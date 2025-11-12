@@ -23,12 +23,4 @@ photos:
   - src: /assets/img/albums/taipei-hualian-tw/img_1802.jpg
     lens: [iphone-15-pro-max]
     taken_at: 2024-02-21
-
-  - src: /assets/img/albums/taipei-hualian-tw/img_1974.jpg
-    lens: [iphone-15-pro-max]
-    taken_at: 2024-02-21
-
-  - src: /assets/img/albums/taipei-hualian-tw/img_2425.jpg
-    lens: [iphone-15-pro-max]
-    taken_at: 2024-02-21
 ---
