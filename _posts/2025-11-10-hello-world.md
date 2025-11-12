@@ -7,6 +7,7 @@ categories: note
 body_zh: |
  这是我的测试文章。新的文章应放在 _posts/ 文件夹中，文件名格式为 YYYY-MM-DD-title.md，并会显示在主页上。 
  （大概率不会）
+comments: true   # 要开评论就写 true；不想要就 false 或删掉
 ---
 
 This is my test post. New posts go in the **_posts/** folder as `YYYY-MM-DD-title.md` and will appear on the home page.
