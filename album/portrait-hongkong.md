@@ -1,4 +1,3 @@
-
 ---
 layout: album
 title: "人像, 香港"
