@@ -6,7 +6,9 @@ permalink: /albums/
 
 <h1 data-i18n="home.albums">Albums</h1>
 
-{%- assign albums_all = site.pages | where: "layout", "album" -%}
+{%- assign raw = site.pages | where: "layout", "album" -%}
+{%- assign grouped = raw | group_by: "url" -%}
+{%- assign albums_all = "" | split: "" -%}{% for g in grouped %}{% assign albums_all = albums_all | push: g.items.first %}{% endfor %}
 {%- assign locs = albums_all | map: "location" | uniq | sort -%}
 
 <div class="album-filters" id="albumLocFilters">
