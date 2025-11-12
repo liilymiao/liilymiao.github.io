@@ -28,7 +28,7 @@ layout: default
 
       <figure class="album-item">
         <img
-          src="{{ thumb | relative_url }}"
+          src="{{ thumb  | relative_url }}"
           data-full="{{ large | relative_url }}"
           alt="{{ caption }}"
           loading="lazy" decoding="async">
@@ -42,7 +42,7 @@ layout: default
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  (function(){
+  (() => {
     const grid = document.querySelector('.album-grid');
     if (!grid) return;
 
@@ -50,19 +50,25 @@ layout: default
       const imgs = Array.from(grid.querySelectorAll('.album-item img'));
       return imgs.map(img => {
         const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-        const w = img.naturalWidth  || 1600;
-        const h = img.naturalHeight || 1067;
-        return { src: full, width: w, height: h, alt: img.alt || '' };
+
+        // 用缩略图比例推算一个更大的尺寸，保证进灯箱后能“放大”
+        const ratio = (img.naturalWidth && img.naturalHeight)
+          ? (img.naturalHeight / img.naturalWidth)
+          : (2/3); // 兜底 3:2
+        const W = 2000;                         // 目标大图宽度（与你的 -large.jpg 接近即可）
+        const H = Math.round(W * ratio);
+
+        return { src: full, msrc: img.src, width: W, height: H, alt: img.alt || '' };
       });
     }
 
     function openLightbox(clickedImg) {
-      const imgs = Array.from(grid.querySelectorAll('.album-item img'));
       const items = buildItems();
-      const curFull = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
-      const idx = Math.max(0, items.findIndex(it => it.src === curFull));
+      const cur = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
+      const index = Math.max(0, items.findIndex(it => it.src === cur));
+
       const pswp = new PhotoSwipe({
-        index: idx,
+        index,
         dataSource: items,
         bgOpacity: 0.95,
         wheelToZoom: true
@@ -95,7 +101,6 @@ layout: default
     border-radius:10px; overflow:hidden;
     box-shadow:var(--card-shadow);
   }
-  /* 关键：不设固定高，按原比例渲染缩略图 */
   .album-item img{
     display:block; width:100%; height:auto; cursor: zoom-in;
   }
