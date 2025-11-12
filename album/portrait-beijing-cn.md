@@ -13,9 +13,6 @@ photos:
   - src: /assets/img/albums/portrait-beijing-cn/dsc06849.jpg
     taken_at: 2023-06-04
     lens: [sigma-18-50-f2.8]
-  - src: /assets/img/albums/portrait-beijing-cn/img_2425.jpg
-    taken_at: 2023-06-04
-    lens: [sigma-18-50-f2.8]
   - src: /assets/img/albums/portrait-beijing-cn/img_2422.jpg
     taken_at: 2023-06-04
     lens: [sigma-18-50-f2.8]
