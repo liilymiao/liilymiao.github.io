@@ -3,7 +3,7 @@ layout: album
 title: 高雄-台南, 台湾
 title_en: Kaohsiung-Tainan, Taiwan 
 permalink: /album/kaohsiung-tainan-tw/
-date: 2024-02-19
+date: 2025-03-10
 location: Taiwan, China
 location_name: Taiwan, China
 cover: /assets/img/albums/kaohsiung-tainan-tw/fullsizerender-5.jpg
@@ -34,23 +34,23 @@ photos:
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5442.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5546.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5630.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5636.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5744.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5934.jpg
     lens: [iphone-15-pro-max]
@@ -58,6 +58,6 @@ photos:
 
   - src: /assets/img/albums/kaohsiung-tainan-tw/img_5948.jpg
     lens: [iphone-15-pro-max]
-    taken_at: 2024-03-09
+    taken_at: 2025-03-09
 
 ---
