@@ -8,18 +8,14 @@ body_zh: |
    我恨之入骨、看到成片就能精准识别 + 生理性难受到发抖的器材
    （包括机身、镜头、转接环、胶卷、冲扫、相纸、后期软件、机内滤镜 / 预设、
    LR / PS 预设套组）榜单：
-
    **sssssss+：**  
    没有这种东西  
- 
    **s：**  
    🈚️  
-
    **a：**  
    没有  
 
    我爱之欲其生的榜单（无先后顺序，仅按价格从低到高排）：
-
    免费：苹果人像模式、Epson V850（原厂 / 银快）  
    Ektar 100、Lomo 92 & 92 日落版  
    唯卓仕全系产品、天工自动转接环、适马所有变焦  
@@ -31,7 +27,6 @@ body_zh: |
 
    无功但无过的基础搭配单品榜单
    （因此机身简单镜头就得不简单 / 镜头基础机身就不能基础）：
-
    美图秀秀、Snapseed  
    全能 400（135）、炮塔 800（120）  
    徕纳转接环、尼康阿富汗少女镜  
@@ -129,7 +124,7 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>Helios when it produces swirl bokeh</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 500T 5219</td></tr>
     <tr><td>Hate</td><td>a</td><td>Olympus</td></tr>
-    <tr><td>Hate</td><td>a</td><td>Rollei (all models except the f/2.8 ones)</td></tr>
+    <tr><td>Hate</td><td>a</td><td>Rollei Rollei (all models except the classic Rolleiflex 2.8 series)</td></tr>
     <tr><td>Hate</td><td>a</td><td>Re-composing by cropping in post</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Ektachrome E100</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Gold 200 (unless in polar or snowfield environments)</td></tr>
