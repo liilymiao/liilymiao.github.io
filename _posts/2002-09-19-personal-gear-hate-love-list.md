@@ -111,7 +111,7 @@ comments: true
     <tr><td>Neutral</td><td>–</td><td>Sony A7II (nice color)</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Sony A7III (too good to discard, too boring to love)</td></tr>
     <tr><td>Hate</td><td>a</td><td>All CCD cameras</td></tr>
-    <tr><td>Hate</td><td>a</td><td>All vlog cameras (except Sony Cinema Line bodies such as the FX3 and FX30)</td></tr>
+    <tr><td>Hate</td><td>a</td><td>All vlog cameras (except Sony Cinema Line like FX2&FX3)</td></tr>
     <tr><td>Hate</td><td>a</td><td>All Tamron telephoto zooms</td></tr>
     <tr><td>Hate</td><td>a</td><td>Sony A7C series</td></tr>
     <tr><td>Hate</td><td>a</td><td>All Minolta products</td></tr>
