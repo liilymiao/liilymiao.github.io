@@ -135,7 +135,7 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>The act of printing photos (except after lamination)</td></tr>
     <tr><td>Hate</td><td>s</td><td>Xingtu app</td></tr>
     <tr><td>Hate</td><td>s</td><td>All Fujifilm filters/picture profiles/presets (including Sony Creative Look FL)</td></tr>
-    <tr><td>Hate</td><td>s</td><td>DJI Pocket series (but not the Action series)</td></tr>
+    <tr><td>Hate</td><td>s</td><td>DJI Pocket series (weirdly I don’t hate the Action)</td></tr>
     <tr><td>Hate</td><td>ssssss+</td><td>Fujifilm (including GFX, all Instax except the Wide series, all Fujifilm film stocks, Frontier SP-3000 scans)</td></tr>
   </tbody>
 </table>
