@@ -30,7 +30,7 @@ body_zh: |
  *无功但无过的基础搭配单品榜单（因此机身简单镜头就得不简单 / 镜头基础机身就不能基础）：*
 
    美图秀秀、Snapseed  
-   全能 400（135）、炮塔 800（120）  
+   全能 400（135）、炮塔 800（120）、E100（仅观赏别冲扫）  
    徕纳转接环、尼康阿富汗少女镜  
    富士 wide300、宝利来 Now+2  
    P67 原厂 75mm、300mm  
@@ -108,6 +108,7 @@ comments: true
     <tr><td>Neutral</td><td>–</td><td>Snapseed</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Kodak UltraMax 400 (135)</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Kodak Portra 800 (120)</td></tr>
+    <tr><td>Neutral</td><td>-</td><td>Kodak Ektachrome E100 (reversal viewing only)</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Laina lens adapters</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Nikon Nikkor 105mm f/2.5 AI-s “the Afghan Girl”</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Fujifilm Instax Wide 300</td></tr>
@@ -125,7 +126,6 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 500T 5219</td></tr>
     <tr><td>Hate</td><td>a</td><td>Olympus</td></tr>
     <tr><td>Hate</td><td>a</td><td>Rollei (all models except the classic Rolleiflex 2.8 series)</td></tr>
-    <tr><td>Hate</td><td>a</td><td>Kodak Ektachrome E100</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Gold 200 (unless in polar or snowfield environments)</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 50D 5203</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 250D 5207</td></tr>
