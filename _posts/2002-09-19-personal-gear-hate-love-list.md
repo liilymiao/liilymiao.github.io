@@ -99,7 +99,6 @@ comments: true
     <tr><td>Love</td><td>–</td><td>Leica Q 28mm</td></tr>
     <tr><td>Love</td><td>–</td><td>Leica M7 (nice name)</td></tr>
     <tr><td>Love</td><td>–</td><td>Angénieux S21 &gt;&gt; S5 (too expensive)</td></tr>
-
     <tr><td>Neutral</td><td>–</td><td>Meitu app</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Snapseed</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Kodak UltraMax 400 (135)</td></tr>
@@ -112,7 +111,6 @@ comments: true
     <tr><td>Neutral</td><td>–</td><td>Pentax 67 original 300 mm lens</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Sony A7II (nice color)</td></tr>
     <tr><td>Neutral</td><td>–</td><td>Sony A7III (too good to discard, too boring to love)</td></tr>
-
     <tr><td>Hate</td><td>a</td><td>All CCD cameras</td></tr>
     <tr><td>Hate</td><td>a</td><td>All vlog cameras (except cinema-style bodies such as FX2 and FX3)</td></tr>
     <tr><td>Hate</td><td>a</td><td>All Tamron telephoto zooms</td></tr>
@@ -122,7 +120,6 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 500T 5219</td></tr>
     <tr><td>Hate</td><td>a</td><td>Olympus</td></tr>
     <tr><td>Hate</td><td>a</td><td>Rollei (all models except the classic Rolleiflex 2.8 series)</td></tr>
-    <tr><td>Hate</td><td>a</td><td>Re-composing by cropping in post</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Ektachrome E100</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Gold 200 (unless in polar or snowfield environments)</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 50D 5203</td></tr>
@@ -131,6 +128,7 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>Hasselblad Flextight X5 scans (in most scenes)</td></tr>
     <tr><td>Hate</td><td>a</td><td>The act of printing photos (except after lamination)</td></tr>
     <tr><td>Hate</td><td>s</td><td>Xingtu app</td></tr>
+    <tr><td>Hate</td><td>s</td><td>Re-composing by cropping</td></tr>
     <tr><td>Hate</td><td>s</td><td>All Fujifilm filters/picture profiles/presets (including Sony Creative Look FL)</td></tr>
     <tr><td>Hate</td><td>s</td><td>DJI Pocket series (weirdly I don’t hate the Action)</td></tr>
     <tr><td>Hate</td><td>ssssss+</td><td>Fujifilm (including GFX, all Instax except the Wide series, all Fujifilm film stocks, Frontier SP-3000 scans)</td></tr>
