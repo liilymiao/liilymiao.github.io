@@ -127,7 +127,7 @@ comments: true
     <tr><td>Hate</td><td>a</td><td>Helios when it produces swirl bokeh</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Vision3 500T 5219</td></tr>
     <tr><td>Hate</td><td>a</td><td>Olympus</td></tr>
-    <tr><td>Hate</td><td>a</td><td>Rollei Rollei (all models except the classic Rolleiflex 2.8 series)</td></tr>
+    <tr><td>Hate</td><td>a</td><td>Rollei (all models except the classic Rolleiflex 2.8 series)</td></tr>
     <tr><td>Hate</td><td>a</td><td>Re-composing by cropping in post</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Ektachrome E100</td></tr>
     <tr><td>Hate</td><td>a</td><td>Kodak Gold 200 (unless in polar or snowfield environments)</td></tr>
