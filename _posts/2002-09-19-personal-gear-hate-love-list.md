@@ -5,11 +5,10 @@ title_en: "The Court: Final Verdicts on Film & Photo Gear"
 date: 2002-09-19 09:15
 categories: note
 body_zh: |
-  *（包括机身、镜头、转接环、胶卷、冲洗、相纸、后期软件、机内滤镜 / 预设、  
-  LR / PS 预设套组）*  
+  *（包括机身、镜头、转接环、胶卷、冲扫、相纸、后期软件、机内滤镜/预设、lr/ps预设套组）*  
 
   <hr style="border:0;border-top:1px solid #4442;margin:1.2rem 0;">
-  
+
   *我爱之欲其生的榜单（无先后顺序，仅按价格从低到高排）：*  
   免费：苹果人像模式、Epson V850（原厂 / 银快）  
   Ektar100、Lomo92 & 92 日落版  
