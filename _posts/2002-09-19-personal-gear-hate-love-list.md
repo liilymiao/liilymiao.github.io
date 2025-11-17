@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "自我意识榜单"
-title_en: "personal hate-love list"
+title: "The Court: Final Verdicts on Film & Photo Gear"
+title_en: "The Court: Final Verdicts on Film & Photo Gear"
 date: 2002-09-19 09:15
 categories: note
 body_zh: |
  *（包括机身、镜头、转接环、胶卷、冲扫、相纸、后期软件、机内滤镜 / 预设、LR / PS 预设套组）*
- 
+
  *我爱之欲其生的榜单（无先后顺序，仅按价格从低到高排）：*
 
    免费：苹果人像模式、Epson V850（原厂 / 银快）  
