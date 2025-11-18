@@ -40,9 +40,6 @@ photos:
   - src: /assets/img/albums/portrait-beijing-cn/img_2419.jpg
     taken_at: 2023-06-04
     lens: [sigma-18-50-f2.8]
-  - src: /assets/img/albums/portrait-beijing-cn/img_4040.jpg
-    taken_at: 2023-06-11
-    lens: [sigma-18-50-f2.8]
   - src: /assets/img/albums/portrait-beijing-cn/img_4037.jpg
     taken_at: 2023-06-11
     lens: [sigma-18-50-f2.8]
