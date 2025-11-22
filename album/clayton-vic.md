@@ -26,4 +26,12 @@ photos:
   - src: /assets/img/albums/clayton-vic/dsc06675.jpg
     taken_at: 2025-11-21
     lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/clayton-vic/dsc06855.jpg
+    taken_at: 2025-11-22
+    lens: [leica-summicron-40-f2]
+  
+  - src: /assets/img/albums/clayton-vic/dsc06819.jpg
+    taken_at: 2025-11-22
+    lens: [leica-summicron-40-f2]
 ---
