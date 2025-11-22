@@ -6,7 +6,7 @@ permalink: /album/island-line-hk/
 date: 2025-10-11
 location: Hong Kong SAR, China
 location_name: Hong Kong SAR, China
-cover: /assets/img/albums/island-line-hk/dsc00066.jpg
+cover: /assets/img/albums/island-line-hk/dsc04269.jpg
 photos:
   - src: /assets/img/albums/island-line-hk/dsc00066.jpg
     lens: [viltrox-16-f1.8]
