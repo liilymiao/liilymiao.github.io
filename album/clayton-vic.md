@@ -2,7 +2,7 @@
 layout: album
 title: "克莱顿, 墨尔本"
 title_en: "Clayton, VIC"
-date: 2025-11-21
+date: 2025-11-22
 cover: /assets/img/albums/clayton-vic/dsc06636.jpg
 location: "Australia"
 location_name: "Australia"
