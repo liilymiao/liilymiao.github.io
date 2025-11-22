@@ -1,9 +1,9 @@
 ---
 layout: album
-title: "Keysborough, VIC"
+title: "基斯伯勒, 墨尔本"
 title_en: "Keysborough, VIC"
 date: 2025-11-22
-cover: /assets/img/albums/keysborough-vic/dsc06750.jpg
+cover: /assets/img/albums/keysborough-vic/dsc06769.jpg
 location: "Australia"
 location_name: "Australia"
 
