@@ -104,13 +104,17 @@ title: Home
 
 <section id="photos">
   <h2 data-i18n="home.photos">Photos</h2>
+
   <style>
-  /* 只管首页 Photos 区域的缩略图 */
-  #photoGrid .photo-card img {
-    display: block;
-    width: 100%;   /* 占满卡片宽度 */
-    height: auto;  /* 高度跟着比例走，绝不强行拉伸 */
-  }
+    /* 只管首页 Photos 区域的缩略图 */
+    #photoGrid .photo-card img {
+      display: block;
+      width: 100%;
+      height: auto; /* 按比例缩放，不拉伸 */
+    }
+    .ph-meta small.ph-album {
+      opacity: .8;
+    }
   </style>
 
   {%- assign lens_pool = "" | split: "" -%}
@@ -140,71 +144,80 @@ title: Home
   </div>
 
   <div class="photos-grid" id="photoGrid">
-  {%- assign photo_items = "" | split: "" -%}
-  {%- for a in albums_all -%}
-    {%- if a.photos -%}
-      {%- for p in a.photos -%}
-        {%- assign when_raw = p.taken_at | default: a.date -%}
-        {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
-        {%- assign ts = day_only | date: "%s" -%}
-        {%- assign src = p.src -%}
+    {%- assign photo_items = "" | split: "" -%}
+    {%- for a in albums_all -%}
+      {%- if a.photos -%}
+        {%- for p in a.photos -%}
+          {%- assign when_raw = p.taken_at | default: a.date -%}
+          {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
+          {%- assign ts = day_only | date: "%s" -%}
+          {%- assign src = p.src -%}
 
-        {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
-        {%- assign thumb = base
-          | replace: '.JPG','-thumb.JPG'
-          | replace: '.JPEG','-thumb.JPEG'
-          | replace: '.jpg','-thumb.jpg'
-          | replace: '.jpeg','-thumb.jpeg' -%}
-        {%- assign large = base
-          | replace: '.JPG','-large.JPG'
-          | replace: '.JPEG','-large.JPEG'
-          | replace: '.jpg','-large.jpg'
-          | replace: '.jpeg','-large.jpeg' -%}
+          {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
+          {%- assign thumb = base
+            | replace: '.JPG','-thumb.JPG'
+            | replace: '.JPEG','-thumb.JPEG'
+            | replace: '.jpg','-thumb.jpg'
+            | replace: '.jpeg','-thumb.jpeg' -%}
+          {%- assign large = base
+            | replace: '.JPG','-large.JPG'
+            | replace: '.JPEG','-large.JPEG'
+            | replace: '.jpg','-large.jpg'
+            | replace: '.jpeg','-large.jpeg' -%}
 
-        {%- capture row -%}
+          {%- capture row -%}
 {{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}||{{ a.title_en | default: a.title }}
-        {%- endcapture -%}
-        {%- assign photo_items = photo_items | push: row | compact -%}
-      {%- endfor -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- assign photos_sorted = photo_items | sort | reverse -%}
+          {%- endcapture -%}
+          {%- assign photo_items = photo_items | push: row | compact -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign photos_sorted = photo_items | sort | reverse -%}
 
-  {%- for row in photos_sorted -%}
-    {%- assign parts        = row | split: "||" -%}
-    {%- assign _thumb       = parts[2] -%}
-    {%- assign _large       = parts[3] -%}
-    {%- assign _lenses      = parts[4] -%}
-    {%- assign _caption     = parts[5] -%}
-    {%- assign _album_url   = parts[6] -%}
-    {%- assign _taken_at    = parts[7] -%}
-    {%- assign _album_title = parts[8] -%}
+    {%- for row in photos_sorted -%}
+      {%- assign parts        = row | split: "||" -%}
+      {%- assign _thumb       = parts[2] -%}
+      {%- assign _large       = parts[3] -%}
+      {%- assign _lenses      = parts[4] -%}
+      {%- assign _caption     = parts[5] -%}
+      {%- assign _album_url   = parts[6] -%}
+      {%- assign _taken_at    = parts[7] -%}
+      {%- assign _album_title = parts[8] -%}
 
-    <a class="photo-card" href="{{ _album_url | relative_url }}"
-   data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
-   title="{{ _caption }}">
-  <img src="{{ _thumb | relative_url }}"
-       data-full="{{ _large | relative_url }}"
-       alt="{{ _caption }}"
-       loading="lazy" decoding="async">
-  <div class="ph-meta">
-    <small>{{ _taken_at }}</small>
-    {%- if _lenses and _lenses != '' -%}
-      <small> · {{ _lenses | replace: ',', ', ' }}</small>
-    {%- endif -%}
-    <br>
-    <small class="ph-album">{{ _album_title }}</small>
+      <a class="photo-card" href="{{ _album_url | relative_url }}"
+         data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+         title="{{ _caption }}">
+        <img src="{{ _thumb | relative_url }}"
+             data-full="{{ _large | relative_url }}"
+             alt="{{ _caption }}"
+             loading="lazy" decoding="async">
+        <div class="ph-meta">
+          <small>{{ _taken_at }}</small>
+          {%- if _lenses and _lenses != '' -%}
+            <small> · {{ _lenses | replace: ',', ', ' }}</small>
+          {%- endif -%}
+          <br>
+          <small class="ph-album">{{ _album_title }}</small>
+        </div>
+      </a>
+    {%- endfor -%}
   </div>
-</a>
-  {%- endfor -%}
-</div>
 </section>
 
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
+<style>
+  /* 防止 PhotoSwipe 内部把大图拉伸成铺满 */
+  .pswp__img {
+    object-fit: contain !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+</style>
+
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  // 不再自己算宽高，交给 PhotoSwipe 自己从图片读取
+  // 不再手动算宽高，完全交给 PhotoSwipe
   function buildItems() {
     const nodes = Array.from(
       document.querySelectorAll('#photoGrid .photo-card img')
@@ -215,7 +228,7 @@ title: Home
       return {
         src:   big,
         msrc:  img.currentSrc || img.src,
-        // 不给 width / height，让 PhotoSwipe 自己测量真实尺寸
+        // 不提供 width / height，让 PhotoSwipe 按真实图片尺寸处理
         alt:   img.alt || ''
       };
     });
@@ -233,7 +246,6 @@ title: Home
       dataSource: items,
       bgOpacity: 0.95,
       wheelToZoom: true,
-      // 尽量按原图比例适配，而不是过分填满
       initialZoomLevel: 'fit',
       secondaryZoomLevel: 1.5,
       maxZoomLevel: 3
@@ -326,7 +338,7 @@ title: Home
     applyAlbumCardTitles(next);
   });
 
-  /* Albums 筛选 */
+  /* Albums 筛选（首页目前已注释掉，这段也就没作用，但保留以备将来再开） */
   (function initAlbumFilter(){
     const ag = document.getElementById('albumGrid');
     const ab = document.getElementById('albumLocFilters');
