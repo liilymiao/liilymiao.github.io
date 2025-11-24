@@ -1,29 +1,56 @@
 ---
 layout: default
+title: Albums
+permalink: /albums/
 ---
 
 <article class="page">
   <h1 data-i18n="albums.title">Albums</h1>
 
-  <div class="albums-grid" id="albumGrid">
-    {%- assign albums = site.pages | where: "layout", "album" | sort: "date" | reverse -%}
+  {%- comment -%}
+    收集所有 album 页面，并去重
+  {%- endcomment -%}
+  {%- assign raw = site.pages | where: "layout", "album" -%}
+  {%- assign grouped = raw | group_by: "url" -%}
+  {%- assign albums_all = "" | split: "" -%}
+  {%- for g in grouped -%}
+    {%- assign albums_all = albums_all | push: g.items.first -%}
+  {%- endfor -%}
 
-    {%- for a in albums -%}
+  {%- comment -%}
+    只用有 location 的相册生成筛选按钮，避免 nil 参与 sort
+  {%- endcomment -%}
+  {%- assign albums_with_loc = albums_all | where_exp: "a", "a.location" -%}
+  {%- assign locs = albums_with_loc | map: "location" | uniq | sort -%}
+
+  <div class="album-filters" id="albumLocFilters">
+    <strong data-i18n="home.location">Location:</strong>
+    <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
+    {%- for loc in locs -%}
+      {%- assign rep = albums_with_loc | where: "location", loc | first -%}
+      <button type="button" data-loc="{{ loc }}">
+        {{ rep.location_name | default: loc }}
+      </button>
+    {%- endfor -%}
+  </div>
+
+  <div class="albums-grid" id="albumGrid">
+    {%- assign cards = albums_all | sort: "date" | reverse -%}
+    {%- for a in cards -%}
       <a class="album-card"
          href="{{ a.url | relative_url }}"
          data-location="{{ a.location | default: '' }}"
          data-title-zh="{{ a.title | escape }}"
          data-title-en="{{ a.title_en | default: a.title | escape }}">
-
         <div class="album-cover">
-          {%- if a.cover -%}
+          {% if a.cover %}
             <img
               src="{{ a.cover | relative_url }}"
               alt="{{ a.title_en | default: a.title }}"
               loading="lazy" decoding="async">
-          {%- else -%}
+          {% else %}
             <div class="album-cover-placeholder"></div>
-          {%- endif -%}
+          {% endif %}
         </div>
 
         <div class="album-meta">
@@ -52,6 +79,32 @@ layout: default
 </article>
 
 <style>
+  .album-filters{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin:8px 0 14px;
+    font-size:0.9rem;
+  }
+  .album-filters strong{
+    margin-right:4px;
+  }
+  .album-filters button{
+    border-radius:999px;
+    border:1px solid var(--border-color, #444);
+    padding:4px 10px;
+    background:transparent;
+    color:inherit;
+    cursor:pointer;
+    font-size:0.86rem;
+  }
+  .album-filters button.on{
+    background:var(--accent, #ffd35c);
+    color:#000;
+    border-color:transparent;
+  }
+
   .albums-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
@@ -94,3 +147,61 @@ layout: default
     color:var(--muted);
   }
 </style>
+
+<script>
+(function () {
+  const grid = document.getElementById('albumGrid');
+  const bar  = document.getElementById('albumLocFilters');
+  if (!grid || !bar) return;
+
+  const cards = Array.from(grid.querySelectorAll('.album-card'));
+  const btns  = Array.from(bar.querySelectorAll('button[data-loc]'));
+
+  function setActive(btn) {
+    btns.forEach(b => b.classList.toggle('on', b === btn));
+  }
+
+  function applyFilter(loc) {
+    cards.forEach(card => {
+      const v = card.getAttribute('data-location') || '';
+      card.style.display = (loc === 'all' || v === loc) ? '' : 'none';
+    });
+
+    // URL 上带上 ?loc=xxx，方便分享
+    try {
+      const u = new URL(window.location.href);
+      if (loc === 'all') {
+        u.searchParams.delete('loc');
+      } else {
+        u.searchParams.set('loc', loc);
+      }
+      history.replaceState(null, '', u.toString());
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  // 初始状态：看 URL 里有没有 ?loc
+  let initLoc = 'all';
+  try {
+    const u = new URL(window.location.href);
+    const q = u.searchParams.get('loc');
+    if (q && btns.some(b => b.dataset.loc === q)) {
+      initLoc = q;
+    }
+  } catch (e) {}
+
+  const initBtn = btns.find(b => b.dataset.loc === initLoc) || btns[0];
+  if (initBtn) {
+    setActive(initBtn);
+    applyFilter(initBtn.dataset.loc);
+  }
+
+  bar.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-loc]');
+    if (!btn) return;
+    setActive(btn);
+    applyFilter(btn.dataset.loc);
+  });
+})();
+</script>
