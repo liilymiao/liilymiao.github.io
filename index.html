@@ -105,85 +105,83 @@ title: Home
 <section id="photos">
   <h2 data-i18n="home.photos">Photos</h2>
 
-  {%- assign album_photos = "" | split: "" -%}
-
-  {%- assign raw_albums = site.pages | where:"layout","album" -%}
-  {%- for a in raw_albums -%}
+  {%- assign lens_pool = "" | split: "" -%}
+  {%- for a in albums_all -%}
     {%- if a.photos -%}
       {%- for p in a.photos -%}
-        {%- assign date_raw = p.taken_at | default: a.date -%}
-        {%- assign date_norm = date_raw | date: "%Y-%m-%d" -%}
-        {%- assign ts = date_norm | date: "%s" -%}
-
-        {%- assign lenslist = "" | split: "" -%}
         {%- if p.lens -%}
-          {%- if p.lens.first -%}
-            {%- assign lenslist = p.lens -%} 
+          {%- assign L = p.lens -%}
+          {%- if L.first -%}
+            {%- assign lens_pool = lens_pool | concat: L -%}
           {%- else -%}
-            {%- assign lenslist = p.lens | split: "," | map: "strip" -%}
+            {%- assign L_arr = L | replace: ',', ' ' | split: ' ' | reject: '' -%}
+            {%- assign lens_pool = lens_pool | concat: L_arr -%}
           {%- endif -%}
         {%- endif -%}
-
-        {%- capture line -%}
-{{ ts }}||
-{{ p.src }}||
-{{ p.src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace:'.jpg','-thumb.jpg' }}||
-{{ p.src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace:'.jpg','-large.jpg' }}||
-{{ lenslist | join: ' ' }}||
-{{ a.title_en | default: a.title }}||
-{{ a.url }}||
-{{ date_norm }}
-        {%- endcapture -%}
-
-        {%- assign album_photos = album_photos | push: line | compact -%}
-
       {%- endfor -%}
     {%- endif -%}
-  {%- endfor -%}
-
-  {%- assign photos_sorted = album_photos | sort | reverse -%}
-
-  {%- assign lens_pool = "" | split:"" -%}
-  {%- for row in photos_sorted -%}
-    {%- assign parts = row | split:"||" -%}
-    {%- assign L = parts[4] | split:" " | reject:"" -%}
-    {%- assign lens_pool = lens_pool | concat: L -%}
   {%- endfor -%}
   {%- assign lenses = lens_pool | uniq | sort -%}
 
   <div class="album-filters" id="photoFilters">
     <strong data-i18n="filters.filter">Lens:</strong>
     <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
-
     {%- for l in lenses -%}
       <button type="button" data-lens="{{ l }}">{{ l }}</button>
     {%- endfor -%}
   </div>
 
   <div class="photos-grid" id="photoGrid">
+    {%- assign photo_items = "" | split: "" -%}
+    {%- for a in albums_all -%}
+      {%- if a.photos -%}
+        {%- for p in a.photos -%}
+          {%- assign when_raw    = p.taken_at | default: a.date -%}
+          {%- assign day_only    = when_raw | date: "%Y-%m-%d" -%}
+          {%- assign ts          = day_only | date: "%s" -%}
+
+          {%- assign src_orig    = p.src -%}
+          {%- assign src_lc      = src_orig | downcase -%}
+          {%- assign thumb       = src_lc | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-thumb.jpg' -%}
+          {%- assign large       = src_lc | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-large.jpg' -%}
+
+          {%- assign lens_str    = p.lens | join: ',' | default: p.lens -%}
+          {%- assign album_title = a.title_en | default: a.title -%}
+          {%- assign caption     = p.caption | default: album_title -%}
+
+          {%- capture row -%}
+{{ ts }}||{{ src_lc }}||{{ thumb }}||{{ large }}||{{ lens_str }}||{{ caption }}||{{ a.url }}||{{ day_only }}||{{ album_title }}
+          {%- endcapture -%}
+          {%- assign photo_items = photo_items | push: row | compact -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign photos_sorted = photo_items | sort | reverse -%}
+
     {%- for row in photos_sorted -%}
-      {%- assign p = row | split:"||" -%}
-      {%- assign thumb  = p[2] -%}
-      {%- assign large  = p[3] -%}
-      {%- assign lens   = p[4] -%}
-      {%- assign album  = p[5] -%}
-      {%- assign aurl   = p[6] -%}
-      {%- assign date   = p[7] -%}
+      {%- assign parts        = row | split: "||" -%}
+      {%- assign _thumb       = parts[2] -%}
+      {%- assign _large       = parts[3] -%}
+      {%- assign _lenses      = parts[4] -%}
+      {%- assign _caption     = parts[5] -%}
+      {%- assign _album_url   = parts[6] -%}
+      {%- assign _taken_at    = parts[7] -%}
+      {%- assign _album_title = parts[8] -%}
 
-      <a class="photo-card"
-         href="{{ aurl | relative_url }}"
-         data-lenses="{{ lens }}"
-         title="{{ album }}">
-        <img src="{{ thumb | relative_url }}"
-             data-full="{{ large | relative_url }}"
-             alt="{{ album }}"
+      <a class="photo-card" href="{{ _album_url | relative_url }}"
+         data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+         title="{{ _caption }}">
+        <img src="{{ _thumb | relative_url }}"
+             data-full="{{ _large | relative_url }}"
+             alt="{{ _caption }}"
              loading="lazy" decoding="async" width="480" height="320">
-
         <div class="ph-meta">
-          <small>{{ date }}</small>
-          {% if lens %}<small> · {{ lens | replace:' ',', ' }}</small>{% endif %}
+          <small>{{ _taken_at }}</small>
+          {%- if _lenses and _lenses != '' -%}
+            <small> · {{ _lenses | replace: ',', ', ' }}</small>
+          {%- endif -%}
           <br>
-          <small style="opacity:.7">{{ album }}</small>
+          <small class="ph-album">{{ _album_title }}</small>
         </div>
       </a>
     {%- endfor -%}
