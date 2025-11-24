@@ -43,6 +43,14 @@ title: Home
 
 <hr>
 
+{%- assign raw = site.pages | where: "layout", "album" -%}
+{%- assign grouped = raw | group_by: "url" -%}
+{%- assign albums_all = "" | split: "" -%}
+{%- for g in grouped -%}
+  {%- assign albums_all = albums_all | push: g.items.first -%}
+{%- endfor -%}
+
+{%- comment -%}
 <section id="albums">
   <h2 data-i18n="home.albums">Albums</h2>
   {%- assign raw = site.pages | where: "layout", "album" -%}
@@ -90,6 +98,7 @@ title: Home
 
   <p><a href="{{ '/albums/' | relative_url }}" data-i18n="home.viewall">View all →</a></p>
 </section>
+{%- endcomment -%}
 
 <hr style="margin:2rem 0; opacity:.2">
 
