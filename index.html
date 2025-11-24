@@ -143,7 +143,7 @@ title: Home
           {%- assign thumb = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-thumb.jpg' -%}
           {%- assign large = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-large.jpg' -%}
           {%- capture row -%}
-{{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}
+{{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}||{{ a.title_en | default: a.title }}
           {%- endcapture -%}
           {%- assign photo_items = photo_items | push: row | compact -%}
         {%- endfor -%}
@@ -153,12 +153,13 @@ title: Home
 
     {%- for row in photos_sorted -%}
       {%- assign parts = row | split: "||" -%}
-      {%- assign _thumb     = parts[2] -%}
-      {%- assign _large     = parts[3] -%}
-      {%- assign _lenses    = parts[4] -%}
-      {%- assign _caption   = parts[5] -%}
-      {%- assign _album_url = parts[6] -%}
-      {%- assign _taken_at  = parts[7] -%}
+      {%- assign _thumb       = parts[2] -%}
+      {%- assign _large       = parts[3] -%}
+      {%- assign _lenses      = parts[4] -%}
+      {%- assign _caption     = parts[5] -%}
+      {%- assign _album_url   = parts[6] -%}
+      {%- assign _taken_at    = parts[7] -%}
+      {%- assign _album_title = parts[8] -%}
 
       <a class="photo-card" href="{{ _album_url | relative_url }}"
          data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
@@ -168,12 +169,16 @@ title: Home
              alt="{{ _caption }}"
              loading="lazy" decoding="async" width="480" height="320">
         <div class="ph-meta">
-          <small>{{ _taken_at }}</small>
-          {%- if _lenses and _lenses != '' -%}<small> · {{ _lenses | replace: ',', ', ' }}</small>{% endif %}
-        </div>
-      </a>
-    {%- endfor -%}
+  <small>{{ _taken_at }}</small>
+  {%- if _lenses and _lenses != '' -%}
+    <small> · {{ _lenses | replace: ',', ', ' }}</small>
+  {% endif %}
   </div>
+{%- if _album_title and _album_title != '' -%}
+  <div class="ph-meta-sub">
+    <small>{{ _album_title }}</small>
+  </div>
+{%- endif -%}
 </section>
 
 <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
