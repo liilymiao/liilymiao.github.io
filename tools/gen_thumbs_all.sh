@@ -1,46 +1,41 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-SRC="assets/img/albums"
+ROOT="assets/img/albums"
 OUT="assets/thumbs/albums"
-
-echo "== Regenerating ALL thumbnails =="
-echo "Source: $SRC"
-echo "Output: $OUT"
-echo ""
 
 mkdir -p "$OUT"
 
-# 遍历每个相册文件夹
-for album in "$SRC"/*; do
-    [ -d "$album" ] || continue
+for dir in "$ROOT"/*; do
+  [ -d "$dir" ] || continue
+  alb="$(basename "$dir")"
+  echo "== Album: $alb =="
 
-    album_name=$(basename "$album")
-    out_dir="$OUT/$album_name"
+  mkdir -p "$OUT/$alb"
 
-    mkdir -p "$out_dir"
+  # *.jpg / *.JPG / *.jpeg / *.JPEG 都处理
+  for img in "$dir"/*.jp*g; do
+    [ -f "$img" ] || continue
 
-    echo "-- Album: $album_name --"
+    base="$(basename "$img")"
+    name="${base%.*}"
+    lower="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
 
-    # 遍历此相册内所有 jpg 文件
-    for img in "$album"/*.jpg "$album"/*.JPG "$album"/*.jpeg "$album"/*.JPEG; do
-        [ -f "$img" ] || continue
+    # 为了彻底兼容大小写问题：同时输出「原大小写名」和「全小写名」
+    for variant in "$name" "$lower"; do
+      th="$OUT/$alb/${variant}-thumb.jpg"
+      lg="$OUT/$alb/${variant}-large.jpg"
 
-        fname=$(basename "$img")
-        base="${fname%.*}"
-        base_lower=$(echo "$base" | tr 'A-Z' 'a-z')
+      # thumb：裁成 3:2（480×320）
+      convert "$img" -auto-orient -resize "480x480^" -gravity center -extent 480x320 "$th"
 
-        thumb="$out_dir/${base_lower}-thumb.jpg"
-        large="$out_dir/${base_lower}-large.jpg"
+      # large：最长边 1600，保持比例
+      convert "$img" -auto-orient -resize "1600x1600>" "$lg"
 
-        echo "thumb -> $thumb"
-        convert "$img" -resize 480x480^ -gravity center -extent 480x480 "$thumb"
-
-        echo "large -> $large"
-        convert "$img" -resize 1600x1600 "$large"
+      echo "thumb  -> $th"
+      echo "large  -> $lg"
     done
-
-    echo ""
+  done
 done
 
-echo "== ALL thumbnails regenerated successfully =="
+echo "== All done =="
