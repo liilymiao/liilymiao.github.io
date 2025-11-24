@@ -11,7 +11,9 @@ layout: default
   {%- for g in grouped -%}
     {%- assign albums_all = albums_all | push: g.items.first -%}
   {%- endfor -%}
-  {%- assign locs = albums_all | map: "location" | uniq | sort -%}
+
+  {%- assign albums_with_loc = albums_all | where_exp: "a", "a.location" -%}
+  {%- assign locs = albums_with_loc | map: "location" | uniq | sort -%}
 
   <div class="album-filters" id="albumLocFilters">
     <strong data-i18n="home.location">Location:</strong>
@@ -27,7 +29,8 @@ layout: default
   </div>
 
   <div class="albums-grid" id="albumGrid">
-    {%- assign cards = albums_all | sort: "date" | reverse -%}
+    {%- assign dated_albums = albums_all | where_exp: "a", "a.date" -%}
+    {%- assign cards = dated_albums | sort: "date" | reverse -%}
     {%- for a in cards -%}
       <a class="album-card"
          href="{{ a.url | relative_url }}"
