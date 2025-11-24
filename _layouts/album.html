@@ -2,138 +2,166 @@
 layout: default
 ---
 
-<!-- PhotoSwipe 样式 -->
-<link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
+<article class="album-page">
+  <header class="album-header">
+    <h1>
+      <span class="i18n-title"
+            data-title-zh="{{ page.title | escape }}"
+            data-title-en="{{ page.title_en | default: page.title | escape }}">
+        {{ page.title_en | default: page.title }}
+      </span>
+    </h1>
 
-<article class="page">
-  <h1>{{ page.title_en | default: page.title }}</h1>
-  {% if page.content %}
-    <div class="post-content">{{ content }}</div>
-  {% endif %}
+    <p class="album-meta-line">
+      {% if page.date %}
+        <span class="album-date">{{ page.date | date: "%Y-%m-%d" }}</span>
+      {% endif %}
+      {% if page.location_name %}
+        {% if page.date %} · {% endif %}
+        <span class="album-location">{{ page.location_name }}</span>
+      {% endif %}
+    </p>
 
-  <div class="album-grid">
-    {%- assign photos_desc = page.photos | reverse -%}  <!-- ✅ 倒序排列 -->
-    {% for p in photos_desc %}
-      {%- assign src   = p.src -%}
-      {%- assign base  = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
-
-      {%- assign thumb = base
-        | replace: '.JPG','-thumb.jpg'  | replace: '.JPEG','-thumb.jpg'
-        | replace: '.jpg','-thumb.jpg'  | replace: '.jpeg','-thumb.jpg' -%}
-
-      {%- assign large = base
-        | replace: '.JPG','-large.jpg'  | replace: '.JPEG','-large.jpg'
-        | replace: '.jpg','-large.jpg'  | replace: '.jpeg','-large.jpg' -%}
-
-      {%- assign caption = p.caption | default: page.title -%}
-
-      <figure class="album-item">
+    {% if page.cover %}
+      <div class="album-cover-main">
         <img
-          src="{{ thumb  | relative_url }}"
-          data-full="{{ large | relative_url }}"
-          alt="{{ caption }}"
-          loading="lazy" decoding="async">
-        {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+          src="{{ page.cover | relative_url }}"
+          alt="{{ page.title_en | default: page.title }}"
+          loading="lazy"
+          decoding="async">
+      </div>
+    {% endif %}
+  </header>
+
+  {% if page.photos %}
+  <section class="album-photos">
+    {% for p in page.photos %}
+      <figure class="album-photo">
+        <img
+          src="{{ p.src | relative_url }}"
+          alt="{{ p.caption | default: page.title }}"
+          loading="lazy"
+          decoding="async">
+
+        <figcaption>
+          <small>
+            {% assign when_raw = p.taken_at | default: page.date %}
+            {% if when_raw %}
+              {{ when_raw | date: "%Y-%m-%d" }}
+            {% endif %}
+            {% if p.lens %}
+              · {{ p.lens | join: ', ' | default: p.lens }}
+            {% endif %}
+          </small>
+          {% if p.caption %}
+            <br>
+            <small class="album-caption">{{ p.caption }}</small>
+          {% endif %}
+        </figcaption>
       </figure>
     {% endfor %}
-  </div>
+  </section>
+  {% endif %}
+
+  {% if page.comments != false %}
+  <section id="comments" class="comments">
+    <h2>Comments</h2>
+    <div id="giscus_container"></div>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="liilymiao/liilymiao.github.io"
+            data-repo-id="R_kgDOQSaSGw"
+            data-category="General"
+            data-category-id="DIC_kwDOQSaSG84Cxt0Y"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+    </script>
+
+    <noscript>Please enable JavaScript to view comments powered by giscus.</noscript>
+  </section>
+  {% endif %}
 </article>
 
-{% if page.comments != false %}
-<section id="comments" class="comments">
-  <h2>Comments</h2>
-  <script src="https://giscus.app/client.js"
-        data-repo="liilymiao/liilymiao.github.io"
-        data-repo-id="R_kgDOQSaSGw"
-        data-category="General"
-        data-category-id="DIC_kwDOQSaSG84Cxt0Y"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
-</script>
-</section>
-{% endif %}
+<style>
+  .album-page{
+    max-width: 960px;
+    margin: 0 auto;
+  }
 
-<!-- PhotoSwipe 脚本（ESM） -->
-<script type="module">
-  import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
+  .album-header h1{
+    margin-bottom: .25rem;
+  }
 
-  (() => {
-    const grid = document.querySelector('.album-grid');
-    if (!grid) return;
+  .album-meta-line{
+    margin: 0 0 1.25rem;
+    font-size: .9rem;
+    color: var(--muted);
+  }
 
-    function buildItems() {
-      const imgs = Array.from(grid.querySelectorAll('.album-item img'));
-      return imgs.map(img => {
-        const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+  .album-cover-main{
+    margin-bottom: 1.8rem;
+  }
 
-        // 用缩略图比例推算一个更大的尺寸，保证进灯箱后能“放大”
-        const ratio = (img.naturalWidth && img.naturalHeight)
-          ? (img.naturalHeight / img.naturalWidth)
-          : (2/3); // 兜底 3:2
-        const W = 2000;
-        const H = Math.round(W * ratio);
+  .album-cover-main img{
+    display: block;
+    max-width: 100%;
+    height: auto;           /* ✅ 原比例，不拉伸 */
+    border-radius: 12px;
+  }
 
-        return { src: full, msrc: img.src, width: W, height: H, alt: img.alt || '' };
+  .album-photos{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .album-photo{
+    margin: 0;
+  }
+
+  .album-photo img{
+    display: block;
+    max-width: 100%;
+    height: auto;           /* ✅ 保证不压扁/拉伸 */
+    border-radius: 10px;
+  }
+
+  .album-photo figcaption{
+    margin-top: 4px;
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .album-photo .album-caption{
+    color: inherit;
+  }
+</style>
+
+<script>
+  // 让相册标题也跟随语言切换（沿用首页逻辑）
+  (function(){
+    function applyAlbumTitle(lang){
+      document.querySelectorAll('.i18n-title').forEach(function(el){
+        var zh = el.dataset.titleZh;
+        var en = el.dataset.titleEn || zh || el.textContent;
+        el.textContent = (lang === 'zh') ? (zh || en) : (en || zh);
       });
     }
 
-    function openLightbox(clickedImg) {
-      const items = buildItems();
-      const cur = clickedImg.getAttribute('data-full') || clickedImg.currentSrc || clickedImg.src;
-      const index = Math.max(0, items.findIndex(it => it.src === cur));
+    var lang = document.documentElement.getAttribute('data-ui-lang') || 'en';
+    applyAlbumTitle(lang);
 
-      const pswp = new PhotoSwipe({
-        index,
-        dataSource: items,
-        bgOpacity: 0.95,
-        wheelToZoom: true
-      });
-      pswp.init();
-    }
-
-    grid.addEventListener('click', (e) => {
-      const img = e.target.closest('.album-item img');
-      if (!img) return;
-      e.preventDefault();
-      openLightbox(img);
+    window.addEventListener('langchange', function(e){
+      var next = e.detail || 'en';
+      applyAlbumTitle(next);
     });
   })();
 </script>
-
-<style>
-  .album-grid{
-    columns: 2;
-    column-gap:16px;
-    margin-top:10px;
-  }
-  @media (max-width:980px){ .album-grid{ columns:2; } }
-  @media (max-width:640px){ .album-grid{ columns:1; } }
-
-  .album-item{
-    break-inside:avoid; -webkit-column-break-inside:avoid; margin:0 0 16px;
-    background:var(--card-bg);
-    border:var(--card-border);
-    border-radius:10px; overflow:hidden;
-    box-shadow:var(--card-shadow);
-  }
-  .album-item img{
-    display:block; width:100%; height:auto; cursor: zoom-in;
-  }
-  .album-item figcaption{
-    padding:8px 10px;
-    color:var(--muted);
-    font-size:.92rem;
-    background:var(--card-bg);
-  }
-  /* 评论区简单留个间距 */
-  #comments{
-    margin-top: 32px;
-  }
-</style>
