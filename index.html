@@ -115,6 +115,29 @@ title: Home
     .ph-meta small.ph-album {
       opacity: .8;
     }
+
+    /* 简单自制大图 Lightbox */
+    #photoLightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    #photoLightbox[hidden] {
+      display: none;
+    }
+    #photoLightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 0 30px rgba(0,0,0,.6);
+    }
+    #photoLightbox .pl-inner {
+      position: relative;
+    }
   </style>
 
   {%- assign lens_pool = "" | split: "" -%}
@@ -184,11 +207,12 @@ title: Home
       {%- assign _taken_at    = parts[7] -%}
       {%- assign _album_title = parts[8] -%}
 
-      <a class="photo-card" href="{{ _album_url | relative_url }}"
+      <a class="photo-card"
+         href="{{ _album_url | relative_url }}"
          data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+         data-full="{{ _large | relative_url }}"
          title="{{ _caption }}">
         <img src="{{ _thumb | relative_url }}"
-             data-full="{{ _large | relative_url }}"
              alt="{{ _caption }}"
              loading="lazy" decoding="async">
         <div class="ph-meta">
@@ -202,71 +226,15 @@ title: Home
       </a>
     {%- endfor -%}
   </div>
+
+  <!-- 简单 Lightbox 容器（隐藏，点击时显示） -->
+  <div id="photoLightbox" hidden>
+    <div class="pl-inner">
+      <img id="photoLightboxImg" src="" alt="">
+    </div>
+  </div>
 </section>
 
-<link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
-<style>
-  /* 防止 PhotoSwipe 内部把大图拉伸成铺满 */
-  .pswp__img {
-    object-fit: contain !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-  }
-</style>
-
-<script type="module">
-  import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
-
-  // 不再手动算宽高，完全交给 PhotoSwipe
-  function buildItems() {
-    const nodes = Array.from(
-      document.querySelectorAll('#photoGrid .photo-card img')
-    ).filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
-
-    return nodes.map(img => {
-      const big = img.dataset.full || img.getAttribute('data-full') || img.src;
-      return {
-        src:   big,
-        msrc:  img.currentSrc || img.src,
-        // 不提供 width / height，让 PhotoSwipe 按真实图片尺寸处理
-        alt:   img.alt || ''
-      };
-    });
-  }
-
-  function openLightbox(clickedImg) {
-    const items = buildItems();
-    const curBig = clickedImg.dataset.full || clickedImg.getAttribute('data-full') || clickedImg.src;
-
-    let idx = items.findIndex(it => it.src === curBig);
-    if (idx < 0) idx = 0;
-
-    const pswp = new PhotoSwipe({
-      index: idx,
-      dataSource: items,
-      bgOpacity: 0.95,
-      wheelToZoom: true,
-      initialZoomLevel: 'fit',
-      secondaryZoomLevel: 1.5,
-      maxZoomLevel: 3
-    });
-
-    pswp.init();
-  }
-
-  const grid = document.getElementById('photoGrid');
-  if (grid) {
-    grid.addEventListener('click', (e) => {
-      const card = e.target.closest('.photo-card');
-      if (!card) return;
-      e.preventDefault();
-      const img = card.querySelector('img');
-      if (img) openLightbox(img);
-    });
-  }
-</script>
-
-<!-- 语言与筛选：简化版 -->
 <script>
 (function () {
   const STORE = 'lang';
@@ -338,7 +306,7 @@ title: Home
     applyAlbumCardTitles(next);
   });
 
-  /* Albums 筛选（首页目前已注释掉，这段也就没作用，但保留以备将来再开） */
+  /* Albums 筛选（首页目前已注释掉，这段没实质作用） */
   (function initAlbumFilter(){
     const ag = document.getElementById('albumGrid');
     const ab = document.getElementById('albumLocFilters');
@@ -401,5 +369,38 @@ title: Home
       setActive(btn); apply(btn.dataset.lens);
     });
   })();
+
+  /* Photos 简易 Lightbox：用 data-full 原图，不做任何拉伸，只 contain */
+  (function initPhotoLightbox(){
+    const grid = document.getElementById('photoGrid');
+    const box  = document.getElementById('photoLightbox');
+    const img  = document.getElementById('photoLightboxImg');
+    if (!grid || !box || !img) return;
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.photo-card');
+      if (!card) return;
+      e.preventDefault();
+      const full = card.getAttribute('data-full');
+      if (!full) return;
+      img.src = full;
+      box.hidden = false;
+    });
+
+    // 点击遮罩关闭
+    box.addEventListener('click', () => {
+      box.hidden = true;
+      img.src = '';
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !box.hidden) {
+        box.hidden = true;
+        img.src = '';
+      }
+    });
+  })();
+
 })();
 </script>
