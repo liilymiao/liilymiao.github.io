@@ -197,72 +197,42 @@ title: Home
 <script type="module">
   import PhotoSwipe from 'https://unpkg.com/photoswipe@5/dist/photoswipe.esm.js';
 
-  /**
-   * 从可见卡片构建 items：
-   * 逐个加载 data-full 大图，读取真实 naturalWidth/Height，避免拉伸。
-   */
+  // 不再自己算宽高，交给 PhotoSwipe 自己从图片读取
   function buildItems() {
-    const imgs = Array.from(
+    const nodes = Array.from(
       document.querySelectorAll('#photoGrid .photo-card img')
     ).filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
 
-    const loaders = imgs.map(img => {
+    return nodes.map(img => {
       const big = img.dataset.full || img.getAttribute('data-full') || img.src;
-
-      return new Promise(resolve => {
-        const tmp = new Image();
-        tmp.onload = () => {
-          const w = tmp.naturalWidth  || 1600;
-          const h = tmp.naturalHeight || 900;
-          resolve({
-            src: big,
-            msrc: img.currentSrc || img.src,
-            width: w,
-            height: h,
-            alt: img.alt || ''
-          });
-        };
-        tmp.onerror = () => {
-          // 兜底：实在读不到就给个 3:2 比例
-          resolve({
-            src: big,
-            msrc: img.currentSrc || img.src,
-            width: 1600,
-            height: 1067,
-            alt: img.alt || ''
-          });
-        };
-        tmp.src = big;
-      });
+      return {
+        src:   big,
+        msrc:  img.currentSrc || img.src,
+        // 不给 width / height，让 PhotoSwipe 自己测量真实尺寸
+        alt:   img.alt || ''
+      };
     });
-
-    return Promise.all(loaders);
   }
 
   function openLightbox(clickedImg) {
-    const imgs = Array.from(
-      document.querySelectorAll('#photoGrid .photo-card img')
-    ).filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
+    const items = buildItems();
+    const curBig = clickedImg.dataset.full || clickedImg.getAttribute('data-full') || clickedImg.src;
 
-    const curBig = clickedImg.dataset.full ||
-                   clickedImg.getAttribute('data-full') ||
-                   clickedImg.src;
+    let idx = items.findIndex(it => it.src === curBig);
+    if (idx < 0) idx = 0;
 
-    buildItems().then(items => {
-      const idx = Math.max(
-        0,
-        items.findIndex(it => it.src === curBig)
-      );
-
-      const pswp = new PhotoSwipe({
-        index: idx,
-        dataSource: items,
-        bgOpacity: 0.95,
-        wheelToZoom: true,
-      });
-
-      pswp.init();
+    const pswp = new PhotoSwipe({
+      index: idx,
+      dataSource: items,
+      bgOpacity: 0.95,
+      wheelToZoom: true,
+      // 尽量按原图比例适配，而不是过分填满
+      initialZoomLevel: 'fit',
+      secondaryZoomLevel: 1.5,
+      maxZoomLevel: 3
     });
+
+    pswp.init();
   }
 
   const grid = document.getElementById('photoGrid');
