@@ -104,6 +104,14 @@ title: Home
 
 <section id="photos">
   <h2 data-i18n="home.photos">Photos</h2>
+  <style>
+  /* 只管首页 Photos 区域的缩略图 */
+  #photoGrid .photo-card img {
+    display: block;
+    width: 100%;   /* 占满卡片宽度 */
+    height: auto;  /* 高度跟着比例走，绝不强行拉伸 */
+  }
+  </style>
 
   {%- assign lens_pool = "" | split: "" -%}
   {%- for a in albums_all -%}
@@ -173,22 +181,21 @@ title: Home
     {%- assign _album_title = parts[8] -%}
 
     <a class="photo-card" href="{{ _album_url | relative_url }}"
-       data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
-       title="{{ _caption }}">
-      <img src="{{ _thumb | relative_url }}"
-           data-full="{{ _large | relative_url }}"
-           alt="{{ _caption }}"
-           loading="lazy" decoding="async"
-           width="480" height="320">
-      <div class="ph-meta">
-        <small>{{ _taken_at }}</small>
-        {%- if _lenses and _lenses != '' -%}
-          <small> · {{ _lenses | replace: ',', ', ' }}</small>
-        {%- endif -%}
-        <br>
-        <small class="ph-album">{{ _album_title }}</small>
-      </div>
-    </a>
+   data-lenses="{{ _lenses | replace: ',', ' ' | default: '' }}"
+   title="{{ _caption }}">
+  <img src="{{ _thumb | relative_url }}"
+       data-full="{{ _large | relative_url }}"
+       alt="{{ _caption }}"
+       loading="lazy" decoding="async">
+  <div class="ph-meta">
+    <small>{{ _taken_at }}</small>
+    {%- if _lenses and _lenses != '' -%}
+      <small> · {{ _lenses | replace: ',', ', ' }}</small>
+    {%- endif -%}
+    <br>
+    <small class="ph-album">{{ _album_title }}</small>
+  </div>
+</a>
   {%- endfor -%}
 </div>
 </section>
