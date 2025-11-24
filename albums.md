@@ -1,25 +1,48 @@
 ---
 layout: default
-title: Albums
-permalink: /albums/
 ---
 
 <article class="page">
   <h1 data-i18n="albums.title">Albums</h1>
 
-  <div class="albums-grid">
-    {%- assign albums = site.pages | where: "layout", "album" | sort: "date" | reverse -%}
+  {%- assign raw = site.pages | where: "layout", "album" -%}
+  {%- assign grouped = raw | group_by: "url" -%}
+  {%- assign albums_all = "" | split: "" -%}
+  {%- for g in grouped -%}
+    {%- assign albums_all = albums_all | push: g.items.first -%}
+  {%- endfor -%}
+  {%- assign locs = albums_all | map: "location" | uniq | sort -%}
 
-    {%- for a in albums -%}
-      <a class="album-card" href="{{ a.url | relative_url }}">
+  <div class="album-filters" id="albumLocFilters">
+    <strong data-i18n="home.location">Location:</strong>
+    <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
+    {%- for loc in locs -%}
+      {%- if loc and loc != "" -%}
+        {%- assign rep = albums_all | where: "location", loc | first -%}
+        <button type="button" data-loc="{{ loc }}">
+          {{ rep.location_name | default: loc }}
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="albums-grid" id="albumGrid">
+    {%- assign cards = albums_all | sort: "date" | reverse -%}
+    {%- for a in cards -%}
+      <a class="album-card"
+         href="{{ a.url | relative_url }}"
+         data-location="{{ a.location | default: '' }}"
+         data-title-zh="{{ a.title | escape }}"
+         data-title-en="{{ a.title_en | default: a.title | escape }}">
         <div class="album-cover">
-          {%- if a.cover -%}
-            <img src="{{ a.cover | relative_url }}"
-                 alt="{{ a.title_en | default: a.title }}"
-                 loading="lazy" decoding="async">
-          {%- else -%}
+          {% if a.cover %}
+            <img
+              src="{{ a.cover | relative_url }}"
+              alt="{{ a.title_en | default: a.title }}"
+              loading="lazy" decoding="async">
+          {% else %}
             <div class="album-cover-placeholder"></div>
-          {%- endif -%}
+          {% endif %}
         </div>
 
         <div class="album-meta">
@@ -48,11 +71,37 @@ permalink: /albums/
 </article>
 
 <style>
+  .album-filters{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin:8px 0 14px;
+    font-size:0.9rem;
+  }
+  .album-filters strong{
+    margin-right:4px;
+  }
+  .album-filters button{
+    border-radius:999px;
+    border:1px solid var(--border-color, #444);
+    padding:4px 10px;
+    background:transparent;
+    color:inherit;
+    cursor:pointer;
+    font-size:0.86rem;
+  }
+  .album-filters button.on{
+    background:var(--accent, #ffd35c);
+    color:#000;
+    border-color:transparent;
+  }
+
   .albums-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
     gap:18px;
-    margin-top:16px;
+    margin-top:8px;
   }
   .album-card{
     display:flex;
