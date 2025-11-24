@@ -134,28 +134,32 @@ title: Home
   <div class="photos-grid" id="photoGrid">
     {%- assign photo_items = "" | split: "" -%}
     {%- for a in albums_all -%}
-      {%- if a.photos -%}
-        {%- for p in a.photos -%}
-          {%- assign when_raw    = p.taken_at | default: a.date -%}
-          {%- assign day_only    = when_raw | date: "%Y-%m-%d" -%}
-          {%- assign ts          = day_only | date: "%s" -%}
+        {%- if a.photos -%}
+    {%- for p in a.photos -%}
+      {%- assign when_raw = p.taken_at | default: a.date -%}
+      {%- assign day_only = when_raw | date: "%Y-%m-%d" -%}
+      {%- assign ts = day_only | date: "%s" -%}
+      {%- assign src = p.src -%}
 
-          {%- assign src_orig    = p.src -%}
-          {%- assign src_lc      = src_orig | downcase -%}
-          {%- assign thumb       = src_lc | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-thumb.jpg' -%}
-          {%- assign large       = src_lc | replace:'/assets/img/albums/','/assets/thumbs/albums/' | replace: '.jpg','-large.jpg' -%}
+      {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
+      {%- assign thumb = base
+        | replace: '.JPG','-thumb.JPG'
+        | replace: '.JPEG','-thumb.JPEG'
+        | replace: '.jpg','-thumb.jpg'
+        | replace: '.jpeg','-thumb.jpeg' -%}
+      {%- assign large = base
+        | replace: '.JPG','-large.JPG'
+        | replace: '.JPEG','-large.JPEG'
+        | replace: '.jpg','-large.jpg'
+        | replace: '.jpeg','-large.jpeg' -%}
 
-          {%- assign lens_str    = p.lens | join: ',' | default: p.lens -%}
-          {%- assign album_title = a.title_en | default: a.title -%}
-          {%- assign caption     = p.caption | default: album_title -%}
-
-          {%- capture row -%}
-{{ ts }}||{{ src_lc }}||{{ thumb }}||{{ large }}||{{ lens_str }}||{{ caption }}||{{ a.url }}||{{ day_only }}||{{ album_title }}
-          {%- endcapture -%}
-          {%- assign photo_items = photo_items | push: row | compact -%}
-        {%- endfor -%}
-      {%- endif -%}
+      {%- capture row -%}
+{{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}||{{ a.title_en | default: a.title }}
+      {%- endcapture -%}
+      {%- assign photo_items = photo_items | push: row | compact -%}
     {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
     {%- assign photos_sorted = photo_items | sort | reverse -%}
 
     {%- for row in photos_sorted -%}
@@ -174,7 +178,8 @@ title: Home
         <img src="{{ _thumb | relative_url }}"
              data-full="{{ _large | relative_url }}"
              alt="{{ _caption }}"
-             loading="lazy" decoding="async" width="480" height="320">
+             loading="lazy" decoding="async"
+             width="480" height="320">
         <div class="ph-meta">
           <small>{{ _taken_at }}</small>
           {%- if _lenses and _lenses != '' -%}
@@ -194,30 +199,37 @@ title: Home
 
   // 从可见卡片构建 items；强制用 data-full（大图）+ 正确宽高（按缩略图比例推算）
   function buildItems() {
-    const nodes = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
-      .filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
+    const nodes = Array.from(
+      document.querySelectorAll('#photoGrid .photo-card img')
+    ).filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
 
     return nodes.map(img => {
       const thumbW = img.naturalWidth  || img.width  || 480;
       const thumbH = img.naturalHeight || img.height || 320;
       const aspect = thumbH / thumbW;
 
-      // 目标大图宽度（与你生成 large 时一致；如果你用 1600 宽，这里就 1600）
-      const w = 1600;
-      const h = Math.max(1, Math.round(w * aspect));
+      const w = 1600;                     // 你的大图宽度
+      const h = Math.max(1, Math.round(w * aspect));   // 按比例推算高度
 
-      const big = img.getAttribute('data-full') || img.dataset.full || img.src; // ✅ 一律取大图
-      return { src: big, msrc: img.currentSrc || img.src, width: w, height: h, alt: img.alt || '' };
+      const big = img.dataset.full || img.getAttribute('data-full') || img.src;
+      return {
+        src: big,
+        msrc: img.currentSrc || img.src,
+        width: w,
+        height: h,
+        alt: img.alt || ''
+      };
     });
   }
 
   function openLightbox(clickedImg) {
-    const imgs  = Array.from(document.querySelectorAll('#photoGrid .photo-card img'))
-      .filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
-    const items = buildItems();
+    const imgs = Array.from(
+      document.querySelectorAll('#photoGrid .photo-card img')
+    ).filter(img => (img.closest('.photo-card')?.style.display || '') !== 'none');
 
-    const curBig = clickedImg.getAttribute('data-full') || clickedImg.dataset.full || clickedImg.src;
-    const idx    = Math.max(0, items.findIndex(it => it.src === curBig));
+    const items = buildItems();
+    const curBig = clickedImg.dataset.full || clickedImg.getAttribute('data-full') || clickedImg.src;
+    const idx = Math.max(0, items.findIndex(it => it.src === curBig));
 
     const pswp = new PhotoSwipe({
       index: idx,
