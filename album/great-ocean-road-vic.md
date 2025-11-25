@@ -1,6 +1,6 @@
 ---
 layout: album
-title: "大洋路, VIC"
+title: "大洋路, 维州"
 title_en: "Great Ocean Road, VIC"
 date: 2025-11-25
 cover: /assets/img/albums/great-ocean-road-vic/DSC07489.jpg
