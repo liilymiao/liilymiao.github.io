@@ -1,7 +1,5 @@
 ---
 layout: default
-title: Albums
-permalink: /albums/
 ---
 
 <article class="page">
@@ -14,11 +12,14 @@ permalink: /albums/
     {%- assign albums_all = albums_all | push: g.items.first -%}
   {%- endfor -%}
 
+  {%- comment -%}
+    只用有 location 的相册来生成筛选按钮，避免 nil 参与 sort
+  {%- endcomment -%}
   {%- assign albums_with_loc = albums_all | where_exp: "a", "a.location" -%}
   {%- assign locs = albums_with_loc | map: "location" | uniq | sort -%}
 
   <div class="album-filters" id="albumLocFilters">
-    <strong data-i18n="home.location">Location:</strong>
+    <strong data-i18n="albums.location">Location:</strong>
     <button type="button" data-loc="all" class="on" data-i18n="filters.all">All</button>
     {%- for loc in locs -%}
       {%- if loc and loc != "" -%}
@@ -143,3 +144,106 @@ permalink: /albums/
     color:var(--muted);
   }
 </style>
+
+<script>
+(function () {
+  const STORE = 'lang';
+
+  const dict = {
+    en: {
+      "albums.title": "Albums",
+      "albums.location": "Location:",
+      "filters.all": "All"
+    },
+    zh: {
+      "albums.title": "相册",
+      "albums.location": "地点：",
+      "filters.all": "全部"
+    }
+  };
+
+  function applyText(lang){
+    const map = dict[lang] || dict.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (map[key] != null) el.textContent = map[key];
+    });
+  }
+
+  function applyAlbumCardTitles(lang){
+    document.querySelectorAll('.album-card').forEach(card => {
+      const zh = card.dataset.titleZh;
+      const en = card.dataset.titleEn || zh;
+      const titleEl = card.querySelector('.album-title');
+      if (!titleEl) return;
+
+      if (lang === 'zh' && zh) {
+        titleEl.textContent = zh;
+      } else {
+        titleEl.textContent = en || zh || titleEl.textContent;
+      }
+    });
+  }
+
+  // 初始化语言（跟首页逻辑一致）
+  let lang = localStorage.getItem(STORE);
+  if (!lang) { lang = 'en'; localStorage.setItem(STORE, lang); }
+  document.documentElement.setAttribute('data-ui-lang', lang);
+  applyText(lang);
+  applyAlbumCardTitles(lang);
+
+  // 监听全局语言切换事件（default.html 会 dispatch）
+  window.addEventListener('langchange', e => {
+    const next = e.detail || 'en';
+    localStorage.setItem(STORE, next);
+    document.documentElement.setAttribute('data-ui-lang', next);
+    applyText(next);
+    applyAlbumCardTitles(next);
+  });
+
+  // Location 筛选
+  const ag = document.getElementById('albumGrid');
+  const ab = document.getElementById('albumLocFilters');
+  if (!ag || !ab) return;
+
+  const cards = Array.from(ag.querySelectorAll('.album-card'));
+  const btns  = Array.from(ab.querySelectorAll('button[data-loc]'));
+
+  function setActive(btn){
+    btns.forEach(b => b.classList.toggle('on', b === btn));
+  }
+
+  function applyLoc(loc){
+    cards.forEach(c => {
+      const v = c.getAttribute('data-location') || '';
+      c.style.display = (loc === 'all' || v === loc) ? '' : 'none';
+    });
+
+    try {
+      const u = new URL(window.location.href);
+      if (loc === 'all') u.searchParams.delete('loc');
+      else u.searchParams.set('loc', loc);
+      history.replaceState(null, '', u.toString());
+    } catch (_) {}
+  }
+
+  let init = 'all';
+  try {
+    const p = new URL(window.location.href).searchParams.get('loc');
+    if (btns.some(b => b.dataset.loc === p)) init = p;
+  } catch (_) {}
+
+  const startBtn = btns.find(b => b.dataset.loc === init) || btns[0];
+  if (startBtn) {
+    setActive(startBtn);
+    applyLoc(startBtn.dataset.loc);
+  }
+
+  ab.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-loc]');
+    if (!btn) return;
+    setActive(btn);
+    applyLoc(btn.dataset.loc);
+  });
+})();
+</script>
