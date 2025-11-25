@@ -1,5 +1,7 @@
 ---
 layout: default
+title: Albums
+permalink: /albums/
 ---
 
 <article class="page">
