@@ -11,18 +11,6 @@ photos:
     taken_at: 2025-11-24
     lens: [iphone-15-pro-max]
 
-  - src: /assets/img/albums/clayton-vic/img_0618.jpg
-    taken_at: 2025-11-24
-    lens: [leica-summicron-40-f2]
-
-  - src: /assets/img/albums/clayton-vic/img_0621.jpg
-    taken_at: 2025-11-24
-    lens: [leica-elmarit-90-f2.8]
-
-  - src: /assets/img/albums/clayton-vic/img_0623.jpg
-    taken_at: 2025-11-24
-    lens: [leica-summicron-40-f2]
-
   - src: /assets/img/albums/clayton-vic/img_0602.jpg
     taken_at: 2025-11-24
     lens: [iphone-15-pro-max]
@@ -45,13 +33,5 @@ photos:
 
   - src: /assets/img/albums/clayton-vic/dsc06675.jpg
     taken_at: 2025-11-21
-    lens: [leica-summicron-40-f2]
-
-  - src: /assets/img/albums/clayton-vic/dsc06855.jpg
-    taken_at: 2025-11-22
-    lens: [leica-summicron-40-f2]
-  
-  - src: /assets/img/albums/clayton-vic/dsc06819.jpg
-    taken_at: 2025-11-22
     lens: [leica-summicron-40-f2]
 ---
