@@ -43,4 +43,88 @@ photos:
   - src: /assets/img/albums/melbourne-city/dsc07368.jpg
     taken_at: 2025-11-24
     lens: [leica-summicron-40-f2]
+    
+  - src: /assets/img/albums/melbourne-city/DSC07679.jpg
+    taken_at: 2025-11-26
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC07671.jpg
+    taken_at: 2025-11-26
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC07663.jpg
+    taken_at: 2025-11-26
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00308.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00533.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00001.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00464.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00440.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00416.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00428.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00359.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00329.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00305.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00197.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00146.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00077.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00068.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00035.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00020.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00005.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC09861.jpg
+    taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
 ---
