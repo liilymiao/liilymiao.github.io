@@ -18,7 +18,7 @@ permalink: /albums/
     只用有 location 的相册来生成筛选按钮，避免 nil 参与 sort
   {%- endcomment -%}
   {%- assign albums_with_loc = albums_all | where_exp: "a", "a.location" -%}
-  {%- assign locs = albums_with_loc | map: "location" | uniq | sort -%}
+  {%- assign locs = albums_with_loc | map: "location" | uniq -%}
 
   <div class="album-filters" id="albumLocFilters">
     <strong data-i18n="albums.location">Location:</strong>
