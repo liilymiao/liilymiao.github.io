@@ -2,7 +2,7 @@
 layout: album
 title: "人像, 澳洲"
 title_en: "Portraits, AU"
-date: 2025-12-5
+date: 2025-12-05
 cover: /assets/img/albums/portrait-au/IMG_1566.jpg
 location: "Australia"
 location_name: "Australia"
