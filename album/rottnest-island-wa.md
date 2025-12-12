@@ -5,7 +5,7 @@ title_en: "Rottnest Island, WA"
 date: 2025-12-06
 cover: /assets/img/albums/rottnest-island-wa/DSC02497.jpg
 location: "Australia"
-location_name: "Western Australia"
+location_name: "Australia"
 
 photos:
   - src: /assets/img/albums/rottnest-island-wa/DSC02497.jpg
