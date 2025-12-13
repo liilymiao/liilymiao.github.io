@@ -52,11 +52,13 @@ layout: default
         <a href="{{ src | relative_url }}"
            class="album-photo-link"
            data-full="{{ large | relative_url }}">
-          <img
-            src="{{ thumb | relative_url }}"
-            alt="{{ p.caption | default: page.title }}"
-            loading="lazy"
-            decoding="async">
+          <div class="album-photo-img-wrap">
+            <img
+              src="{{ thumb | relative_url }}"
+              alt="{{ p.caption | default: page.title }}"
+              loading="lazy"
+              decoding="async">
+          </div>
         </a>
 
         <figcaption>
@@ -148,11 +150,22 @@ layout: default
     margin: 0;
   }
 
-  .album-photo img{
-    display: block;
-    max-width: 100%;
-    height: auto;
+  /* 统一相册内部缩略图的纵横比（这里用约 3:2） */
+  .album-photo-img-wrap{
+    position: relative;
+    width: 100%;
+    padding-top: 66.666%; /* 高度 = 宽度 * 2/3 */
+    overflow: hidden;
     border-radius: 10px;
+    background: var(--bg-soft);
+  }
+  .album-photo-img-wrap img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 中心裁切，保证不变形 */
+    display: block;
   }
 
   .album-photo figcaption{
