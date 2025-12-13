@@ -36,9 +36,16 @@ layout: default
   {% if page.photos %}
   <section class="album-photos">
     {% for p in page.photos %}
+      {% assign src = p.src %}
+      {% assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' %}
+      {% assign thumb = base
+        | replace: '.JPG','-thumb.JPG'
+        | replace: '.JPEG','-thumb.JPEG'
+        | replace: '.jpg','-thumb.jpg'
+        | replace: '.jpeg','-thumb.jpeg' %}
       <figure class="album-photo">
         <img
-          src="{{ p.src | relative_url }}"
+          src="{{ thumb | relative_url }}"
           alt="{{ p.caption | default: page.title }}"
           loading="lazy"
           decoding="async">
@@ -112,7 +119,7 @@ layout: default
   .album-cover-main img{
     display: block;
     max-width: 100%;
-    height: auto;           /* ✅ 原比例，不拉伸 */
+    height: auto;
     border-radius: 12px;
   }
 
@@ -129,7 +136,7 @@ layout: default
   .album-photo img{
     display: block;
     max-width: 100%;
-    height: auto;           /* ✅ 保证不压扁/拉伸 */
+    height: auto;
     border-radius: 10px;
   }
 
@@ -146,7 +153,6 @@ layout: default
 </style>
 
 <script>
-  // 让相册标题也跟随语言切换（沿用首页逻辑）
   (function(){
     function applyAlbumTitle(lang){
       document.querySelectorAll('.i18n-title').forEach(function(el){
