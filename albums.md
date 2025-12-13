@@ -42,15 +42,22 @@ permalink: /albums/
          data-title-zh="{{ a.title | escape }}"
          data-title-en="{{ a.title_en | default: a.title | escape }}">
         <div class="album-cover">
-          {% if a.cover %}
-            <img
-              src="{{ a.cover | relative_url }}"
-              alt="{{ a.title_en | default: a.title }}"
-              loading="lazy" decoding="async">
-          {% else %}
-            <div class="album-cover-placeholder"></div>
-          {% endif %}
-        </div>
+  {% if a.cover %}
+    {% assign cover_src   = a.cover %}
+    {% assign cover_base  = cover_src | replace:'/assets/img/albums/','/assets/thumbs/albums/' %}
+    {% assign cover_thumb = cover_base
+      | replace: '.JPG','-thumb.JPG'
+      | replace: '.JPEG','-thumb.JPEG'
+      | replace: '.jpg','-thumb.jpg'
+      | replace: '.jpeg','-thumb.jpeg' %}
+    <img
+      src="{{ cover_thumb | relative_url }}"
+      alt="{{ a.title_en | default: a.title }}"
+      loading="lazy" decoding="async">
+  {% else %}
+    <div class="album-cover-placeholder"></div>
+  {% endif %}
+       </div>
 
         <div class="album-meta">
           <h2 class="album-title">
