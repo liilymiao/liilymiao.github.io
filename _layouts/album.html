@@ -21,16 +21,6 @@ layout: default
         <span class="album-location">{{ page.location_name }}</span>
       {% endif %}
     </p>
-
-    {% if page.cover %}
-      <div class="album-cover-main">
-        <img
-          src="{{ page.cover | relative_url }}"
-          alt="{{ page.title_en | default: page.title }}"
-          loading="lazy"
-          decoding="async">
-      </div>
-    {% endif %}
   </header>
 
   {% if page.photos %}
