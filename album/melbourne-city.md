@@ -1,6 +1,6 @@
 ---
 layout: album
-title: "城区，墨尔本"
+title: "墨尔本城区, 维多利亚州"
 title_en: "Melbourne City, VIC"
 date: 2025-11-24
 cover: /assets/img/albums/melbourne-city/dsc07374.jpg
@@ -126,5 +126,49 @@ photos:
 
   - src: /assets/img/albums/melbourne-city/DSC09861.jpg
     taken_at: 2025-11-27
+    lens: [leica-summicron-40-f2]
+ 
+  - src: /assets/img/albums/melbourne-city/DSC00047.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00820.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00826.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00799.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00805.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00781.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00707.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00704.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00713.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00697.jpg
+    taken_at: 2025-11-28
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/melbourne-city/DSC00209.jpg
+    taken_at: 2025-11-28
     lens: [leica-summicron-40-f2]
 ---
