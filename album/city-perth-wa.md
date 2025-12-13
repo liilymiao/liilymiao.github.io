@@ -51,4 +51,28 @@ photos:
   - src: /assets/img/albums/city-perth-wa/DSC02451.jpg
     taken_at: 2025-12-05
     lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02333.jpg
+    taken_at: 2025-12-05
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02315.jpg
+    taken_at: 2025-12-05
+    lens: [viltrox-16-f1.8]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02320.jpg
+    taken_at: 2025-12-05
+    lens: [leica-summicron-40-f2]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02311.jpg
+    taken_at: 2025-12-05
+    lens: [viltrox-16-f1.8]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02300.jpg
+    taken_at: 2025-12-05
+    lens: [viltrox-16-f1.8]
+
+  - src: /assets/img/albums/city-perth-wa/DSC02291.jpg
+    taken_at: 2025-12-05
+    lens: [leica-summicron-40-f2]
 ---
