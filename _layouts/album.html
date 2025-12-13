@@ -34,7 +34,7 @@ layout: default
   </header>
 
   {% if page.photos %}
-  <section class="album-photos">
+  <section class="album-photos" id="albumPhotos">
     {% for p in page.photos %}
       {% assign src = p.src %}
       {% assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' %}
@@ -43,12 +43,21 @@ layout: default
         | replace: '.JPEG','-thumb.JPEG'
         | replace: '.jpg','-thumb.jpg'
         | replace: '.jpeg','-thumb.jpeg' %}
+      {% assign large = base
+        | replace: '.JPG','-large.JPG'
+        | replace: '.JPEG','-large.JPEG'
+        | replace: '.jpg','-large.jpg'
+        | replace: '.jpeg','-large.jpeg' %}
       <figure class="album-photo">
-        <img
-          src="{{ thumb | relative_url }}"
-          alt="{{ p.caption | default: page.title }}"
-          loading="lazy"
-          decoding="async">
+        <a href="{{ src | relative_url }}"
+           class="album-photo-link"
+           data-full="{{ large | relative_url }}">
+          <img
+            src="{{ thumb | relative_url }}"
+            alt="{{ p.caption | default: page.title }}"
+            loading="lazy"
+            decoding="async">
+        </a>
 
         <figcaption>
           <small>
@@ -69,6 +78,12 @@ layout: default
     {% endfor %}
   </section>
   {% endif %}
+
+  <div id="albumLightbox" hidden>
+    <div class="al-inner">
+      <img id="albumLightboxImg" src="" alt="">
+    </div>
+  </div>
 
   {% if page.comments != false %}
   <section id="comments" class="comments">
@@ -150,6 +165,28 @@ layout: default
   .album-photo .album-caption{
     color: inherit;
   }
+
+  #albumLightbox{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  #albumLightbox[hidden]{
+    display: none;
+  }
+  #albumLightbox .al-inner{
+    position: relative;
+  }
+  #albumLightbox img{
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    box-shadow: 0 0 30px rgba(0,0,0,.6);
+  }
 </style>
 
 <script>
@@ -168,6 +205,35 @@ layout: default
     window.addEventListener('langchange', function(e){
       var next = e.detail || 'en';
       applyAlbumTitle(next);
+    });
+  })();
+
+  (function(){
+    var grid = document.getElementById('albumPhotos');
+    var box  = document.getElementById('albumLightbox');
+    var img  = document.getElementById('albumLightboxImg');
+    if (!grid || !box || !img) return;
+
+    grid.addEventListener('click', function(e){
+      var link = e.target.closest('.album-photo-link');
+      if (!link) return;
+      e.preventDefault();
+      var full = link.getAttribute('data-full');
+      if (!full) return;
+      img.src = full;
+      box.hidden = false;
+    });
+
+    box.addEventListener('click', function(){
+      box.hidden = true;
+      img.src = '';
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !box.hidden){
+        box.hidden = true;
+        img.src = '';
+      }
     });
   })();
 </script>
