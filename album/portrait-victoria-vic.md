@@ -19,16 +19,12 @@ photos:
   - src: /assets/img/albums/portrait-au/DSC02363.jpg
     taken_at: 2025-12-05
     lens: [leica-summicron-40-f2]
-
-  - src: /assets/img/albums/portrait-au/IMG_7500.jpg
+  
+  - src: /assets/img/albums/portrait-au/IMG_7499.jpg
     taken_at: 2025-12-04
     lens: [leica-summicron-40-f2]
-
+    
   - src: /assets/img/albums/portrait-au/DSC02226.jpg
-    taken_at: 2025-12-04
-    lens: [leica-summicron-40-f2]
-
-  - src: /assets/img/albums/portrait-au/IMG_7501.jpg
     taken_at: 2025-12-04
     lens: [leica-summicron-40-f2]
 
