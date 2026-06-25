@@ -27,8 +27,6 @@ layout: null
     <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
     <div class="links">
       <a href="{{ '/' | relative_url }}" data-i18n="nav.home">Home</a>
-      <a href="https://github.com/liilymiao" target="_blank" rel="noopener" data-i18n="nav.about">About</a>
-      <a href="{{ '/categories/' | relative_url }}" data-i18n="nav.categories">Categories</a>
       <a href="{{ '/albums/' | relative_url }}" data-i18n="nav.albums">Albums</a>
     </div>
   </nav>
@@ -70,12 +68,12 @@ layout: null
   (function(){
     const dict = {
       en: {
-        "nav.home":"Home","nav.about":"About","nav.categories":"Categories","nav.albums":"Albums","nav.locations":"Locations",
+        "nav.home":"Home","nav.albums":"Albums",
         "home.latest":"Latest posts","home.about":"About","home.albums":"Albums","home.location":"Location:",
         "home.viewall":"View all →","home.photos":"Photos","filters.all":"All","filters.filter":"Lens:"
       },
       zh: {
-        "nav.home":"主页","nav.about":"关于","nav.categories":"分类","nav.albums":"相册","nav.locations":"地点",
+        "nav.home":"主页","nav.albums":"相册",
         "home.latest":"最新文章","home.about":"关于","home.albums":"相册","home.location":"地点：",
         "home.viewall":"查看全部 →","home.photos":"照片","filters.all":"全部","filters.filter":"镜头："
       }
