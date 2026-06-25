@@ -12,12 +12,15 @@ echo "------------------------------------------------"
 
 # 搜索路径可按需修改（默认检测 assets 和 stylesheets 文件夹）
 TARGET_DIRS=("assets" "stylesheets")
+PATTERN='(color|background|background-color|border|border-color|box-shadow|text-shadow):'
+COLOR_PATTERN='#[0-9A-Fa-f]{3,8}|rgb\(|rgba\('
 
 for DIR in "${TARGET_DIRS[@]}"; do
   if [ -d "$DIR" ]; then
     echo "📂 Checking $DIR ..."
-    grep -HnE 'color:|background:|border:|shadow:' "$DIR"/*.css 2>/dev/null \
-      | grep -E '#[0-9A-Fa-f]{3,6}|rgb\(|rgba\(' \
+    find "$DIR" -type f \( -name '*.css' -o -name '*.scss' \) -print0 \
+      | xargs -0 grep -HnE "$PATTERN" 2>/dev/null \
+      | grep -E "$COLOR_PATTERN" \
       | grep -vE 'var\(--' \
       | sed "s|^|[$DIR] |"
   fi

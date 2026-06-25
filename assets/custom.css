@@ -176,12 +176,12 @@ blockquote{
 
 /* 明确为不同主题细化卡片观感（避免亮色下过暗） */
 :root[data-theme='light'] .album-card{
-  background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);
+  background:var(--card-bg);
+  box-shadow:var(--card-shadow);
 }
 :root[data-theme='dark'] .album-card{
-  background:#10161d;
-  box-shadow:0 2px 8px rgba(255,255,255,.03);
+  background:var(--card-bg);
+  box-shadow:var(--card-shadow);
 }
 
 /* =========================================================
@@ -308,11 +308,11 @@ article.post .post-meta, article.post small {
 /* 亮色/暗色下的微调（可选，更稳） */
 :root[data-theme='light'] .post,
 :root[data-theme='light'] article.post {
-  background: #ffffff !important;
+  background: var(--card-bg) !important;
   box-shadow: 0 2px 12px color-mix(in oklab, var(--text-color) 8%, transparent);
 }
 :root[data-theme='dark'] .post,
 :root[data-theme='dark'] article.post {
-  background: #0d1319 !important;
+  background: var(--card-bg) !important;
   box-shadow: none;
 }

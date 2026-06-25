@@ -14,13 +14,13 @@ h1,h2,h3{ color:var(--ink); }
 
 .wrapper{ max-width:860px; margin:28px auto; padding:0 16px; }
 .post,.page{
-  background:#fff; border:1px solid var(--edge);
-  box-shadow:0 2px 12px rgba(17,24,39,.04); border-radius:10px; padding:22px;
+  background:var(--card-bg, #fff); border:1px solid var(--edge);
+  box-shadow:var(--card-shadow, 0 2px 12px rgba(17,24,39,.04)); border-radius:10px; padding:22px;
 }
 
 pre,code{ background:var(--chip); }
 pre{ padding:12px 14px; border-radius:8px; border:1px solid var(--edge); overflow:auto; }
-blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#fff; padding:.4rem .9rem; }
+blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:var(--card-bg, #fff); padding:.4rem .9rem; }
 
 /* 防止 /albums 页首图铺满 */
 .page > p:first-child > img:only-child{
@@ -35,8 +35,8 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   margin-top:1rem;
 }
 .album-card{
-  display:block; background:#fff; border-radius:12px; overflow:hidden;
-  box-shadow:0 1px 6px rgba(0,0,0,.06); text-decoration:none;
+  display:block; background:var(--card-bg, #fff); border-radius:12px; overflow:hidden;
+  box-shadow:var(--card-shadow, 0 1px 6px rgba(0,0,0,.06)); text-decoration:none;
 }
 .album-card img{
   width:100%;
@@ -55,8 +55,8 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   gap:.75rem;
 }
 .photo-card{
-  display:block; background:#fff; border-radius:12px; overflow:hidden;
-  box-shadow:0 1px 6px rgba(0,0,0,.06); text-decoration:none;
+  display:block; background:var(--card-bg, #fff); border-radius:12px; overflow:hidden;
+  box-shadow:var(--card-shadow, 0 1px 6px rgba(0,0,0,.06)); text-decoration:none;
 }
 .photo-card img{
   width:100%;
@@ -64,17 +64,17 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   object-fit:cover;
   display:block;
 }
-.photo-card .ph-meta{ padding:.4rem .6rem; font-size:.8rem; color:#6b7280; }
+.photo-card .ph-meta{ padding:.4rem .6rem; font-size:.8rem; color:var(--muted); }
 
 /* 顶部筛选“胶囊”按钮 */
 .album-filters{
   margin:.5rem 0 1rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;
 }
 .album-filters button{
-  border:1px solid rgba(0,0,0,.1); background:#fff; border-radius:999px;
+  border:1px solid var(--edge); background:var(--card-bg, #fff); border-radius:999px;
   padding:.25rem .6rem; font-size:.85rem; cursor:pointer;
 }
-.album-filters button.on{ background:#eef2ff; border-color:#c7d2fe; font-weight:600; }
+.album-filters button.on{ background:var(--chip); border-color:var(--blue); font-weight:600; }
 
 /* ===== 深色模式（系统） ===== */
 @media (prefers-color-scheme: dark){
@@ -91,19 +91,19 @@ blockquote{ border-left:3px solid var(--blue); color:var(--muted); background:#f
   body .post-content,
   body .entry,
   body article{
-    background:#1e242c !important;
+    background:var(--card-bg, #1e242c) !important;
     background-image:none !important;
     border-color:var(--edge) !important;
-    box-shadow:0 2px 12px rgba(0,0,0,.30) !important;
-    border:1px solid rgba(255,255,255,.05) !important;
+    box-shadow:var(--card-shadow, none) !important;
+    border:1px solid var(--edge) !important;
     color:var(--ink) !important;
   }
 
   /* 相册与照片卡片仍沿用浅色布局的卡片风格： */
   body .album-card,
   body .photo-card{
-    background:#1e242c;
-    border:1px solid rgba(255,255,255,.05);
+    background:var(--card-bg, #1e242c);
+    border:1px solid var(--edge);
   }
 
   a{ color:var(--blue); }
