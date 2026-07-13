@@ -2,6 +2,8 @@
 layout: album
 title: "罗特尼斯岛, 西澳大利亚州"
 title_en: "Rottnest Island, WA"
+permalink: /album/rottnest-island-wa/
+redirect_from: /album/rottnest-island-wa.html
 date: 2025-12-06
 cover: /assets/img/albums/rottnest-island-wa/DSC02497.jpg
 location: "Australia"

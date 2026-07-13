@@ -2,6 +2,8 @@
 layout: album
 title: "香港中文大学, 香港"
 title_en: "CUHK, Hong Kong"
+permalink: /album/cuhk-hongkong/
+redirect_from: /album/cuhk-hongkong.html
 date: 2018-07-22
 cover: /assets/img/albums/cuhk-hongkong/IMG_0057.jpg
 location: Hong Kong SAR, China

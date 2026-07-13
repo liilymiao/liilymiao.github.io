@@ -2,6 +2,8 @@
 layout: album
 title: "人像, 香港"
 title_en: "Portraits, Hong Kong"
+permalink: /album/portrait-hongkong/
+redirect_from: /album/portrait-hongkong.html
 date: 2024-11-30
 cover: /assets/img/albums/portrait-hongkong/IMG_6396.jpg
 location: Hong Kong SAR, China

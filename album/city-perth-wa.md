@@ -2,6 +2,8 @@
 layout: album
 title: "珀斯市区, 西澳大利亚州"
 title_en: "Perth City, WA"
+permalink: /album/city-perth-wa/
+redirect_from: /album/city-perth-wa.html
 date: 2025-12-05
 cover: /assets/img/albums/city-perth-wa/DSC02267.jpg
 location: "Australia"

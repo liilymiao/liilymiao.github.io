@@ -2,6 +2,8 @@
 layout: album
 title: "墨尔本城区, 维多利亚州"
 title_en: "Melbourne City, VIC"
+permalink: /album/melbourne-city/
+redirect_from: /album/melbourne-city.html
 date: 2025-11-28
 cover: /assets/img/albums/melbourne-city/dsc07374.jpg
 location: "Australia"

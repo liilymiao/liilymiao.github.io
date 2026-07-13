@@ -2,6 +2,7 @@
 from collections import Counter
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 
@@ -95,20 +96,31 @@ def main():
         for path in ROOT.rglob(".DS_Store")
         if ".git" not in path.parts
     )
+    tracked_ds_store = [
+        path
+        for path in ds_store
+        if subprocess.run(
+            ["git", "ls-files", "--error-unmatch", str(path)],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        ).returncode == 0
+    ]
 
     report("missing_originals", missing_originals)
     report("missing_thumb_or_large", missing_derivatives)
     report("duplicate_photo_sources", duplicate_srcs)
     report("orphan_thumbs", orphan_derivatives)
     report("unreferenced_originals", unreferenced_originals)
-    report("ds_store_files", ds_store)
+    report("tracked_ds_store_files", tracked_ds_store)
 
     failures = (
         missing_originals
         or missing_derivatives
         or duplicate_srcs
         or orphan_derivatives
-        or ds_store
+        or tracked_ds_store
     )
     return 1 if failures else 0
 

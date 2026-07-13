@@ -2,6 +2,8 @@
 layout: album
 title: "人像, 澳洲"
 title_en: "Portraits, AU"
+permalink: /album/portrait-victoria-vic/
+redirect_from: /album/portrait-victoria-vic.html
 date: 2025-12-06
 cover: /assets/img/albums/portrait-au/IMG_1566.jpg
 location: "Australia"

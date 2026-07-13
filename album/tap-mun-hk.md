@@ -2,6 +2,8 @@
 layout: album
 title: "塔门岛, 香港"
 title_en: "Tap Mun Island, Hong Kong"
+permalink: /album/tap-mun-hk/
+redirect_from: /album/tap-mun-hk.html
 date: 2023-10-23
 cover: /assets/img/albums/tap-mun-hk/dsc00287.jpg
 location: "Hong Kong SAR, China"

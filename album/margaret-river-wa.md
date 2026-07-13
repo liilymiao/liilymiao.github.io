@@ -2,6 +2,8 @@
 layout: album
 title: "玛格丽特河, 西澳大利亚州"
 title_en: "Margaret River, WA"
+permalink: /album/margaret-river-wa/
+redirect_from: /album/margaret-river-wa.html
 date: 2025-12-04
 cover: /assets/img/albums/margaret-river-wa/DSC02105.jpg
 location: "Australia"

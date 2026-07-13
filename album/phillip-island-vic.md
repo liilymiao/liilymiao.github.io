@@ -2,6 +2,8 @@
 layout: album
 title: "菲利普岛, 维多利亚州"
 title_en: "Phillip Island, VIC"
+permalink: /album/phillip-island-vic/
+redirect_from: /album/phillip-island-vic.html
 date: 2025-11-26
 cover: /assets/img/albums/phillip-island-vic/DSC08225.jpg
 location: "Australia"

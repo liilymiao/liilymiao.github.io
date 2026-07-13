@@ -140,34 +140,7 @@ title: Home
     }
   </style>
 
-  {%- assign lens_pool = "" | split: "" -%}
-  {%- for a in albums_all -%}
-    {%- if a.photos -%}
-      {%- for p in a.photos -%}
-        {%- if p.lens -%}
-          {%- assign L = p.lens -%}
-          {%- if L.first -%}
-            {%- assign lens_pool = lens_pool | concat: L -%}
-          {%- else -%}
-            {%- assign L_arr = L | replace: ',', ' ' | split: ' ' | reject: '' -%}
-            {%- assign lens_pool = lens_pool | concat: L_arr -%}
-          {%- endif -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- assign lenses = lens_pool | uniq | sort -%}
-
-  <div class="album-filters" id="photoFilters">
-    <strong data-i18n="filters.filter">Lens:</strong>
-    <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
-    {%- for l in lenses -%}
-      <button type="button" data-lens="{{ l }}">{{ l }}</button>
-    {%- endfor -%}
-  </div>
-
-  <div class="photos-grid" id="photoGrid">
-    {%- assign photo_items = "" | split: "" -%}
+  {%- assign photo_items = "" | split: "" -%}
     {%- for a in albums_all -%}
       {%- if a.photos -%}
         {%- for p in a.photos -%}
@@ -195,9 +168,27 @@ title: Home
         {%- endfor -%}
       {%- endif -%}
     {%- endfor -%}
-    {%- assign photos_sorted = photo_items | sort | reverse -%}
+  {%- assign photos_sorted = photo_items | sort | reverse -%}
+  {%- assign photos_home = photos_sorted | slice: 0, 72 -%}
+  {%- assign lens_pool = "" | split: "" -%}
+  {%- for row in photos_home -%}
+    {%- assign parts = row | split: "||" -%}
+    {%- assign row_lenses = parts[4] | split: ',' | reject: '' -%}
+    {%- assign lens_pool = lens_pool | concat: row_lenses -%}
+  {%- endfor -%}
+  {%- assign lenses = lens_pool | uniq | sort -%}
 
-    {%- for row in photos_sorted -%}
+  <div class="album-filters" id="photoFilters">
+    <strong data-i18n="filters.filter">Lens:</strong>
+    <button type="button" data-lens="all" class="on" data-i18n="filters.all">All</button>
+    {%- for l in lenses -%}
+      <button type="button" data-lens="{{ l }}">{{ l }}</button>
+    {%- endfor -%}
+  </div>
+
+  <div class="photos-grid" id="photoGrid">
+
+    {%- for row in photos_home -%}
       {%- assign parts        = row | split: "||" -%}
       {%- assign _thumb       = parts[2] -%}
       {%- assign _large       = parts[3] -%}
@@ -228,7 +219,7 @@ title: Home
   </div>
 
   <!-- 简单 Lightbox 容器（隐藏，点击时显示） -->
-  <div id="photoLightbox" hidden>
+  <div id="photoLightbox" role="dialog" aria-modal="true" aria-label="Photo preview" tabindex="-1" hidden>
     <div class="pl-inner">
       <img id="photoLightboxImg" src="" alt="">
     </div>
@@ -377,27 +368,35 @@ title: Home
     const img  = document.getElementById('photoLightboxImg');
     if (!grid || !box || !img) return;
 
+    let previousFocus = null;
+
+    function closeLightbox(){
+      box.hidden = true;
+      img.src = '';
+      if (previousFocus) previousFocus.focus();
+    }
+
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.photo-card');
       if (!card) return;
       e.preventDefault();
       const full = card.getAttribute('data-full');
       if (!full) return;
+      previousFocus = card;
       img.src = full;
+      const preview = card.querySelector('img');
+      img.alt = preview ? preview.alt : '';
       box.hidden = false;
+      box.focus();
     });
 
     // 点击遮罩关闭
-    box.addEventListener('click', () => {
-      box.hidden = true;
-      img.src = '';
-    });
+    box.addEventListener('click', closeLightbox);
 
     // ESC 关闭
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !box.hidden) {
-        box.hidden = true;
-        img.src = '';
+        closeLightbox();
       }
     });
   })();

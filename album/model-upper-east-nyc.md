@@ -2,8 +2,12 @@
 layout: album
 title: "名模, 上东区"
 title_en: "Model, Upper East Side"
+permalink: /album/model-upper-east-nyc/
+redirect_from: /album/model-upper-east-nyc.html
 date: 2006-10-07
 cover: /assets/img/albums/model-upper-east-nyc/p1060309.jpg
+location: "United States"
+location_name: "New York, United States"
 photos:
   - src: /assets/img/albums/model-upper-east-nyc/img_9403.jpg
     taken_at: 2010-07-31

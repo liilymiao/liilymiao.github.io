@@ -14,6 +14,15 @@ layout: null
     {% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}
   {% endif %}
 </title>
+  {%- assign page_description = page.description | default: site.description -%}
+  <meta name="description" content="{{ page_description | strip_html | normalize_whitespace | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <meta property="og:title" content="{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}">
+  <meta property="og:description" content="{{ page_description | strip_html | normalize_whitespace | escape }}">
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  {% if page.cover %}<meta property="og:image" content="{{ page.cover | absolute_url }}">{% endif %}
+  <meta name="twitter:card" content="{% if page.cover %}summary_large_image{% else %}summary{% endif %}">
 
   <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="{{ '/assets/icons/favicon.svg?v=3' | relative_url }}">
@@ -32,8 +41,8 @@ layout: null
   </nav>
 
   <!-- 左下角：主题 & 语言按钮 -->
-  <div class="theme-toggle"><button id="themeToggle" title="Toggle dark/light mode">🌙</button></div>
-  <div class="lang-toggle"><button id="langToggle" title="Switch language">中/EN</button></div>
+  <div class="theme-toggle"><button type="button" id="themeToggle" title="Toggle dark/light mode" aria-label="Toggle dark/light mode">🌙</button></div>
+  <div class="lang-toggle"><button type="button" id="langToggle" title="Switch language" aria-label="切换到中文">中/EN</button></div>
 
   <main class="page-wrap">
     {{ content }}

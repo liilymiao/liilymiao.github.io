@@ -2,6 +2,8 @@
 layout: album
 title: "克莱顿, 墨尔本"
 title_en: "Clayton, VIC"
+permalink: /album/clayton-vic/
+redirect_from: /album/clayton-vic.html
 date: 2025-11-24
 cover: /assets/img/albums/clayton-vic/dsc06636.jpg
 location: "Australia"

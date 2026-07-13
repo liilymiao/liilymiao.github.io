@@ -1,0 +1,26 @@
+name: Site checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+      - name: Check album metadata and images
+        run: |
+          python3 tools/check_albums.py
+          bash check_albums.sh
+          bash check_color_leaks.sh
+      - name: Build site
+        run: bundle exec jekyll build --trace

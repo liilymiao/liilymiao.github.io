@@ -2,6 +2,8 @@
 layout: album
 title: "莫宁顿&索伦托, 维多利亚州"
 title_en: "Mornington&Sorrento, VIC"
+permalink: /album/mornington-sorrento/
+redirect_from: /album/mornington-sorrento.html
 date: 2025-11-23
 cover: /assets/img/albums/mornington-sorrento/img_0561.jpg
 location: "Australia"

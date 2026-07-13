@@ -1,5 +1,6 @@
 title: "liilymiao"
-description: "填写描述让更多人看到这些花里胡哨的玩意儿"
+description: "Photography albums and personal notes from Hong Kong and beyond."
+url: "https://liilymiao.github.io"
 theme: jekyll-theme-modernist
 author: liilymiao
 lang: en
@@ -7,9 +8,10 @@ timezone: Asia/Hong_Kong
 
 plugins:
   - jekyll-feed
+  - jekyll-redirect-from
   - jekyll-sitemap
 
-exclude: [album_backup_*, node_modules, vendor, script, tools]
+exclude: [album_backup_*, node_modules, vendor, script, tools, "*.bak", .fresh_build.txt, .rebuild.txt]
 
 defaults:
   - scope:

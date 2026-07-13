@@ -2,6 +2,8 @@
 layout: album
 title: "大洋路, 维多利亚州"
 title_en: "Great Ocean Road, VIC"
+permalink: /album/great-ocean-road-vic/
+redirect_from: /album/great-ocean-road-vic.html
 date: 2025-11-25
 cover: /assets/img/albums/great-ocean-road-vic/DSC07489.jpg
 location: "Australia"

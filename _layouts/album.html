@@ -71,7 +71,7 @@ layout: default
   </section>
   {% endif %}
 
-  <div id="albumLightbox" hidden>
+  <div id="albumLightbox" role="dialog" aria-modal="true" aria-label="Photo preview" tabindex="-1" hidden>
     <div class="al-inner">
       <img id="albumLightboxImg" src="" alt="">
     </div>
@@ -217,25 +217,33 @@ layout: default
     var img  = document.getElementById('albumLightboxImg');
     if (!grid || !box || !img) return;
 
+    var previousFocus = null;
+
+    function closeLightbox(){
+      box.hidden = true;
+      img.src = '';
+      if (previousFocus) previousFocus.focus();
+    }
+
     grid.addEventListener('click', function(e){
       var link = e.target.closest('.album-photo-link');
       if (!link) return;
       e.preventDefault();
       var full = link.getAttribute('data-full');
       if (!full) return;
+      previousFocus = link;
       img.src = full;
+      var preview = link.querySelector('img');
+      img.alt = preview ? preview.alt : '';
       box.hidden = false;
+      box.focus();
     });
 
-    box.addEventListener('click', function(){
-      box.hidden = true;
-      img.src = '';
-    });
+    box.addEventListener('click', closeLightbox);
 
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape' && !box.hidden){
-        box.hidden = true;
-        img.src = '';
+        closeLightbox();
       }
     });
   })();

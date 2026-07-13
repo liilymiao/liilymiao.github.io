@@ -2,6 +2,8 @@
 layout: album
 title: "人像, 北京"
 title_en: "Portraits, Beijing"
+permalink: /album/portrait-beijing-cn/
+redirect_from: /album/portrait-beijing-cn.html
 date: 2023-06-16
 cover: /assets/img/albums/portrait-beijing-cn/img_2424.jpg
 location: "Beijing, China"
