@@ -169,7 +169,6 @@ title: Home
       {%- endif -%}
     {%- endfor -%}
   {%- assign photos_sorted = photo_items | sort | reverse -%}
-  {%- assign photos_home = photos_sorted | slice: 0, 72 -%}
   {%- assign lens_pool = "" | split: "" -%}
   {%- for row in photos_sorted -%}
     {%- assign parts = row | split: "||" -%}
@@ -177,27 +176,6 @@ title: Home
     {%- assign lens_pool = lens_pool | concat: row_lenses -%}
   {%- endfor -%}
   {%- assign lenses = lens_pool | uniq | sort -%}
-  {%- for lens in lenses -%}
-    {%- assign has_lens = false -%}
-    {%- for row in photos_home -%}
-      {%- assign parts = row | split: "||" -%}
-      {%- assign row_lenses = parts[4] | split: ',' | reject: '' -%}
-      {%- if row_lenses contains lens -%}
-        {%- assign has_lens = true -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- unless has_lens -%}
-      {%- for row in photos_sorted -%}
-        {%- assign parts = row | split: "||" -%}
-        {%- assign row_lenses = parts[4] | split: ',' | reject: '' -%}
-        {%- if row_lenses contains lens -%}
-          {%- assign photos_home = photos_home | push: row -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endunless -%}
-  {%- endfor -%}
 
   <div class="album-filters" id="photoFilters">
     <strong data-i18n="filters.filter">Lens:</strong>
@@ -209,7 +187,7 @@ title: Home
 
   <div class="photos-grid" id="photoGrid">
 
-    {%- for row in photos_home -%}
+    {%- for row in photos_sorted -%}
       {%- assign parts        = row | split: "||" -%}
       {%- assign _thumb       = parts[2] -%}
       {%- assign _large       = parts[3] -%}
