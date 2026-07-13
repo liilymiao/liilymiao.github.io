@@ -45,11 +45,11 @@ permalink: /albums/
   {% if a.cover %}
     {% assign cover_src   = a.cover %}
     {% assign cover_base  = cover_src | replace:'/assets/img/albums/','/assets/thumbs/albums/' %}
-    {% assign cover_thumb = cover_base
-      | replace: '.JPG','-thumb.JPG'
-      | replace: '.JPEG','-thumb.JPEG'
-      | replace: '.jpg','-thumb.jpg'
-      | replace: '.jpeg','-thumb.jpeg' %}
+      {% assign cover_thumb = cover_base
+        | replace: '.jpg','-thumb.jpg'
+        | replace: '.jpeg','-thumb.jpg'
+        | replace: '.JPG','-thumb.jpg'
+        | replace: '.JPEG','-thumb.jpg' %}
     <img
       src="{{ cover_thumb | relative_url }}"
       alt="{{ a.title_en | default: a.title }}"

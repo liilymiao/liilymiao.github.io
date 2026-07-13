@@ -14,12 +14,9 @@ THUMB_ROOT = ROOT / "assets/thumbs/albums"
 
 def thumb_paths(src):
     base = src.replace("/assets/img/albums/", "/assets/thumbs/albums/")
-    stem = re.sub(r"\.(JPG|JPEG|jpg|jpeg)$", "", base)
+    stem = re.sub(r"\.(jpg|jpeg)$", "", base, flags=re.IGNORECASE)
     if not src.lower().endswith((".jpg", ".jpeg")):
         return []
-    if src.endswith((".JPG", ".JPEG")):
-        ext = Path(src).suffix
-        return [f"{stem}-thumb{ext}", f"{stem}-large{ext}"]
     return [f"{stem}-thumb.jpg", f"{stem}-large.jpg"]
 
 

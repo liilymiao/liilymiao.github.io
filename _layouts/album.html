@@ -29,15 +29,15 @@ layout: default
       {% assign src = p.src %}
       {% assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' %}
       {% assign thumb = base
-        | replace: '.JPG','-thumb.JPG'
-        | replace: '.JPEG','-thumb.JPEG'
         | replace: '.jpg','-thumb.jpg'
-        | replace: '.jpeg','-thumb.jpeg' %}
+        | replace: '.jpeg','-thumb.jpg'
+        | replace: '.JPG','-thumb.jpg'
+        | replace: '.JPEG','-thumb.jpg' %}
       {% assign large = base
-        | replace: '.JPG','-large.JPG'
-        | replace: '.JPEG','-large.JPEG'
         | replace: '.jpg','-large.jpg'
-        | replace: '.jpeg','-large.jpeg' %}
+        | replace: '.jpeg','-large.jpg'
+        | replace: '.JPG','-large.jpg'
+        | replace: '.JPEG','-large.jpg' %}
       <figure class="album-photo">
         <a href="{{ src | relative_url }}"
            class="album-photo-link"

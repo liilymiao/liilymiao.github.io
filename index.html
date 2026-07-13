@@ -151,15 +151,15 @@ title: Home
 
           {%- assign base = src | replace:'/assets/img/albums/','/assets/thumbs/albums/' -%}
           {%- assign thumb = base
-            | replace: '.JPG','-thumb.JPG'
-            | replace: '.JPEG','-thumb.JPEG'
             | replace: '.jpg','-thumb.jpg'
-            | replace: '.jpeg','-thumb.jpeg' -%}
+            | replace: '.jpeg','-thumb.jpg'
+            | replace: '.JPG','-thumb.jpg'
+            | replace: '.JPEG','-thumb.jpg' -%}
           {%- assign large = base
-            | replace: '.JPG','-large.JPG'
-            | replace: '.JPEG','-large.JPEG'
             | replace: '.jpg','-large.jpg'
-            | replace: '.jpeg','-large.jpeg' -%}
+            | replace: '.jpeg','-large.jpg'
+            | replace: '.JPG','-large.jpg'
+            | replace: '.JPEG','-large.jpg' -%}
 
           {%- capture row -%}
 {{ ts }}||{{ src }}||{{ thumb }}||{{ large }}||{{ p.lens | join: ',' | default: p.lens }}||{{ p.caption | default: a.title }}||{{ a.url }}||{{ day_only }}||{{ a.title_en | default: a.title }}
