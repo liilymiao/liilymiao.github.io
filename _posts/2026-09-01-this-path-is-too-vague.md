@@ -42,4 +42,4 @@ body_zh: |
 
 With you once more, mere waiting is a small price to pay, isn’t it?
 
-Congratulations—you’ve made it to yet another September in the long years.
+Congratulations—you’ve made it to yet another September in your long life.
