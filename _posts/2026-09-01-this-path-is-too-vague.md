@@ -7,8 +7,6 @@ comments: true
 body_zh: |
   <p><strong>23岁幸福或悲伤到有点极端的切片：</strong></p>
 
-  <br>
-
   <p><em>拉着xianfei在super sandwich研究70岁徕卡老镜头的两个月、在大洋路崩如溃修宾得67ii卡住的反光板那一天（<span style="color: #808080;">到今天还没配好腰平取景器</span>）、</em></p>
 
   <p><em>在圣诞派对抽到钱的那一天、隔着山溢远眺瑰晨修道院，晒在阳光下的那一天、</em></p>
